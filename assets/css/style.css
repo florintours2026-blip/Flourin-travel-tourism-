@@ -1,0 +1,791 @@
+/*==========================================================
+    FLORIN TOURS AGENCY
+    MAIN STYLE
+==========================================================*/
+
+:root{
+
+    --primary:#0B5ED7;
+    --primary-light:#2F80ED;
+    --secondary:#00C2FF;
+
+    --dark:#071320;
+    --dark-2:#0F1F31;
+
+    --white:#FFFFFF;
+
+    --text:#DCE7F5;
+
+    --text-dark:#202B36;
+
+    --border:rgba(255,255,255,.08);
+
+    --glass:rgba(255,255,255,.08);
+
+    --glass2:rgba(255,255,255,.12);
+
+    --shadow:
+    0 15px 40px rgba(0,0,0,.25);
+
+    --radius:22px;
+
+    --transition:.35s ease;
+
+}
+
+
+*{
+
+margin:0;
+
+padding:0;
+
+box-sizing:border-box;
+
+scroll-behavior:smooth;
+
+}
+
+
+html{
+
+font-size:16px;
+
+}
+
+
+body{
+
+font-family:'Cairo',sans-serif;
+
+background:var(--dark);
+
+color:var(--text);
+
+overflow-x:hidden;
+
+line-height:1.7;
+
+}
+
+
+img{
+
+max-width:100%;
+
+display:block;
+
+}
+
+
+a{
+
+text-decoration:none;
+
+color:inherit;
+
+transition:var(--transition);
+
+}
+
+
+ul{
+
+list-style:none;
+
+}
+
+
+.container{
+
+width:min(1400px,92%);
+
+margin:auto;
+
+}
+
+
+section{
+
+padding:90px 0;
+
+}
+
+
+.section-header{
+
+text-align:center;
+
+margin-bottom:60px;
+
+}
+
+
+.section-badge{
+
+display:inline-block;
+
+padding:10px 22px;
+
+background:rgba(47,128,237,.18);
+
+border:1px solid rgba(47,128,237,.35);
+
+border-radius:100px;
+
+color:#7ED7FF;
+
+font-size:.9rem;
+
+margin-bottom:20px;
+
+}
+
+
+.section-header h2{
+
+font-size:3rem;
+
+font-weight:800;
+
+margin-bottom:15px;
+
+color:white;
+
+}
+
+
+.section-header p{
+
+max-width:760px;
+
+margin:auto;
+
+color:#b9c8da;
+
+font-size:1.05rem;
+
+}
+
+
+::-webkit-scrollbar{
+
+width:12px;
+
+}
+
+
+::-webkit-scrollbar-track{
+
+background:#08131d;
+
+}
+
+
+::-webkit-scrollbar-thumb{
+
+background:#1976d2;
+
+border-radius:30px;
+
+}
+
+/*==========================================================
+HEADER
+==========================================================*/
+
+.top-header{
+
+    background:#05101b;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    height:45px;
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.top-header .container{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.top-left,
+.top-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:22px;
+
+}
+
+.top-left a{
+
+    font-size:14px;
+
+    color:#cfd8e3;
+
+}
+
+.top-left a:hover{
+
+    color:#4FC3F7;
+
+}
+
+.top-left i{
+
+    color:#2F80ED;
+
+    margin-left:8px;
+
+}
+
+.top-right a{
+
+    width:36px;
+
+    height:36px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:rgba(255,255,255,.05);
+
+    transition:.35s;
+
+}
+
+.top-right a:hover{
+
+    background:#2F80ED;
+
+    transform:translateY(-3px);
+
+}
+
+/*==========================================================
+NAVBAR
+==========================================================*/
+
+.navbar{
+
+    position:sticky;
+
+    top:0;
+
+    width:100%;
+
+    z-index:999;
+
+    background:rgba(7,19,32,.82);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.navbar .container{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    min-height:90px;
+
+}
+
+.logo img{
+
+    width:180px;
+
+}
+
+.nav-links{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:35px;
+
+}
+
+.nav-links li{
+
+    position:relative;
+
+}
+
+.nav-links a{
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    transition:.35s;
+
+}
+
+.nav-links a:hover{
+
+    color:#4FC3F7;
+
+}
+
+.nav-links a::after{
+
+    content:"";
+
+    position:absolute;
+
+    right:0;
+
+    bottom:-10px;
+
+    width:0;
+
+    height:3px;
+
+    background:#2F80ED;
+
+    border-radius:20px;
+
+    transition:.35s;
+
+}
+
+.nav-links a:hover::after{
+
+    width:100%;
+
+}
+
+.header-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.header-actions button{
+
+    width:46px;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+    background:rgba(255,255,255,.08);
+
+    color:white;
+
+    transition:.35s;
+
+}
+
+.header-actions button:hover{
+
+    background:#2F80ED;
+
+    transform:translateY(-3px);
+
+}
+
+#langToggle{
+
+    width:auto;
+
+    padding:0 18px;
+
+    border-radius:30px;
+
+    font-weight:700;
+
+}
+
+.mobile-menu{
+
+    display:none;
+
+}
+
+/*==========================================================
+HERO SECTION
+==========================================================*/
+
+.hero{
+
+    position:relative;
+
+    width:100%;
+
+    height:100vh;
+
+    min-height:850px;
+
+    overflow:hidden;
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.hero-image{
+
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    transform:scale(1.05);
+
+}
+
+.hero-overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+    linear-gradient(
+        90deg,
+        rgba(5,18,32,.90) 15%,
+        rgba(5,18,32,.55) 55%,
+        rgba(5,18,32,.35) 100%
+    );
+
+}
+
+.hero-content{
+
+    position:relative;
+
+    z-index:5;
+
+    max-width:760px;
+
+}
+
+.hero-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px 24px;
+
+    border-radius:50px;
+
+    border:1px solid rgba(255,255,255,.15);
+
+    background:rgba(255,255,255,.08);
+
+    backdrop-filter:blur(18px);
+
+    color:#81D4FA;
+
+    margin-bottom:30px;
+
+}
+
+.hero h1{
+
+    font-size:72px;
+
+    line-height:1.15;
+
+    font-weight:900;
+
+    color:white;
+
+}
+
+.hero h1 span{
+
+    color:#42A5F5;
+
+}
+
+.hero p{
+
+    margin-top:25px;
+
+    color:#d7e7f8;
+
+    font-size:20px;
+
+    max-width:650px;
+
+    line-height:1.9;
+
+}
+
+.hero-features{
+
+    display:flex;
+
+    gap:18px;
+
+    margin-top:45px;
+
+    flex-wrap:wrap;
+
+}
+
+.hero-features div{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:15px 24px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.08);
+
+    backdrop-filter:blur(15px);
+
+    border:1px solid rgba(255,255,255,.10);
+
+    color:white;
+
+}
+
+.hero-features i{
+
+    color:#4FC3F7;
+
+    font-size:20px;
+
+}
+
+/*==========================================================
+POPULAR DESTINATIONS
+==========================================================*/
+
+.destinations{
+
+    background:linear-gradient(
+    180deg,
+    #081521 0%,
+    #0B1D30 100%);
+
+}
+
+.destination-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(350px,1fr));
+
+    gap:35px;
+
+}
+
+.destination-card{
+
+    position:relative;
+
+    height:480px;
+
+    overflow:hidden;
+
+    border-radius:28px;
+
+    cursor:pointer;
+
+    background:#0d1f33;
+
+    box-shadow:
+    0 20px 45px rgba(0,0,0,.35);
+
+    transition:.45s;
+
+}
+
+.destination-card:hover{
+
+    transform:
+    translateY(-12px);
+
+    box-shadow:
+    0 35px 70px rgba(0,0,0,.45);
+
+}
+
+.destination-card img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.8s;
+
+}
+
+.destination-card:hover img{
+
+    transform:scale(1.12);
+
+}
+
+.destination-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+    linear-gradient(
+
+    transparent 20%,
+
+    rgba(0,0,0,.85));
+
+}
+
+.overlay{
+
+    position:absolute;
+
+    bottom:0;
+
+    right:0;
+
+    left:0;
+
+    padding:35px;
+
+    z-index:10;
+
+}
+
+.country{
+
+    display:inline-block;
+
+    padding:8px 18px;
+
+    border-radius:50px;
+
+    background:rgba(255,255,255,.12);
+
+    backdrop-filter:blur(15px);
+
+    color:#7DD3FC;
+
+    font-size:14px;
+
+    margin-bottom:18px;
+
+}
+
+.overlay h3{
+
+    color:white;
+
+    font-size:34px;
+
+    margin-bottom:12px;
+
+}
+
+.overlay p{
+
+    color:#d8e5f4;
+
+    line-height:1.8;
+
+}
+
+.card-footer{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-top:30px;
+
+}
+
+.card-footer span{
+
+    color:#FFD54F;
+
+    font-size:18px;
+
+    font-weight:700;
+
+}
+
+.card-footer a{
+
+    padding:13px 28px;
+
+    border-radius:50px;
+
+    background:#1976D2;
+
+    color:white;
+
+    font-weight:700;
+
+    transition:.35s;
+
+}
+
+.card-footer a:hover{
+
+    background:#42A5F5;
+
+  }
+
+
