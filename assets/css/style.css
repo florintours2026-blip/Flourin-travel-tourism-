@@ -1071,9 +1071,8 @@ OFFERS
 .offer-content{
     padding:28px;
     display:flex;
-flex-direction:column;
-justify-content:space-between;
-flex:1;
+    flex-direction:column;
+    gap:10px;
 }
 
 .offer-country{
