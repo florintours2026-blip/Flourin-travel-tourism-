@@ -1,10 +1,482 @@
 /*==========================================================
+HOME PAGE
+HERO SECTION
+==========================================================*/
+
+.hero{
+
+    position:relative;
+
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    overflow:hidden;
+
+    padding:180px 0 120px;
+
+    background:#071320;
+
+}
+
+.hero-image{
+
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    z-index:1;
+
+}
+
+.hero-overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        linear-gradient(
+            rgba(7,19,32,.82),
+            rgba(7,19,32,.88)
+        );
+
+    z-index:2;
+
+}
+
+.hero-content{
+
+    position:relative;
+
+    z-index:3;
+
+    max-width:760px;
+
+    text-align:center;
+
+}
+
+.hero-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px 24px;
+
+    border-radius:999px;
+
+    background:rgba(30,136,229,.12);
+
+    border:1px solid rgba(66,165,245,.25);
+
+    color:#42A5F5;
+
+    margin-bottom:28px;
+
+    font-weight:700;
+
+}
+
+.hero h1{
+
+    margin-bottom:25px;
+
+    line-height:1.15;
+
+}
+
+.hero h1 span{
+
+    color:#42A5F5;
+
+}
+
+.hero p{
+
+    font-size:20px;
+
+    max-width:650px;
+
+    margin:0 auto 40px;
+
+}
+
+.hero-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:18px;
+
+    flex-wrap:wrap;
+
+}
+
+/*==========================================================
+BOOKING SEARCH
+==========================================================*/
+
+.booking-search{
+
+    position:relative;
+
+    margin-top:-80px;
+
+    z-index:20;
+
+}
+
+.search-card{
+
+    background:rgba(16,38,61,.96);
+
+    backdrop-filter:blur(22px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:30px;
+
+    padding:35px;
+
+    box-shadow:0 25px 60px rgba(0,0,0,.35);
+
+}
+
+.search-tabs{
+
+    display:flex;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:30px;
+
+}
+
+.search-tabs button{
+
+    padding:15px 24px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.06);
+
+    color:#ffffff;
+
+    font-weight:700;
+
+    transition:.3s;
+
+}
+
+.search-tabs button.active{
+
+    background:#1E88E5;
+
+}
+
+.search-tabs button:hover{
+
+    background:#42A5F5;
+
+}
+
+.booking-form{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(200px,1fr));
+
+    gap:20px;
+
+}
+
+.booking-form .form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.booking-form label{
+
+    margin-bottom:10px;
+
+    color:#C8D7E8;
+
+    font-size:15px;
+
+}
+
+.booking-form input,
+
+.booking-form select{
+
+    height:58px;
+
+    border-radius:16px;
+
+    background:#13283E;
+
+    color:#ffffff;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    padding:0 18px;
+
+}
+
+.booking-form input:focus,
+
+.booking-form select:focus{
+
+    border-color:#42A5F5;
+
+}
+
+.search-btn{
+
+    align-self:end;
+
+    }
+
+/*==========================================================
+SERVICES
+==========================================================*/
+
+.services{
+
+    background:#081726;
+
+}
+
+.services-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+    gap:30px;
+
+}
+
+.service-card{
+
+    background:#10263D;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:28px;
+
+    padding:45px 30px;
+
+    text-align:center;
+
+    transition:.35s;
+
+    overflow:hidden;
+
+    position:relative;
+
+}
+
+.service-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:4px;
+
+    background:linear-gradient(
+        90deg,
+        #1E88E5,
+        #42A5F5
+    );
+
+}
+
+.service-card:hover{
+
+    transform:translateY(-10px);
+
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
+
+}
+
+.service-card i{
+
+    font-size:58px;
+
+    color:#42A5F5;
+
+    margin-bottom:25px;
+
+}
+
+.service-card h3{
+
+    margin-bottom:18px;
+
+    color:#fff;
+
+}
+
+.service-card p{
+
+    color:#C9D7E8;
+
+}
+
+/*==========================================================
+POPULAR DESTINATIONS
+==========================================================*/
+
+.destinations{
+
+    background:#071320;
+
+}
+
+.destination-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+
+    gap:30px;
+
+}
+
+.destination-card{
+
+    position:relative;
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+    height:460px;
+
+    cursor:pointer;
+
+}
+
+.destination-card img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.6s;
+
+}
+
+.destination-card:hover img{
+
+    transform:scale(1.08);
+
+}
+
+.destination-card .overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:flex-end;
+
+    padding:35px;
+
+    background:linear-gradient(
+
+        transparent,
+
+        rgba(0,0,0,.85)
+
+    );
+
+}
+
+.destination-card h3{
+
+    color:#fff;
+
+    font-size:34px;
+
+    margin-bottom:12px;
+
+}
+
+.destination-card p{
+
+    color:#E5EEF7;
+
+    margin-bottom:25px;
+
+}
+
+.destination-card a{
+
+    width:max-content;
+
+    padding:14px 28px;
+
+    border-radius:999px;
+
+    background:#1E88E5;
+
+    color:#fff;
+
+    font-weight:700;
+
+    transition:.35s;
+
+}
+
+.destination-card a:hover{
+
+    background:#42A5F5;
+
+}
+
+/*==========================================================
 WHY FLORIN
 ==========================================================*/
 
 .why-florin{
 
-    background:#071320;
+    background:#081726;
 
 }
 
@@ -20,15 +492,13 @@ WHY FLORIN
 
 .why-card{
 
-    background:rgba(255,255,255,.05);
+    background:#10263D;
 
     border:1px solid rgba(255,255,255,.08);
 
-    backdrop-filter:blur(18px);
+    border-radius:28px;
 
-    border-radius:24px;
-
-    padding:45px 25px;
+    padding:45px 30px;
 
     text-align:center;
 
@@ -40,13 +510,15 @@ WHY FLORIN
 
     transform:translateY(-10px);
 
-    border-color:#2F80ED;
+    border-color:#42A5F5;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
 
 }
 
 .why-card i{
 
-    font-size:52px;
+    font-size:58px;
 
     color:#42A5F5;
 
@@ -58,204 +530,19 @@ WHY FLORIN
 
     font-size:42px;
 
-    color:#ffffff;
+    color:#fff;
 
-    margin-bottom:10px;
-
-    font-weight:800;
+    margin-bottom:12px;
 
 }
 
 .why-card span{
 
-    color:#C7D5E5;
+    color:#C8D7E8;
 
     font-size:18px;
 
 }
-
-
-<!-- ===================================================== -->
-<!-- PREMIUM OFFERS -->
-<!-- ===================================================== -->
-
-<section class="premium-offers">
-
-    <div class="container">
-
-        <div class="section-header">
-
-            <span class="section-badge">
-                عروض حصرية
-            </span>
-
-            <h2>
-
-                أفضل عروض السفر
-
-            </h2>
-
-            <p>
-
-                احجز الآن واستمتع بخصومات حصرية على أشهر الوجهات السياحية.
-
-            </p>
-
-        </div>
-
-        <div class="offers-slider">
-
-            <!-- Card -->
-
-            <article class="offer-slide">
-
-                <div class="offer-image">
-
-                    <img src="assets/images/offers/maldives.webp"
-                    alt="Maldives">
-
-                    <span class="offer-discount">
-
-                        خصم 25%
-
-                    </span>
-
-                </div>
-
-                <div class="offer-content">
-
-                    <span class="offer-country">
-
-                        🇲🇻 Maldives
-
-                    </span>
-
-                    <h3>
-
-                        المالديف
-
-                    </h3>
-
-                    <p>
-
-                        إقامة 5 أيام / 4 ليالٍ مع الإفطار والنقل.
-
-                    </p>
-
-                    <div class="offer-price">
-
-                        <del>
-
-                            ٧٥٬٠٠٠ ج.م
-
-                        </del>
-
-                        <strong>
-
-                            ٥٦٬٩٩٠ ج.م
-
-                        </strong>
-
-                    </div>
-
-                    <div class="offer-buttons">
-
-                        <a href="#">
-
-                            احجز الآن
-
-                        </a>
-
-                        <button>
-
-                            التفاصيل
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-            <!-- Dubai -->
-
-            <article class="offer-slide">
-
-                <div class="offer-image">
-
-                    <img src="assets/images/offers/dubai.webp"
-                    alt="Dubai">
-
-                    <span class="offer-discount">
-
-                        خصم 20%
-
-                    </span>
-
-                </div>
-
-                <div class="offer-content">
-
-                    <span class="offer-country">
-
-                        🇦🇪 Dubai
-
-                    </span>
-
-                    <h3>
-
-                        دبي
-
-                    </h3>
-
-                    <p>
-
-                        4 أيام مع الفندق والإفطار.
-
-                    </p>
-
-                    <div class="offer-price">
-
-                        <del>
-
-                            ٤٥٬٠٠٠ ج.م
-
-                        </del>
-
-                        <strong>
-
-                            ٣٦٬٠٠٠ ج.م
-
-                        </strong>
-
-                    </div>
-
-                    <div class="offer-buttons">
-
-                        <a href="#">
-
-                            احجز الآن
-
-                        </a>
-
-                        <button>
-
-                            التفاصيل
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-        </div>
-
-    </div>
-
-</section>
 
 /*==========================================================
 PREMIUM OFFERS
@@ -263,60 +550,63 @@ PREMIUM OFFERS
 
 .premium-offers{
 
-    background:#081726;
+    background:#071320;
 
 }
 
-.offers-slider{
+.offers-grid{
 
     display:grid;
 
-    grid-template-columns:
-    repeat(auto-fit,minmax(520px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
 
     gap:35px;
 
 }
 
-.offer-slide{
+.offer-card{
 
     overflow:hidden;
 
-    border-radius:28px;
+    border-radius:30px;
 
-    background:#10263d;
+    background:#10263D;
 
     border:1px solid rgba(255,255,255,.08);
 
     transition:.35s;
 
+    position:relative;
+
 }
 
-.offer-slide:hover{
+.offer-card:hover{
 
     transform:translateY(-10px);
 
-}
-
-.offer-image{
-
-    position:relative;
-
-    height:320px;
+    box-shadow:0 25px 55px rgba(0,0,0,.35);
 
 }
 
-.offer-image img{
+.offer-card img{
 
     width:100%;
 
-    height:100%;
+    height:280px;
 
     object-fit:cover;
 
+    transition:.5s;
+
 }
 
-.offer-discount{
+.offer-card:hover img{
+
+    transform:scale(1.08);
+
+}
+
+.discount{
 
     position:absolute;
 
@@ -326,11 +616,11 @@ PREMIUM OFFERS
 
     background:#E53935;
 
-    color:white;
+    color:#fff;
 
     padding:10px 18px;
 
-    border-radius:30px;
+    border-radius:999px;
 
     font-weight:700;
 
@@ -338,92 +628,930 @@ PREMIUM OFFERS
 
 .offer-content{
 
-    padding:35px;
-
-}
-
-.offer-country{
-
-    color:#7DD3FC;
+    padding:30px;
 
 }
 
 .offer-content h3{
 
-    margin:18px 0;
+    color:#fff;
 
-    color:white;
-
-    font-size:34px;
+    margin-bottom:10px;
 
 }
 
 .offer-content p{
 
-    color:#c9d8e9;
+    color:#C8D7E8;
+
+    margin-bottom:20px;
 
 }
 
-.offer-price{
+.offer-content strong{
 
-    margin:25px 0;
-
-}
-
-.offer-price del{
-
-    color:#90A4AE;
-
-    margin-left:15px;
-
-}
-
-.offer-price strong{
+    display:block;
 
     color:#42A5F5;
 
     font-size:32px;
 
+    margin-bottom:25px;
+
 }
 
-.offer-buttons{
+.offer-content a{
+
+    display:inline-flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:14px 30px;
+
+    border-radius:999px;
+
+    background:#1E88E5;
+
+    color:#fff;
+
+    font-weight:700;
+
+    transition:.35s;
+
+}
+
+.offer-content a:hover{
+
+    background:#42A5F5;
+
+}
+
+/*==========================================================
+FEATURED FLIGHTS
+==========================================================*/
+
+.featured-flights{
+
+    background:#081726;
+
+}
+
+.flights-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
+
+    gap:30px;
+
+}
+
+.flight-card{
+
+    background:#10263D;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:28px;
+
+    padding:30px;
+
+    transition:.35s;
+
+}
+
+.flight-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
+
+}
+
+.flight-company{
 
     display:flex;
 
+    align-items:center;
+
     gap:15px;
+
+    margin-bottom:30px;
 
 }
 
-.offer-buttons a{
+.flight-company img{
 
-    flex:1;
+    width:70px;
 
-    padding:15px;
+}
 
-    background:#1976D2;
+.flight-company span{
 
-    color:white;
+    color:#fff;
 
-    text-align:center;
-
-    border-radius:15px;
+    font-size:20px;
 
     font-weight:700;
 
 }
 
-.offer-buttons button{
+.flight-route{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+}
+
+.flight-route strong{
+
+    display:block;
+
+    color:#fff;
+
+    font-size:30px;
+
+}
+
+.flight-route small{
+
+    color:#C8D7E8;
+
+}
+
+.flight-route i{
+
+    color:#42A5F5;
+
+    font-size:28px;
+
+}
+
+.flight-details{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:25px;
+
+    color:#C8D7E8;
+
+}
+
+.flight-price{
+
+    margin-bottom:25px;
+
+    color:#C8D7E8;
+
+}
+
+.flight-price strong{
+
+    display:block;
+
+    margin-top:10px;
+
+    color:#42A5F5;
+
+    font-size:30px;
+
+}
+
+.book-btn{
+
+    display:block;
+
+    text-align:center;
+
+    padding:16px;
+
+    border-radius:16px;
+
+    background:#1E88E5;
+
+    color:#fff;
+
+    font-weight:700;
+
+    transition:.35s;
+
+}
+
+.book-btn:hover{
+
+    background:#42A5F5;
+
+}
+
+/*==========================================================
+FEATURED HOTELS
+==========================================================*/
+
+.featured-hotels{
+
+    background:#071320;
+
+}
+
+.hotels-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+
+    gap:30px;
+
+}
+
+.hotel-card{
+
+    overflow:hidden;
+
+    border-radius:28px;
+
+    background:#10263D;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.35s;
+
+}
+
+.hotel-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 55px rgba(0,0,0,.35);
+
+}
+
+.hotel-card img{
+
+    width:100%;
+
+    height:260px;
+
+    object-fit:cover;
+
+    transition:.5s;
+
+}
+
+.hotel-card:hover img{
+
+    transform:scale(1.08);
+
+}
+
+.hotel-content{
+
+    padding:28px;
+
+}
+
+.hotel-content h3{
+
+    color:#fff;
+
+    margin-bottom:12px;
+
+}
+
+.hotel-content p{
+
+    color:#FFD54F;
+
+    margin-bottom:15px;
+
+}
+
+.hotel-content span{
+
+    display:block;
+
+    color:#42A5F5;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    margin-bottom:25px;
+
+}
+
+.hotel-content a{
+
+    display:block;
+
+    text-align:center;
+
+    padding:15px;
+
+    border-radius:16px;
+
+    background:#1E88E5;
+
+    color:#fff;
+
+    font-weight:700;
+
+    transition:.35s;
+
+}
+
+.hotel-content a:hover{
+
+    background:#42A5F5;
+
+}
+
+/*==========================================================
+FEATURED TOURS
+==========================================================*/
+
+.featured-tours{
+
+    background:#081726;
+
+}
+
+.tours-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+
+    gap:30px;
+
+}
+
+.tour-card{
+
+    background:#10263D;
+
+    border-radius:28px;
+
+    overflow:hidden;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.35s;
+
+}
+
+.tour-card:hover{
+
+    transform:translateY(-8px);
+
+}
+
+.tour-card img{
+
+    width:100%;
+
+    height:250px;
+
+    object-fit:cover;
+
+    transition:.5s;
+
+}
+
+.tour-card:hover img{
+
+    transform:scale(1.08);
+
+}
+
+.tour-content{
+
+    padding:28px;
+
+}
+
+.tour-content h3{
+
+    color:#fff;
+
+    margin-bottom:12px;
+
+}
+
+.tour-content p{
+
+    color:#C9D7E8;
+
+    margin-bottom:12px;
+
+}
+
+.tour-content span{
+
+    display:block;
+
+    margin-bottom:20px;
+
+    color:#AFC6DA;
+
+}
+
+.tour-content strong{
+
+    display:block;
+
+    color:#42A5F5;
+
+    font-size:28px;
+
+    margin-bottom:25px;
+
+}
+
+.tour-content a{
+
+    display:block;
+
+    text-align:center;
+
+    padding:15px;
+
+    border-radius:16px;
+
+    background:#1E88E5;
+
+    color:#fff;
+
+    font-weight:700;
+
+}
+
+/*==========================================================
+SECURITY CLEARANCE
+==========================================================*/
+
+.security-clearance{
+
+    background:#071320;
+
+}
+
+.security-box{
+
+    display:grid;
+
+    grid-template-columns:1.2fr 1fr;
+
+    gap:60px;
+
+    align-items:center;
+
+    background:#10263D;
+
+    border-radius:30px;
+
+    padding:60px;
+
+}
+
+.security-text h2{
+
+    margin:20px 0;
+
+}
+
+.security-text p{
+
+    margin-bottom:25px;
+
+}
+
+.security-text ul{
+
+    display:grid;
+
+    gap:15px;
+
+    margin-bottom:35px;
+
+}
+
+.security-text li{
+
+    color:#DCE8F5;
+
+}
+
+.security-image img{
+
+    border-radius:24px;
+
+    width:100%;
+
+}
+
+/*==========================================================
+VISA SERVICES
+==========================================================*/
+
+.visa-services{
+
+    background:#081726;
+
+}
+
+.visa-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+    gap:30px;
+
+}
+
+.visa-card{
+
+    text-align:center;
+
+    background:#10263D;
+
+    padding:45px 30px;
+
+    border-radius:24px;
+
+    transition:.35s;
+
+}
+
+.visa-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
+
+}
+
+.visa-card i{
+
+    font-size:54px;
+
+    color:#42A5F5;
+
+    margin-bottom:20px;
+
+}
+
+.visa-card h3{
+
+    color:#fff;
+
+}
+
+/*==========================================================
+TESTIMONIALS
+==========================================================*/
+
+.testimonials{
+
+    background:#071320;
+
+}
+
+.testimonials-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+
+    gap:30px;
+
+}
+
+.testimonial-card{
+
+    background:#10263D;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:28px;
+
+    padding:35px;
+
+    transition:.35s;
+
+}
+
+.testimonial-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 55px rgba(0,0,0,.35);
+
+}
+
+.stars{
+
+    color:#FFD54F;
+
+    font-size:22px;
+
+    margin-bottom:20px;
+
+}
+
+.client{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    margin-top:30px;
+
+}
+
+.client img{
+
+    width:70px;
+
+    height:70px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+}
+
+.client h4{
+
+    color:#fff;
+
+    margin-bottom:6px;
+
+}
+
+.client span{
+
+    color:#B9C9D9;
+
+}
+
+/*==========================================================
+PARTNERS
+==========================================================*/
+
+.partners{
+
+    background:#081726;
+
+}
+
+.partners-slider{
+
+    display:grid;
+
+    grid-template-columns:repeat(6,1fr);
+
+    gap:25px;
+
+    align-items:center;
+
+}
+
+.partners-slider img{
+
+    width:100%;
+
+    max-height:70px;
+
+    object-fit:contain;
+
+    filter:grayscale(100%);
+
+    opacity:.7;
+
+    transition:.35s;
+
+}
+
+.partners-slider img:hover{
+
+    filter:none;
+
+    opacity:1;
+
+    transform:scale(1.08);
+
+}
+
+/*==========================================================
+NEWSLETTER
+==========================================================*/
+
+.newsletter{
+
+    background:linear-gradient(
+        135deg,
+        #0D1E30,
+        #10263D
+    );
+
+}
+
+.newsletter-box{
+
+    max-width:900px;
+
+    margin:auto;
+
+    padding:70px;
+
+    text-align:center;
+
+    border-radius:30px;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(18px);
+
+}
+
+.newsletter-box h2{
+
+    margin-bottom:18px;
+
+}
+
+.newsletter-box p{
+
+    margin-bottom:35px;
+
+}
+
+.newsletter-box form{
+
+    display:flex;
+
+    gap:20px;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+}
+
+.newsletter-box input{
 
     flex:1;
 
-    border:none;
+    min-width:280px;
 
-    background:rgba(255,255,255,.08);
+    height:60px;
 
-    color:white;
+    border-radius:16px;
 
-    border-radius:15px;
+    padding:0 20px;
 
-    cursor:pointer;
+    background:#13283E;
+
+    color:#fff;
+
+    border:1px solid rgba(255,255,255,.08);
+
+}
+
+.newsletter-box button{
+
+    height:60px;
+
+    padding:0 35px;
+
+    border-radius:16px;
+
+    background:#1E88E5;
+
+    color:#fff;
+
+    font-weight:700;
+
+    transition:.35s;
+
+}
+
+.newsletter-box button:hover{
+
+    background:#42A5F5;
+
+}
+
+/*==========================================================
+HOME RESPONSIVE
+==========================================================*/
+
+@media(max-width:1200px){
+
+    .security-box{
+
+        grid-template-columns:1fr;
+
+        text-align:center;
+
+    }
+
+}
+
+@media(max-width:992px){
+
+    .hero{
+
+        min-height:auto;
+
+        padding:160px 0 100px;
+
+    }
+
+    .hero-buttons{
+
+        flex-direction:column;
+
+        align-items:center;
+
+    }
+
+    .partners-slider{
+
+        grid-template-columns:repeat(3,1fr);
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .booking-form{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .newsletter-box{
+
+        padding:40px 25px;
+
+    }
+
+    .newsletter-box form{
+
+        flex-direction:column;
+
+    }
+
+}
+
+@media(max-width:576px){
+
+    .section-header{
+
+        margin-bottom:45px;
+
+    }
+
+    .hero h1{
+
+        font-size:42px;
+
+    }
+
+    .hero p{
+
+        font-size:17px;
+
+    }
+
+    .partners-slider{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+    .hotel-card img,
+    .tour-card img,
+    .offer-card img{
+
+        height:220px;
+
+    }
 
 }
