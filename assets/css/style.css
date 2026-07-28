@@ -430,20 +430,22 @@ NAVBAR
 
     min-height:86px;
 
+.logo{
+    display:flex;
+    align-items:center;
 }
 
 .logo img{
-
-    .logo img{
-
-    width:180px;
-
-    height:auto;
-
+    height:48px;
+    width:auto;
     display:block;
-
     object-fit:contain;
+}
 
+@media (max-width:768px){
+    .logo img{
+        height:38px;
+    }
 }
     
 /*==========================================================
