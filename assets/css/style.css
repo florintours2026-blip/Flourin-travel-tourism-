@@ -421,28 +421,29 @@ NAVBAR
 }
 
 .navbar .container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 86px;
+}
 
-    .logo{
-    flex:0 0 auto;
-    margin-left:20px;
+.logo{
+    display: flex;
+    align-items: center;
 }
 
 .logo img{
-    height:56px;
-    width:auto;
-    display:block;
-    object-fit:contain;
+    height: 48px;
+    width: auto;
+    display: block;
+    object-fit: contain;
 }
 
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    min-height:74px;
-padding:0 20px;
-gap:24px;
+@media (max-width:768px){
+    .logo img{
+        height: 38px;
+    }
+}
 
 .logo{
     display:flex;
