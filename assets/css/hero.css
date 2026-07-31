@@ -8,7 +8,9 @@
 
     width:100%;
 
-    min-height:100vh;
+    height:650px;
+
+    min-height:650px;
 
     overflow:hidden;
 
@@ -21,7 +23,6 @@
     background:#071320;
 
 }
-
 /*==========================================================
   HERO SLIDER
 ==========================================================*/
@@ -195,7 +196,9 @@
 
     .hero{
 
-        min-height:85vh;
+        height:420px;
+
+        min-height:420px;
 
     }
 
