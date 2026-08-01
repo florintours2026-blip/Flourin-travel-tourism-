@@ -45,6 +45,8 @@
 
 .hero-slide{
 
+    .hero-slide{
+
     position:absolute;
 
     inset:0;
@@ -55,20 +57,15 @@
 
     object-fit:cover;
 
-    opacity:0;
+    opacity:1 !important;
 
-    visibility:hidden;
+    visibility:visible !important;
 
-    transition:
-        opacity .8s ease,
-        visibility .8s ease,
-        transform 8s ease;
+    transform:none !important;
 
-    transform:scale(1);
+    }
 
-}
-
-.hero-slide.active{
+/*.hero-slide.active{
 
     opacity:1;
 
