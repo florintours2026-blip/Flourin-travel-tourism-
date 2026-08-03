@@ -1,3 +1,5 @@
+import { saveBooking } from "./booking-database.js";
+
 /*==========================================================
 BOOKING FORM DYNAMIC FIELDS
 ==========================================================*/
@@ -141,6 +143,88 @@ if (serviceSelect) {
                 `;
 
                 break;
+
+        }
+
+    });
+
+}
+
+/*==========================================================
+BOOKING SUBMIT
+==========================================================*/
+
+const bookingForm = document.getElementById("bookingForm");
+
+if (bookingForm) {
+
+    bookingForm.addEventListener("submit", async (event) => {
+
+        event.preventDefault();
+
+        const bookingData = {
+
+            fullName: document.getElementById("fullName").value.trim(),
+
+            phone: document.getElementById("phone").value.trim(),
+
+            email: document.getElementById("email").value.trim(),
+
+            country: document.getElementById("country").value,
+
+            service: document.getElementById("service").value,
+
+            destination: document.getElementById("destination").value,
+
+            travelDate: document.getElementById("travelDate").value,
+
+            travelers: document.getElementById("travelers").value,
+
+            notes: document.getElementById("notes").value.trim()
+
+        };
+
+        if (!bookingData.service) {
+
+    alert("Please select a service.");
+
+    return;
+
+}
+
+if (
+
+    !bookingData.fullName ||
+
+    !bookingData.phone ||
+
+    !bookingData.destination ||
+
+    !bookingData.travelDate
+
+) {
+
+    alert("Please complete all required fields.");
+
+    return;
+
+}
+
+        const success = await saveBooking(bookingData);
+
+        if (success) {
+
+            alert("Your booking request has been sent successfully.");
+
+            bookingForm.reset();
+
+            dynamicFields.innerHTML = "";
+
+        }
+
+        else {
+
+            alert("An error occurred while sending your request.");
 
         }
 
