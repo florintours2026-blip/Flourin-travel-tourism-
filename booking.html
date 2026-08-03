@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Book Your Trip | FLORIN Travel</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <link rel="stylesheet" href="assets/css/booking.css">
+
+</head>
+
+<body>
+
+    <main class="booking-page">
+
+        <div class="booking-container">
+
+            <div class="booking-header">
+
+                <img
+                    src="assets/images/logo/logo.png"
+                    alt="FLORIN Travel"
+                    class="booking-logo">
+
+                <h1>Book Your Trip</h1>
+
+                <p>
+
+                    Complete the form below and our travel experts will contact you shortly.
+
+                </p>
+
+            </div>
+
+            <form id="bookingForm" class="booking-form">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>Full Name</label>
+
+                        <input
+                            type="text"
+                            id="fullName"
+                            required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Email Address</label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Phone Number</label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Country</label>
+
+                        <input
+                            type="text"
+                            id="country"
+                            required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Destination</label>
+
+                        <select id="destination" required>
+
+                            <option value="">Choose Destination</option>
+
+                            <option>Dubai</option>
+
+                            <option>Istanbul</option>
+
+                            <option>Maldives</option>
+
+                            <option>Makkah</option>
+
+                            <option>Egypt</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Departure Date</label>
+
+                        <input
+                            type="date"
+                            id="departureDate"
+                            required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Return Date</label>
+
+                        <input
+                            type="date"
+                            id="returnDate">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Adults</label>
+
+                        <input
+                            type="number"
+                            id="adults"
+                            value="1"
+                            min="1">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Children</label>
+
+                        <input
+                            type="number"
+                            id="children"
+                            value="0"
+                            min="0">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Hotel Category</label>
+
+                        <select id="hotel">
+
+                            <option>3 Stars</option>
+
+                            <option>4 Stars</option>
+
+                            <option selected>5 Stars</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Additional Notes</label>
+
+                    <textarea
+                        id="notes"
+                        rows="5"></textarea>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="booking-btn">
+
+                    Book Now
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </main>
+
+    <script type="module" src="assets/js/auth-guard.js"></script>
+
+    <script type="module" src="assets/js/booking.js"></script>
+
+</body>
+
+  </html>
