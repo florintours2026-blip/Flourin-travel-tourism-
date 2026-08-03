@@ -39,158 +39,156 @@
 
             </div>
 
-            <form id="bookingForm" class="booking-form">
+<form id="bookingForm" class="booking-form">
 
-                <div class="form-grid">
+    <h2>Customer Information</h2>
 
-                    <div class="form-group">
+    <div class="form-grid">
 
-                        <label>Full Name</label>
+        <div class="form-group">
+            <label for="fullName">Full Name *</label>
+            <input type="text" id="fullName" required>
+        </div>
 
-                        <input
-                            type="text"
-                            id="fullName"
-                            required>
+        <div class="form-group">
+            <label for="phone">Phone Number *</label>
+            <input type="tel" id="phone" required>
+        </div>
 
-                    </div>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email">
+        </div>
 
-                    <div class="form-group">
+        <div class="form-group">
+            <label for="country">Country</label>
 
-                        <label>Email Address</label>
+            <select id="country">
 
-                        <input
-                            type="email"
-                            id="email"
-                            required>
+                <option value="">Select Country</option>
 
-                    </div>
+                <option>Egypt</option>
+                <option>Saudi Arabia</option>
+                <option>United Arab Emirates</option>
+                <option>Kuwait</option>
+                <option>Qatar</option>
+                <option>Bahrain</option>
+                <option>Oman</option>
+                <option>Jordan</option>
+                <option>Iraq</option>
+                <option>Libya</option>
 
-                    <div class="form-group">
+            </select>
 
-                        <label>Phone Number</label>
+        </div>
 
-                        <input
-                            type="tel"
-                            id="phone"
-                            required>
+    </div>
 
-                    </div>
+    <h2>Service Details</h2>
 
-                    <div class="form-group">
+    <div class="form-grid">
 
-                        <label>Country</label>
+        <div class="form-group">
 
-                        <input
-                            type="text"
-                            id="country"
-                            required>
+            <label for="service">Required Service</label>
 
-                    </div>
+            <select id="service" required>
 
-                    <div class="form-group">
+                <option value="">Select Service</option>
 
-                        <label>Destination</label>
+                <option value="flight">✈ Flight Booking</option>
 
-                        <select id="destination" required>
+                <option value="hotel">🏨 Hotel Booking</option>
 
-                            <option value="">Choose Destination</option>
+                <option value="tour">🌍 Tour Package</option>
 
-                            <option>Dubai</option>
+                <option value="umrah">🕋 Umrah</option>
 
-                            <option>Istanbul</option>
+                <option value="visa">📄 Visa</option>
 
-                            <option>Maldives</option>
+                <option value="security">🛡 Security Clearance</option>
 
-                            <option>Makkah</option>
+            </select>
 
-                            <option>Egypt</option>
+        </div>
 
-                        </select>
+        <div class="form-group">
 
-                    </div>
+            <label for="destination">Destination</label>
 
-                    <div class="form-group">
+            <select id="destination">
 
-                        <label>Departure Date</label>
+                <option value="">Select Destination</option>
 
-                        <input
-                            type="date"
-                            id="departureDate"
-                            required>
+                <option>Dubai</option>
 
-                    </div>
+                <option>Istanbul</option>
 
-                    <div class="form-group">
+                <option>Maldives</option>
 
-                        <label>Return Date</label>
+                <option>Makkah</option>
 
-                        <input
-                            type="date"
-                            id="returnDate">
+                <option>Madinah</option>
 
-                    </div>
+                <option>Cairo</option>
 
-                    <div class="form-group">
+                <option>Sharm El Sheikh</option>
 
-                        <label>Adults</label>
+                <option>Paris</option>
 
-                        <input
-                            type="number"
-                            id="adults"
-                            value="1"
-                            min="1">
+                <option>London</option>
 
-                    </div>
+            </select>
 
-                    <div class="form-group">
+        </div>
 
-                        <label>Children</label>
+        <div class="form-group">
 
-                        <input
-                            type="number"
-                            id="children"
-                            value="0"
-                            min="0">
+            <label for="travelDate">Travel Date</label>
 
-                    </div>
+            <input type="date" id="travelDate">
 
-                    <div class="form-group">
+        </div>
 
-                        <label>Hotel Category</label>
+        <div class="form-group">
 
-                        <select id="hotel">
+            <label for="travelers">Number of Travelers</label>
 
-                            <option>3 Stars</option>
+            <input
+                type="number"
+                id="travelers"
+                value="1"
+                min="1">
 
-                            <option>4 Stars</option>
+        </div>
 
-                            <option selected>5 Stars</option>
+    </div>
 
-                        </select>
+    <div id="dynamicFields"></div>
 
-                    </div>
+    <div class="form-group">
 
-                </div>
+        <label for="notes">
 
-                <div class="form-group">
+            Special Requests / Notes
 
-                    <label>Additional Notes</label>
+        </label>
 
-                    <textarea
-                        id="notes"
-                        rows="5"></textarea>
+        <textarea
+            id="notes"
+            rows="6"></textarea>
 
-                </div>
+    </div>
 
-                <button
-                    type="submit"
-                    class="booking-btn">
+    <button
+        type="submit"
+        class="booking-btn">
 
-                    Book Now
+        Submit Booking Request
 
-                </button>
+    </button>
 
-            </form>
+</form>
 
         </div>
 
