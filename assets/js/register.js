@@ -3,6 +3,10 @@ import {
     loginWithGoogle
 } from "./auth.js";
 
+import {
+    saveUser
+} from "./database.js";
+
 /*==========================================================
 REGISTER FORM
 ==========================================================*/
@@ -33,15 +37,17 @@ if (registerForm) {
 
         try {
 
-            await registerUser(
+            const user = await registerUser(
                 fullName,
                 email,
                 password
             );
 
+            await saveUser(user);
+
             alert("Account created successfully.");
 
-            window.location.href = "index.html";
+            window.location.href = "profile.html";
 
         }
 
@@ -67,9 +73,11 @@ if (googleRegister) {
 
         try {
 
-            await loginWithGoogle();
+            const user = await loginWithGoogle();
 
-            window.location.href = "index.html";
+            await saveUser(user);
+
+            window.location.href = "profile.html";
 
         }
 
