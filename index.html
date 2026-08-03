@@ -160,17 +160,51 @@ info@florintours.com
 
 <div class="header-actions">
 
+<!-- AUTH -->
+
+<a href="login.html" id="loginLink" class="auth-link">
+
+<i class="fa-solid fa-right-to-bracket"></i>
+Login
+
+</a>
+
+
+<a href="profile.html" id="profileLink" class="auth-link" style="display:none;">
+
+<i class="fa-solid fa-user"></i>
+<span id="navUserName"></span>
+
+</a>
+
+
+<a href="#" id="logoutLink" class="auth-link" style="display:none;">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+
+</a>
+
+
+<!-- THEME -->
+
 <button id="themeToggle">
 
 <i class="fa-solid fa-moon"></i>
 
 </button>
 
+
+<!-- LANGUAGE -->
+
 <button id="langToggle">
 
 AR | EN
 
 </button>
+
+
+<!-- MOBILE -->
 
 <button class="mobile-menu">
 
@@ -180,9 +214,10 @@ AR | EN
 
 </div>
 
-</div>
+      </div>
 
 </nav>
+    
 
 <!-- ================= Hero يبدأ هنا ================= -->
 
@@ -1818,10 +1853,14 @@ AR | EN
 
 </footer>
     
- <script src="assets/js/hero-slider.js"></script>
+<script src="assets/js/hero-slider.js"></script>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/home.js"></script>
 
+<script type="module" src="assets/js/navbar-auth.js"></script>
+
+</body>
+    
 </body>
 
 </html>  
