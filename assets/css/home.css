@@ -363,13 +363,10 @@ POPULAR DESTINATIONS
 }
 
 .destination-grid{
-
     display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-
-    gap:30px;
-
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:24px;
+    align-items:stretch;
 }
 
 .destination-card{
@@ -711,13 +708,10 @@ FEATURED FLIGHTS
 }
 
 .flights-grid{
-
     display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
-
-    gap:30px;
-
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:24px;
+    align-items:stretch;
 }
 
 .flight-card{
@@ -875,13 +869,10 @@ FEATURED HOTELS
 }
 
 .hotels-grid{
-
     display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-
-    gap:30px;
-
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:24px;
+    align-items:stretch;
 }
 
 .hotel-card{
