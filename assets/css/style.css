@@ -404,27 +404,34 @@ NAVBAR
 
 .navbar{
 
-    position:sticky;
+    position: sticky;
 
-    top:0;
+    top: 0;
 
-    width:100%;
+    z-index: 9999;
 
-    z-index:9999;
+    width: 100%;
 
-    background:rgba(7,19,32,.88);
+    background: rgba(7,19,32,.95);
 
-    backdrop-filter:blur(20px);
+    backdrop-filter: blur(18px);
 
-    border-bottom:1px solid rgba(255,255,255,.08);
+    border-bottom: 1px solid rgba(255,255,255,.08);
 
 }
 
 .navbar .container{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 86px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    min-height:78px;
+
+    gap:24px;
+
 }
 
 .logo{
@@ -484,49 +491,31 @@ NAVIGATION
 
     justify-content:center;
 
-    gap:28px;
+    gap:22px;
 
     flex:1;
 
 }
 
+.nav-links li{
+
+    position:relative;
+
+}
+
 .nav-links a{
 
-    color:#fff;
+    display:block;
 
-    font-size:16px;
+    padding:8px 4px;
+
+    font-size:15px;
 
     font-weight:600;
 
-    white-space:nowrap;
+    color:#fff;
 
     transition:.3s;
-
-}
-
-.nav-links a:hover{
-
-    color:#42A5F5;
-
-}
-    
-.nav-links a::after{
-
-    content:"";
-
-    position:absolute;
-
-    right:0;
-
-    bottom:-6px;
-
-    width:0;
-
-    height:2px;
-
-    background:var(--primary-light);
-
-    transition:var(--transition);
 
 }
 
@@ -552,39 +541,33 @@ HEADER ACTIONS
 
     align-items:center;
 
-    gap:14px;
+    gap:10px;
+
+    flex-shrink:0;
 
 }
 
 .header-actions button{
 
-    width:46px;
+    width:42px;
 
-    height:46px;
+    height:42px;
 
     border-radius:50%;
 
-    display:flex;
+}
 
-    justify-content:center;
+.auth-link{
+
+    display:flex;
 
     align-items:center;
 
-    background:rgba(255,255,255,.08);
+    gap:8px;
 
-    color:#fff;
+    font-size:14px;
 
-    font-size:18px;
-
-    transition:var(--transition);
-
-}
-
-.header-actions button:hover{
-
-    background:var(--primary);
-
-    transform:translateY(-3px);
+    white-space:nowrap;
 
 }
 
@@ -1503,6 +1486,82 @@ min-height:650px;
         min-height:420px;
 
     }
+
+}
+
+/*==========================
+MOBILE NAVBAR
+==========================*/
+
+.mobile-menu{
+
+    display:none;
+
+}
+
+@media (max-width:991px){
+
+.top-header{
+
+display:none;
+
+}
+
+.mobile-menu{
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+.nav-links{
+
+position:fixed;
+
+top:78px;
+
+right:-100%;
+
+width:300px;
+
+height:calc(100vh - 78px);
+
+background:#091827;
+
+flex-direction:column;
+
+justify-content:flex-start;
+
+padding:35px 20px;
+
+gap:18px;
+
+transition:.35s;
+
+z-index:999;
+
+}
+
+.nav-links.active{
+
+right:0;
+
+}
+
+.header-actions{
+
+gap:8px;
+
+}
+
+.auth-link span{
+
+display:none;
+
+}
 
 }
 
