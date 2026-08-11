@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عروض فلورين | FLORIN Travel & Tourism</title>
+<meta name="description" content="استعرض عروض فلورين واختَر العرض ثم أرسل بيانات الحجز يدويًا.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
+<link rel="stylesheet" href="assets/css/offers.css">
+</head>
+<body>
+
+<nav class="navbar">
+<div class="container">
+<a href="index.html" class="logo"><img src="assets/images/logo/logo.png" alt="FLORIN"></a>
+<ul class="nav-links">
+<li><a href="index.html">الرئيسية</a></li>
+<li><a href="offers.html">العروض</a></li>
+<li><a href="booking.html">الحجز</a></li>
+</ul>
+<div class="header-actions">
+<a href="login.html" class="auth-link"><i class="fa-solid fa-right-to-bracket"></i><span>دخول</span></a>
+<button id="themeToggle" type="button"><i class="fa-solid fa-moon"></i></button>
+<button class="mobile-menu" type="button"><i class="fa-solid fa-bars"></i></button>
+</div>
+</div>
+</nav>
+
+<main class="offers-page">
+<div class="container">
+
+<header class="offers-hero">
+<span class="section-badge">عروض FLORIN</span>
+<h1>اختر عرضك واحجز بالطريقة التي تناسبك</h1>
+<p>اضغط على أي عرض لعرض التفاصيل والخدمات المشمولة، ثم أدخل بياناتك يدويًا لإرسال طلب الحجز إلى فلورين.</p>
+</header>
+
+<section class="offers-catalog" id="offersCatalog"></section>
+
+<section class="offer-details" id="offerDetails" aria-live="polite"></section>
+
+<section class="manual-booking" id="manualBooking">
+<h2>طلب حجز يدوي</h2>
+<p>أدخل بياناتك وسنراجع الطلب ونتواصل معك لتأكيد السعر والتوفر والتفاصيل النهائية.</p>
+
+<form id="manualBookingForm" class="manual-booking-form">
+<div>
+<label for="customerName">الاسم الكامل *</label>
+<input id="customerName" name="customerName" type="text" autocomplete="name" required>
+</div>
+<div>
+<label for="customerPhone">رقم الهاتف / واتساب *</label>
+<input id="customerPhone" name="customerPhone" type="tel" autocomplete="tel" required>
+</div>
+<div>
+<label for="customerEmail">البريد الإلكتروني</label>
+<input id="customerEmail" name="customerEmail" type="email" autocomplete="email">
+</div>
+<div>
+<label for="customerCountry">الدولة</label>
+<input id="customerCountry" name="customerCountry" type="text" autocomplete="country-name">
+</div>
+<div>
+<label for="travelDateOffer">تاريخ السفر</label>
+<input id="travelDateOffer" name="travelDateOffer" type="date">
+</div>
+<div>
+<label for="travelerCount">عدد المسافرين</label>
+<input id="travelerCount" name="travelerCount" type="number" min="1" value="1">
+</div>
+<div class="full">
+<label for="customerNotes">ملاحظات / طلبات خاصة</label>
+<textarea id="customerNotes" name="customerNotes" placeholder="اكتب أي تفاصيل تريد إضافتها للطلب..."></textarea>
+</div>
+<input type="hidden" id="selectedOfferId" name="selectedOfferId">
+<input type="hidden" id="selectedOfferName" name="selectedOfferName">
+<button class="submit" type="submit"><i class="fa-solid fa-paper-plane"></i> إرسال طلب الحجز</button>
+</form>
+<div id="bookingStatus" class="booking-status"></div>
+</section>
+
+</div>
+</main>
+
+<script src="assets/js/main.js"></script>
+<script type="module" src="assets/js/offers.js"></script>
+</body>
+</html>
