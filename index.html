@@ -153,6 +153,7 @@ info@florintours.com
 <li><a href="visas.html">التأشيرات</a></li>
 
 <li><a href="offers.html">العروض</a></li>
+<li><a href="admin.html" id="adminNavLink" style="display:none;">لوحة الإدارة</a></li>
 
 <li><a href="contact.html">اتصل بنا</a></li>
 
@@ -406,221 +407,17 @@ AR | EN
 <!-- OFFERS -->
 
     <section class="offers">
-
-    <div class="container">
-
-        <div class="section-header">
-
-            <span class="section-badge">
-                أفضل العروض
-            </span>
-
-            <h2>
-                عروض فلورين المميزة
-            </h2>
-
-            <p>
-                اختر وجهتك واستمتع بأفضل الأسعار والعروض الحصرية.
-            </p>
-
-        </div>
-
-        <div class="offers-grid">
-
-            <article class="offer-card">
-
-                <img src="assets/images/offers/dubai-offer.png"
-                     alt="Dubai Offer">
-
-                <div class="offer-content">
-
-                    <span class="offer-country">
-                        دبي
-                    </span>
-
-                    <h3>
-                        رحلة إلى دبي
-                    </h3>
-
-                    <p>
-                        5 أيام / 4 ليالٍ
-                    </p>
-
-                    <a href="offers.html" class="offer-btn">
-                        عرض التفاصيل
-                    </a>
-
-                </div>
-
-            </article>
-
-            <article class="offer-card">
-
-    <img src="assets/images/offers/maldives-offer.png"
-         alt="Maldives Offer">
-
-    <div class="offer-content">
-
-        <span class="offer-country">
-            المالديف
-        </span>
-
-        <h3>
-            رحلة إلى المالديف
-        </h3>
-
-        <p>
-            5 أيام / 4 ليالٍ
-        </p>
-
-        <a href="offers.html" class="offer-btn">
-            عرض التفاصيل
-        </a>
-
-    </div>
-
-            </article>
-
-            <article class="offer-card">
-
-    <img src="assets/images/offers/istanbul-offer.png"
-         alt="Istanbul Offer">
-
-    <div class="offer-content">
-
-        <span class="offer-country">
-            إسطنبول
-        </span>
-
-        <h3>
-            رحلة إلى إسطنبول
-        </h3>
-
-        <p>
-            6 أيام / 5 ليالٍ
-        </p>
-
-        <a href="offers.html" class="offer-btn">
-            عرض التفاصيل
-        </a>
-
-    </div>
-
-            </article>
-
-            <article class="offer-card">
-
-    <img src="assets/images/offers/makkah-offer.png"
-         alt="Makkah Offer">
-
-    <div class="offer-content">
-
-        <span class="offer-country">
-            مكة المكرمة
-        </span>
-
-        <h3>
-            رحلة عمرة
-        </h3>
-
-        <p>
-            باقات عمرة مميزة
-        </p>
-
-        <a href="offers.html" class="offer-btn">
-            عرض التفاصيل
-        </a>
-
-    </div>
-
-            </article>
-
-            <article class="offer-card">
-
-    <img src="assets/images/offers/egypt-offer.png"
-         alt="Egypt Offer">
-
-    <div class="offer-content">
-
-        <span class="offer-country">
-            مصر
-        </span>
-
-        <h3>
-            اكتشف مصر
-        </h3>
-
-        <p>
-            القاهرة وشرم الشيخ
-        </p>
-
-        <a href="offers.html" class="offer-btn">
-            عرض التفاصيل
-        </a>
-
-    </div>
-
-            </article>
-
-            <article class="offer-card">
-
-    <img src="assets/images/offers/egypt-security-offer.png"
-         alt="Security Approval">
-
-    <div class="offer-content">
-
-        <span class="offer-country">
-            الموافقة الأمنية
-        </span>
-
-        <h3>
-            دخول مصر
-        </h3>
-
-        <p>
-            متابعة كاملة للطلب
-        </p>
-
-        <a href="offers.html" class="offer-btn">
-            عرض التفاصيل
-        </a>
-
-    </div>
-
-            </article>
-
-            <article class="offer-card">
-
-<img src="assets/images/offers/florin-offer.png"
-     alt="Florin Offer">
-                
-    <div class="offer-content">
-
-        <span class="offer-country">
-            Florin
-        </span>
-
-        <h3>
-            أفضل عروض السفر
-        </h3>
-
-        <p>
-            اكتشف جميع الباقات
-        </p>
-
-        <a href="offers.html" class="offer-btn">
-            عرض التفاصيل
-        </a>
-
-    </div>
-
-            </article>
-
-        </div>
-
-    </div>
-
-    </section>
+<div class="container">
+<div class="section-header">
+<span class="section-badge">أفضل العروض</span>
+<h2>عروض فلورين المميزة</h2>
+<p>اختر وجهتك واستمتع بأفضل الأسعار والعروض الحصرية.</p>
+</div>
+<div class="offers-grid" id="homeOffersGrid">
+<div class="offer-loading">جاري تحميل العروض...</div>
+</div>
+</div>
+</section>
 
 <!-- SERVICES -->
 
@@ -1771,13 +1568,9 @@ AR | EN
 
             <div>
 
-                <img<a href="index.html" class="footer-logo">
-
-    <img
-        src="assets/images/logo/logo-white.png"
-        alt="Florin Travel & Tourism">
-
-            </a>
+                <a href="index.html" class="footer-logo">
+    <img src="assets/images/logo/logo.png" alt="FLORIN Travel & Tourism">
+</a>
 
                     فلورين للسفر والسياحة تقدم خدمات متكاملة تشمل حجز الطيران، الفنادق، البرامج السياحية، التأشيرات، والموافقات الأمنية.
 
@@ -1800,6 +1593,7 @@ AR | EN
                     <li><a href="hotels.html">الفنادق</a></li>
                     <li><a href="tours.html">البرامج السياحية</a></li>
                     <li><a href="offers.html">العروض</a></li>
+<li><a href="admin.html" id="adminNavLink" style="display:none;">لوحة الإدارة</a></li>
 
                 </ul>
 
@@ -1860,7 +1654,4 @@ AR | EN
 <script type="module" src="assets/js/navbar-auth.js"></script>
 
 </body>
-    
-</body>
-
 </html>  
