@@ -1568,3 +1568,21 @@ display:none;
 /*==========================================================
 END OF STYLE.CSS
 ==========================================================*/
+
+
+/*==========================================================
+FLORIN MOBILE SAFETY OVERRIDES
+==========================================================*/
+.mobile-menu{
+    display:none;
+}
+
+@media(max-width:991px){
+    .mobile-menu{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:rgba(255,255,255,.06);
+        color:#fff;
+    }
+}
