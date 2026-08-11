@@ -1,32 +1,21 @@
-<!doctype html>
-<html lang="ar" dir="rtl"><head>
+<!doctype html><html lang="ar" dir="rtl"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>تفاصيل العرض | FLORIN Travel & Tourism Agency</title>
-<link rel="stylesheet" href="assets/css/style.css">
-<style>
-:root{--bg:#061525;--card:#102b45;--blue:#2495e8;--text:#f7f9fc;--muted:#aab9c8}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Tahoma,sans-serif;direction:rtl}
-a{text-decoration:none;color:inherit}.container{width:min(1180px,92%);margin:auto}.page-head{text-align:center;padding:65px 0 30px}
-.badge{display:inline-block;padding:9px 16px;border-radius:999px;background:#0b2943;color:#48aaf2;border:1px solid #17466b;font-weight:700}
-.page-head h1{font-size:clamp(30px,4vw,48px);margin:18px 0 10px}.page-head p,.card p,.note{color:var(--muted);line-height:1.9}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;padding-bottom:70px}.card{background:var(--card);border:1px solid #ffffff12;border-radius:22px;overflow:hidden;box-shadow:0 14px 35px #0003}
-.card-icon{height:150px;display:grid;place-items:center;background:#0b2035;font-size:58px}.card-body{padding:22px}.card h2{margin:0 0 10px}
-.btn{display:flex;align-items:center;justify-content:center;min-height:48px;padding:12px 18px;background:var(--blue);border-radius:14px;font-weight:800;margin-top:16px}
-.btn.secondary{background:transparent;border:1px solid #2495e877;color:#48aaf2}.details-wrap{padding:35px 0 80px}.back{color:#48aaf2}
-.details{display:grid;grid-template-columns:1.2fr .8fr;gap:24px}.details-main,.details-side{background:var(--card);border:1px solid #ffffff12;border-radius:22px;padding:28px}
-.details-main h1{font-size:clamp(28px,4vw,44px);margin:15px 0}.meta{display:flex;flex-wrap:wrap;gap:10px}.meta span{background:#ffffff0b;padding:8px 12px;border-radius:10px;color:var(--muted)}
-.section-title{font-size:21px;font-weight:800;margin:28px 0 12px}.list{list-style:none;padding:0;margin:0;display:grid;gap:10px}.list li:before{content:"✓";color:#48aaf2;font-weight:bold;margin-left:8px}.price{font-size:30px;color:#48aaf2;font-weight:900;margin:10px 0}
-@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.details{grid-template-columns:1fr}}
-@media(max-width:600px){.container{width:94%}.grid{grid-template-columns:1fr;gap:15px}.page-head{padding:45px 0 22px}.card-icon{height:130px}.details-main,.details-side{padding:20px;border-radius:18px}}
-</style></head><body><main class="details-wrap"><div class="container"><a class="back" href="javascript:history.back()">← العودة</a>
-<div class="details"><section class="details-main"><span class="badge" id="category">عرض</span><h1 id="title">تفاصيل العرض</h1>
-<div class="meta"><span id="destination"></span><span id="duration"></span></div>
-<div class="section-title">ماذا يشمل؟</div><ul class="list" id="included"></ul>
-<div class="section-title">ما لا يشمل</div><ul class="list" id="excluded"></ul>
-<div class="section-title">ملاحظات مهمة</div><p class="note">التفاصيل النهائية والسعر والتوافر يتم تأكيدها بعد مراجعة بيانات السفر وقبل إتمام الحجز.</p>
-</section><aside class="details-side"><div class="note">السعر</div><div class="price">يحدد حسب الطلب</div>
-<p class="note">أرسل بياناتك يدويًا وسنراجع العرض المناسب لك.</p><a id="book" class="btn" href="#">احجز الآن يدويًا</a><a class="btn secondary" href="tours.html">عروض أخرى</a></aside></div></div></main><script>const data={"dubai": ("رحلة إلى دبي", "دبي", "5 أيام / 4 ليالٍ", "رحلة سياحية"), "maldives": ("رحلة إلى المالديف", "المالديف", "5 أيام / 4 ليالٍ", "رحلة سياحية"), "istanbul": ("رحلة إلى إسطنبول", "إسطنبول", "6 أيام / 5 ليالٍ", "رحلة سياحية"), "umrah": ("رحلة عمرة", "مكة والمدينة", "حسب البرنامج", "عمرة"), "egypt": ("رحلة إلى مصر", "مصر", "حسب البرنامج", "رحلة سياحية"), "dubai-flight": ("رحلة طيران إلى دبي", "دبي", "حسب الرحلة", "طيران"), "malaysia-flight": ("رحلة طيران إلى ماليزيا", "كوالالمبور", "حسب الرحلة", "طيران"), "egypt-service": ("خدمة سفر إلى مصر", "مصر", "حسب نوع الخدمة", "خدمة"), "tourist-visa": ("طلب تأشيرة سياحية", "حسب الوجهة", "حسب الدولة والخدمة", "تأشيرات")};const p=new URLSearchParams(location.search);const id=p.get("id")||"dubai";const o=data[id]||data.dubai;
-document.getElementById("category").textContent=o[3];document.getElementById("title").textContent=o[0];document.getElementById("destination").textContent="📍 "+o[1];document.getElementById("duration").textContent="⏱️ "+o[2];
-const inc=["مراجعة وتنسيق الخدمة المطلوبة","إمكانية حجز الطيران والإقامة حسب الطلب","متابعة تفاصيل الرحلة قبل التأكيد"];const exc=["المصاريف الشخصية","أي خدمة إضافية غير مؤكدة","الرسوم الخارجية أو الحكومية إن وجدت"];
-document.getElementById("included").innerHTML=inc.map(x=>"<li>"+x+"</li>").join("");document.getElementById("excluded").innerHTML=exc.map(x=>"<li>"+x+"</li>").join("");
-document.getElementById("book").href="booking.html?offer="+encodeURIComponent(id)+"&offerName="+encodeURIComponent(o[0]);</script></body></html>
+<link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css"><link rel="stylesheet" href="assets/css/offers.css">
+</head><body><main class="details-wrap"><div class="container"><a class="back" href="offers.html">← العودة إلى العروض</a>
+<div id="offerDetailsPage"></div></div></main>
+<script type="module">
+import {getOffer} from "./assets/js/offers-data.js";
+const box=document.getElementById("offerDetailsPage");const id=new URLSearchParams(location.search).get("id")||"dubai";
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+const o=await getOffer(id);
+if(!o){box.innerHTML="<p>العرض غير موجود أو تم إخفاؤه.</p>";}
+else{document.title=o.name+" | FLORIN";box.innerHTML=`<div class="details"><section class="details-main"><span class="badge">${esc(o.category)}</span>
+<h1>${esc(o.name)}</h1><div class="meta"><span>📍 ${esc(o.country)}</span><span>⏱️ ${esc(o.duration)}</span></div>
+<p>${esc(o.description)}</p><div class="section-title">ماذا يشمل العرض؟</div><ul class="list">${(o.included||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+<div class="section-title">ما لا يشمل</div><ul class="list">${(o.excluded||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+<div class="section-title">ملاحظات مهمة</div><p class="note">${esc(o.notes)}</p></section>
+<aside class="details-side"><div class="note">السعر</div><div class="price">${esc(o.price)}</div><p class="note">السعر النهائي والتوفر يتم تأكيدهما بعد مراجعة بيانات السفر.</p>
+<a class="btn" href="booking.html?offer=${encodeURIComponent(o.id)}&offerName=${encodeURIComponent(o.name)}">احجز الآن يدويًا</a>
+<a class="btn secondary" href="offers.html">عروض أخرى</a></aside></div>`}
+</script></body></html>
