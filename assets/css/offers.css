@@ -1,0 +1,343 @@
+/*==========================================================
+FLORIN OFFERS & MANUAL BOOKING
+==========================================================*/
+
+.offers-page{
+    padding:70px 0 100px;
+    background:#071320;
+}
+
+.offers-hero{
+    text-align:center;
+    margin-bottom:45px;
+}
+
+.offers-hero h1{
+    font-size:clamp(34px,5vw,58px);
+    margin-bottom:12px;
+}
+
+.offers-hero p{
+    color:#b9cadd;
+    max-width:760px;
+    margin:auto;
+}
+
+.offers-catalog{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:22px;
+}
+
+.offer-item{
+    background:#10263D;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:24px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+    transition:.3s ease;
+}
+
+.offer-item:hover{
+    transform:translateY(-5px);
+    box-shadow:0 18px 45px rgba(0,0,0,.28);
+}
+
+.offer-item img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+}
+
+.offer-item-body{
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+    flex:1;
+}
+
+.offer-item-body .country{
+    color:#42A5F5;
+    font-size:14px;
+    font-weight:700;
+}
+
+.offer-item-body h2{
+    font-size:23px;
+}
+
+.offer-item-body p{
+    color:#c8d7e8;
+    font-size:14px;
+}
+
+.offer-price{
+    color:#42A5F5;
+    font-size:24px;
+    font-weight:800;
+    margin-top:auto;
+}
+
+.offer-actions{
+    display:flex;
+    gap:9px;
+    margin-top:10px;
+}
+
+.offer-actions a,
+.offer-actions button{
+    flex:1;
+    min-height:46px;
+    border-radius:13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+}
+
+.details-btn{
+    background:#1E88E5;
+    color:#fff;
+}
+
+.booking-btn-outline{
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.12);
+    color:#fff;
+}
+
+.offer-details{
+    display:none;
+    margin-top:38px;
+    background:#0D1E30;
+    border:1px solid rgba(66,165,245,.18);
+    border-radius:28px;
+    overflow:hidden;
+}
+
+.offer-details.active{
+    display:block;
+}
+
+.offer-details-grid{
+    display:grid;
+    grid-template-columns:1fr 1.15fr;
+}
+
+.offer-details-media img{
+    width:100%;
+    height:100%;
+    min-height:390px;
+    object-fit:cover;
+}
+
+.offer-details-content{
+    padding:34px;
+}
+
+.offer-details-content .country{
+    color:#42A5F5;
+    font-weight:700;
+}
+
+.offer-details-content h2{
+    margin:7px 0 10px;
+    font-size:clamp(28px,4vw,44px);
+}
+
+.detail-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin:18px 0 25px;
+}
+
+.detail-meta span{
+    padding:8px 12px;
+    border-radius:999px;
+    background:rgba(66,165,245,.09);
+    border:1px solid rgba(66,165,245,.16);
+    color:#dceafa;
+    font-size:13px;
+}
+
+.detail-columns{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.detail-box h3{
+    font-size:19px;
+    margin-bottom:9px;
+}
+
+.detail-box ul{
+    list-style:disc;
+    padding-right:20px;
+    color:#c8d7e8;
+}
+
+.detail-box li{
+    margin-bottom:7px;
+}
+
+.offer-note{
+    margin-top:20px;
+    padding:14px 16px;
+    border-radius:14px;
+    background:rgba(251,192,45,.08);
+    border:1px solid rgba(251,192,45,.18);
+    color:#f6e5a9;
+    font-size:13px;
+}
+
+.manual-booking{
+    margin-top:40px;
+    padding:30px;
+    background:#10263D;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:26px;
+}
+
+.manual-booking h2{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.manual-booking > p{
+    color:#b9cadd;
+    margin-bottom:22px;
+}
+
+.manual-booking-form{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+}
+
+.manual-booking-form .full{
+    grid-column:1/-1;
+}
+
+.manual-booking-form label{
+    display:block;
+    margin-bottom:7px;
+    color:#d9e6f3;
+    font-size:14px;
+    font-weight:600;
+}
+
+.manual-booking-form input,
+.manual-booking-form select,
+.manual-booking-form textarea{
+    width:100%;
+    min-height:52px;
+    border-radius:14px;
+    background:#0B1D2E;
+    border:1px solid rgba(255,255,255,.09);
+    color:#fff;
+    padding:12px 14px;
+}
+
+.manual-booking-form textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+.manual-booking-form .submit{
+    grid-column:1/-1;
+    min-height:52px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#1E88E5,#42A5F5);
+    color:#fff;
+    font-weight:800;
+    font-size:16px;
+}
+
+.booking-status{
+    display:none;
+    margin-top:14px;
+    padding:12px 14px;
+    border-radius:12px;
+}
+
+.booking-status.show{
+    display:block;
+}
+
+.booking-status.success{
+    background:rgba(46,204,113,.1);
+    color:#7ff0a8;
+}
+
+.booking-status.error{
+    background:rgba(229,57,53,.1);
+    color:#ff9a95;
+}
+
+@media(max-width:991px){
+    .offers-catalog{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    .offer-details-grid{
+        grid-template-columns:1fr;
+    }
+    .offer-details-media img{
+        min-height:280px;
+        max-height:380px;
+    }
+}
+
+@media(max-width:767px){
+    .offers-page{
+        padding:48px 0 70px;
+    }
+    .offers-catalog{
+        grid-template-columns:1fr;
+        gap:14px;
+    }
+    .offer-item{
+        flex-direction:row;
+        min-height:150px;
+    }
+    .offer-item img{
+        width:37%;
+        height:auto;
+        min-height:150px;
+    }
+    .offer-item-body{
+        padding:14px;
+    }
+    .offer-item-body h2{
+        font-size:18px;
+    }
+    .offer-item-body p{
+        font-size:12px;
+    }
+    .offer-price{
+        font-size:19px;
+    }
+    .offer-actions{
+        flex-direction:column;
+    }
+    .offer-actions a,
+    .offer-actions button{
+        min-height:40px;
+        font-size:13px;
+    }
+    .offer-details-content{
+        padding:20px;
+    }
+    .detail-columns,
+    .manual-booking-form{
+        grid-template-columns:1fr;
+    }
+    .manual-booking-form .full,
+    .manual-booking-form .submit{
+        grid-column:auto;
+    }
+}
