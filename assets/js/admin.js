@@ -1,1045 +1,1164 @@
 import { auth, db } from "./firebase-config.js";
 
 import {
-    onAuthStateChanged,
-    signOut
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 import {
-    collection,
-    getDocs,
-    getDoc,
-    doc,
-    setDoc,
-    addDoc,
-    updateDoc,
-    deleteDoc,
-    serverTimestamp,
-    query,
-    orderBy,
-    limit
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-import { DEFAULT_OFFERS } from "./offers-data.js";
-
-
-/*==========================================================
-  HELPERS
-==========================================================*/
-
-const $ = (id) => document.getElementById(id);
 
 let currentUser = null;
 let offers = [];
+let currentOffer = null;
 
 
-function fmt(ts) {
+const $ = id => document.getElementById(id);
 
-    if (!ts) return "—";
 
-    try {
-        return ts.toDate().toLocaleString("ar-EG");
-    }
-
-    catch {
-        return String(ts);
-    }
+function show(id, state = true) {
+  const el = $(id);
+  if (el) el.classList.toggle("hidden", !state);
 }
 
 
 function esc(value) {
-
-    return String(value ?? "").replace(
-        /[&<>"']/g,
-        (char) => ({
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#039;"
-        }[char])
-    );
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 
-function show(element, on = true) {
-
-    element.classList.toggle("hidden", !on);
+function arr(value) {
+  if (Array.isArray(value)) return value.filter(Boolean);
+  if (typeof value === "string") {
+    return value
+      .split("\n")
+      .map(x => x.trim())
+      .filter(Boolean);
+  }
+  return [];
 }
 
 
-/*==========================================================
-  ADMIN CHECK
-==========================================================*/
+/* =========================
+   ADMIN CHECK
+========================= */
 
-async function isAdmin(user) {
+async function checkAdmin(user) {
+  if (!user) return false;
 
-    if (!user) return false;
+  try {
+    const ref = doc(db, "admins", user.uid);
+    const snap = await getDoc(ref);
 
-    const snap = await getDoc(
-        doc(db, "admins", user.uid)
-    );
+    return snap.exists() &&
+           snap.data().active === true;
 
-    return (
-        snap.exists() &&
-        snap.data().active === true
-    );
+  } catch (error) {
+    console.error("Admin check:", error);
+    return false;
+  }
 }
 
 
-/*==========================================================
-  LOAD ALL DATA
-==========================================================*/
+/* =========================
+   LOAD ALL DATA
+========================= */
 
-async function loadAll() {
-
-    const [
-        usersSnapshot,
-        bookingsSnapshot,
-        activitySnapshot,
-        offersSnapshot
-    ] = await Promise.all([
-
-        getDocs(
-            collection(db, "users")
-        ),
-
-        getDocs(
-            query(
-                collection(db, "bookings"),
-                orderBy("createdAt", "desc"),
-                limit(200)
-            )
-        ),
-
-        getDocs(
-            query(
-                collection(db, "activityLogs"),
-                orderBy("createdAt", "desc"),
-                limit(300)
-            )
-        ),
-
-        getDocs(
-            collection(db, "offers")
-        )
-    ]);
+async function loadDashboard() {
+  await Promise.all([
+    loadOffers(),
+    loadUsers(),
+    loadBookings(),
+    loadActivity()
+  ]);
+}
 
 
-    offers = offersSnapshot.docs.map(
-        (document) => ({
-            id: document.id,
-            ...document.data()
-        })
+/* =========================
+   USERS
+========================= */
+
+async function loadUsers() {
+  const table = $("usersTable");
+  if (!table) return;
+
+  try {
+    const snap = await getDocs(
+      collection(db, "users")
     );
 
+    if ($("usersCount"))
+      $("usersCount").textContent = snap.size;
 
-    $("usersCount").textContent =
-        usersSnapshot.size;
+    table.innerHTML = snap.empty
+      ? `<tr><td colspan="4">لا توجد بيانات.</td></tr>`
+      : snap.docs.map(d => {
+          const x = d.data();
 
-    $("bookingsCount").textContent =
-        bookingsSnapshot.size;
+          return `
+            <tr>
+              <td>${esc(x.name || x.displayName || "—")}</td>
+              <td>${esc(x.email || "—")}</td>
+              <td>${esc(x.uid || d.id)}</td>
+              <td>${date(x.createdAt)}</td>
+            </tr>
+          `;
+        }).join("");
 
-    $("activityCount").textContent =
-        activitySnapshot.size;
-
-    $("offersCount").textContent =
-        offers.length;
-
-
-    /* USERS */
-
-    $("usersTable").innerHTML =
-        usersSnapshot.docs.map((document) => {
-
-            const data = document.data();
-
-            return `
-                <tr>
-                    <td>${esc(data.name)}</td>
-                    <td>${esc(data.email)}</td>
-                    <td>${esc(data.uid)}</td>
-                    <td>${fmt(data.createdAt)}</td>
-                </tr>
-            `;
-
-        }).join("") ||
-
-        `<tr>
-            <td colspan="4">لا توجد بيانات</td>
-        </tr>`;
+  } catch (e) {
+    console.error("Users:", e);
+    table.innerHTML =
+      `<tr><td colspan="4">تعذر تحميل العملاء.</td></tr>`;
+  }
+}
 
 
-    /* BOOKINGS */
+/* =========================
+   BOOKINGS
+========================= */
 
-    $("bookingsTable").innerHTML =
-        bookingsSnapshot.docs.map((document) => {
+async function loadBookings() {
+  const table = $("bookingsTable");
+  if (!table) return;
 
-            const data = document.data();
+  try {
+    const snap = await getDocs(
+      collection(db, "bookings")
+    );
 
-            return `
-                <tr>
-                    <td>${esc(data.fullName)}</td>
-                    <td>${esc(data.phone)}</td>
-                    <td>${esc(data.offerName || data.service)}</td>
-                    <td>${esc(data.travelDate)}</td>
-                    <td>${esc(data.travelers)}</td>
-                    <td>${esc(data.status)}</td>
-                </tr>
-            `;
+    if ($("bookingsCount"))
+      $("bookingsCount").textContent = snap.size;
 
-        }).join("") ||
+    table.innerHTML = snap.empty
+      ? `<tr><td colspan="6">لا توجد حجوزات.</td></tr>`
+      : snap.docs.map(d => {
+          const x = d.data();
 
-        `<tr>
-            <td colspan="6">لا توجد حجوزات</td>
-        </tr>`;
+          return `
+            <tr>
+              <td>${esc(x.fullName || x.name || "—")}</td>
+              <td>${esc(x.phone || "—")}</td>
+              <td>${esc(x.offerName || x.offer || "—")}</td>
+              <td>${esc(x.travelDate || "—")}</td>
+              <td>${esc(x.travelers || x.guests || "—")}</td>
+              <td>${esc(x.status || "جديد")}</td>
+            </tr>
+          `;
+        }).join("");
+
+  } catch (e) {
+    console.error("Bookings:", e);
+    table.innerHTML =
+      `<tr><td colspan="6">تعذر تحميل الحجوزات.</td></tr>`;
+  }
+}
 
 
-    /* ACTIVITY */
+/* =========================
+   ACTIVITY
+========================= */
 
-    $("activityTable").innerHTML =
-        activitySnapshot.docs.map((document) => {
+async function loadActivity() {
+  const table = $("activityTable");
+  if (!table) return;
 
-            const data = document.data();
+  try {
+    const snap = await getDocs(
+      collection(db, "activityLogs")
+    );
 
-            return `
-                <tr>
-                    <td>${esc(data.type)}</td>
-                    <td>${esc(data.email)}</td>
-                    <td>${esc(data.uid)}</td>
-                    <td>${fmt(data.createdAt)}</td>
-                </tr>
-            `;
+    if ($("activityCount"))
+      $("activityCount").textContent = snap.size;
 
-        }).join("") ||
+    table.innerHTML = snap.empty
+      ? `<tr><td colspan="4">لا يوجد نشاط.</td></tr>`
+      : snap.docs.map(d => {
+          const x = d.data();
 
-        `<tr>
-            <td colspan="4">لا يوجد نشاط مسجل</td>
-        </tr>`;
+          return `
+            <tr>
+              <td>${esc(x.type || x.action || x.event || "—")}</td>
+              <td>${esc(x.email || "—")}</td>
+              <td>${esc(x.uid || "—")}</td>
+              <td>${date(x.createdAt)}</td>
+            </tr>
+          `;
+        }).join("");
 
+  } catch (e) {
+    console.error("Activity:", e);
+    table.innerHTML =
+      `<tr><td colspan="4">تعذر تحميل السجل.</td></tr>`;
+  }
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+function date(value) {
+  if (!value) return "—";
+
+  try {
+    if (value.toDate)
+      return value.toDate().toLocaleString("ar-EG");
+
+    return new Date(value)
+      .toLocaleString("ar-EG");
+
+  } catch {
+    return "—";
+  }
+}
+
+
+/* =========================
+   OFFERS
+========================= */
+
+async function loadOffers() {
+  const table = $("offersTable");
+  if (!table) return;
+
+  try {
+    const snap = await getDocs(
+      collection(db, "offers")
+    );
+
+    offers = snap.docs.map(d => ({
+      id: d.id,
+      ...d.data()
+    }));
+
+    offers.sort(
+      (a, b) =>
+        Number(a.order || 0) -
+        Number(b.order || 0)
+    );
+
+    if ($("offersCount"))
+      $("offersCount").textContent = offers.length;
 
     renderOffers();
+
+  } catch (e) {
+    console.error("Offers:", e);
+
+    table.innerHTML =
+      `<tr><td colspan="6">تعذر تحميل العروض.</td></tr>`;
+  }
 }
 
 
-/*==========================================================
-  RENDER OFFERS TABLE
-==========================================================*/
+/* =========================
+   RENDER OFFERS
+========================= */
 
 function renderOffers() {
-
-    $("offersTable").innerHTML =
-
-        offers.map((offer) => {
-
-            const imagesCount =
-                Array.isArray(offer.images)
-                    ? offer.images.length
-                    : (offer.image ? 1 : 0);
-
-
-            return `
-                <tr>
-
-                    <td>
-                        <strong>
-                            ${esc(offer.name)}
-                        </strong>
-
-                        <br>
-
-                        <small>
-                            ${esc(offer.category || "")}
-                        </small>
-                    </td>
-
-
-                    <td>
-                        ${esc(offer.country)}
-                    </td>
-
-
-                    <td>
-                        ${esc(offer.price)}
-                    </td>
-
-
-                    <td>
-                        ${offer.active === false
-                            ? "مخفي"
-                            : "ظاهر"}
-                    </td>
-
-
-                    <td>
-                        ${imagesCount} صورة
-                    </td>
-
-
-                    <td>
-
-                        <div class="actions">
-
-                            <button
-                                class="small edit"
-                                data-edit="${esc(offer.id)}"
-                            >
-                                تعديل
-                            </button>
-
-
-                            <button
-                                class="small delete"
-                                data-delete="${esc(offer.id)}"
-                            >
-                                حذف
-                            </button>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-            `;
-
-        }).join("") ||
-
-        `<tr>
-            <td colspan="6">
-                لا توجد عروض.
-                استخدم استيراد العروض الحالية.
-            </td>
-        </tr>`;
-
-
-    document.querySelectorAll("[data-edit]")
-        .forEach((button) => {
-
-            button.onclick = () => {
-
-                const offer = offers.find(
-                    (item) =>
-                        item.id === button.dataset.edit
-                );
-
-                openEditor(offer);
-            };
-
-        });
-
-
-    document.querySelectorAll("[data-delete]")
-        .forEach((button) => {
-
-            button.onclick = async () => {
-
-                if (
-                    !confirm(
-                        "هل أنت متأكد من حذف هذا العرض؟"
-                    )
-                ) {
-                    return;
-                }
-
-
-                await deleteDoc(
-                    doc(
-                        db,
-                        "offers",
-                        button.dataset.delete
-                    )
-                );
-
-
-                await loadAll();
-            };
-
-        });
-}
-
-
-/*==========================================================
-  OFFER EDITOR
-==========================================================*/
-
-function openEditor(offer = null) {
-
-
-    const data = offer || {
-
-        id: "",
-
-        name: "",
-
-        country: "",
-
-        duration: "",
-
-        price: "",
-
-        image: "",
-
-        images: [],
-
-        category: "رحلات سياحية",
-
-        description: "",
-
-        content: "",
-
-        included: [],
-
-        excluded: [],
-
-        notes: "",
-
-        order: 0,
-
-        active: true
-
-    };
-
-
-    const images = Array.isArray(data.images)
-        ? data.images
-        : (
-            data.image
-                ? [data.image]
-                : []
-        );
-
-
-    $("offerEditor").innerHTML = `
-
-        <h3>
-            ${offer
-                ? "تعديل العرض"
-                : "إضافة عرض جديد"}
-        </h3>
-
-
-        <div class="form-grid">
-
-
-            <!-- ID -->
-
-            <div class="field">
-
-                <label>
-                    المعرّف (ID)
-                </label>
-
-                <input
-                    id="e_id"
-                    value="${esc(data.id)}"
-                    ${offer ? "readonly" : ""}
-                >
-
-            </div>
-
-
-            <!-- NAME -->
-
-            <div class="field">
-
-                <label>
-                    اسم العرض
-                </label>
-
-                <input
-                    id="e_name"
-                    value="${esc(data.name)}"
-                >
-
-            </div>
-
-
-            <!-- COUNTRY -->
-
-            <div class="field">
-
-                <label>
-                    الدولة / الوجهة
-                </label>
-
-                <input
-                    id="e_country"
-                    value="${esc(data.country)}"
-                >
-
-            </div>
-
-
-            <!-- CATEGORY -->
-
-            <div class="field">
-
-                <label>
-                    التصنيف
-                </label>
-
-                <input
-                    id="e_category"
-                    value="${esc(data.category)}"
-                >
-
-            </div>
-
-
-            <!-- DURATION -->
-
-            <div class="field">
-
-                <label>
-                    مدة الرحلة
-                </label>
-
-                <input
-                    id="e_duration"
-                    value="${esc(data.duration)}"
-                >
-
-            </div>
-
-
-            <!-- PRICE -->
-
-            <div class="field">
-
-                <label>
-                    السعر
-                </label>
-
-                <input
-                    id="e_price"
-                    value="${esc(data.price)}"
-                >
-
-            </div>
-
-
-            <!-- ORDER -->
-
-            <div class="field">
-
-                <label>
-                    ترتيب العرض
-                </label>
-
-                <input
-                    id="e_order"
-                    type="number"
-                    value="${Number(data.order || 0)}"
-                >
-
-            </div>
-
-
-            <!-- MAIN IMAGE -->
-
-            <div class="field full">
-
-                <label>
-                    الصورة الرئيسية
-                </label>
-
-                <input
-                    id="e_image"
-                    value="${esc(data.image || images[0] || "")}"
-                    placeholder="assets/images/offers/dubai-offer.png"
-                >
-
-                <small>
-                    اكتب مسار الصورة الموجودة داخل المشروع.
-                </small>
-
-            </div>
-
-
-            <!-- MULTIPLE IMAGES -->
-
-            <div class="field full">
-
-                <label>
-                    صور العرض — صورة في كل سطر
-                </label>
-
-                <textarea
-                    id="e_images"
-                    rows="6"
-                    placeholder="assets/images/offers/dubai-offer.png
-assets/images/offers/dubai-2.png
-assets/images/offers/dubai-3.png"
-                >${esc(images.join("\n"))}</textarea>
-
-                <small>
-                    يمكنك إضافة عدد غير محدود من مسارات الصور الموجودة في المشروع.
-                </small>
-
-            </div>
-
-
-            <!-- DESCRIPTION -->
-
-            <div class="field full">
-
-                <label>
-                    الوصف المختصر
-                </label>
-
-                <textarea
-                    id="e_description"
-                    rows="4"
-                >${esc(data.description)}</textarea>
-
-            </div>
-
-
-            <!-- FULL CONTENT -->
-
-            <div class="field full">
-
-                <label>
-                    📝 محتويات العرض بالكامل
-                </label>
-
-                <textarea
-                    id="e_content"
-                    rows="12"
-                    placeholder="اكتب هنا جميع تفاصيل ومحتويات العرض...
-
-مثال:
-
-✈️ تذاكر الطيران
-🏨 الإقامة الفندقية
-🍳 الإفطار
-🚐 الاستقبال والتوصيل
-🗺️ الجولات السياحية
-🛂 التأشيرة حسب الجنسية
-📞 الدعم والمتابعة
-
-يمكنك كتابة النص بالتفصيل."
-                >${esc(data.content)}</textarea>
-
-            </div>
-
-
-            <!-- INCLUDED -->
-
-            <div class="field">
-
-                <label>
-                    يشمل — خدمة في كل سطر
-                </label>
-
-                <textarea
-                    id="e_included"
-                    rows="8"
-                >${esc(
-                    (data.included || [])
-                        .join("\n")
-                )}</textarea>
-
-            </div>
-
-
-            <!-- EXCLUDED -->
-
-            <div class="field">
-
-                <label>
-                    لا يشمل — خدمة في كل سطر
-                </label>
-
-                <textarea
-                    id="e_excluded"
-                    rows="8"
-                >${esc(
-                    (data.excluded || [])
-                        .join("\n")
-                )}</textarea>
-
-            </div>
-
-
-            <!-- NOTES -->
-
-            <div class="field full">
-
-                <label>
-                    ملاحظات
-                </label>
-
-                <textarea
-                    id="e_notes"
-                    rows="6"
-                >${esc(data.notes)}</textarea>
-
-            </div>
-
-
-        </div>
-
-
-        <label class="checkbox">
-
-            <input
-                type="checkbox"
-                id="e_active"
-                ${data.active !== false
-                    ? "checked"
-                    : ""}
-            >
-
-            إظهار العرض للعملاء
-
-        </label>
-
-
-        <div class="editor-actions">
-
-            <button
-                class="primary"
-                id="saveOffer"
-            >
-                حفظ العرض
-            </button>
-
-
-            <button
-                class="secondary"
-                id="cancelOffer"
-            >
-                إلغاء
-            </button>
-
-        </div>
+  const table = $("offersTable");
+  if (!table) return;
+
+  if (!offers.length) {
+    table.innerHTML =
+      `<tr><td colspan="6">لا توجد عروض.</td></tr>`;
+    return;
+  }
+
+  table.innerHTML = offers.map(o => {
+
+    const images =
+      Array.isArray(o.images)
+        ? o.images
+        : o.image
+          ? [o.image]
+          : [];
+
+    return `
+      <tr>
+
+        <td>
+          <strong>${esc(o.name || "بدون اسم")}</strong>
+        </td>
+
+        <td>
+          ${esc(o.country || o.destination || "—")}
+        </td>
+
+        <td>
+          ${esc(o.price || "—")}
+        </td>
+
+        <td>
+          ${o.active !== false ? "ظاهر" : "مخفي"}
+        </td>
+
+        <td>
+          ${images.length} صورة
+        </td>
+
+        <td>
+
+          <button
+            class="small edit"
+            data-edit="${esc(o.id)}">
+            تعديل
+          </button>
+
+          <button
+            class="small delete"
+            data-delete="${esc(o.id)}">
+            حذف
+          </button>
+
+        </td>
+
+      </tr>
     `;
 
+  }).join("");
+
+  document.querySelectorAll("[data-edit]")
+    .forEach(btn => {
+
+      btn.onclick = () => {
+
+        const offer =
+          offers.find(
+            x => x.id === btn.dataset.edit
+          );
+
+        if (offer)
+          openEditor(offer);
+      };
+
+    });
+
+  document.querySelectorAll("[data-delete]")
+    .forEach(btn => {
+
+      btn.onclick = () =>
+        removeOffer(btn.dataset.delete);
+
+    });
+       }
+
+/* =========================
+   OFFER EDITOR
+========================= */
+
+function openEditor(o = null) {
+
+  currentOffer = o;
+
+  const e = $("offerEditor");
+  if (!e) return;
+
+  const x = o || {
+    id: "",
+    name: "",
+    country: "",
+    destination: "",
+    category: "رحلات سياحية",
+    duration: "",
+    price: "",
+    image: "",
+    images: [],
+    description: "",
+    content: "",
+    included: [],
+    excluded: [],
+    notes: "",
+    order: 0,
+    active: true
+  };
+
+  const images = arr(x.images);
+  if (x.image && !images.includes(x.image))
+    images.unshift(x.image);
+
+  e.innerHTML = `
+    <div class="offer-editor">
+
+      <h2>
+        ${o ? "تعديل العرض" : "إضافة عرض جديد"}
+      </h2>
+
+      <div class="form-grid">
+
+        <div class="field">
+          <label>معرف العرض</label>
+          <input id="e_id"
+            value="${esc(x.id)}"
+            ${o ? "readonly" : ""}
+            placeholder="dubai">
+        </div>
+
+        <div class="field">
+          <label>اسم العرض</label>
+          <input id="e_name"
+            value="${esc(x.name)}"
+            placeholder="عرض دبي السياحي">
+        </div>
 
-    show($("offerEditor"));
+        <div class="field">
+          <label>الدولة</label>
+          <input id="e_country"
+            value="${esc(x.country)}"
+            placeholder="الإمارات">
+        </div>
 
+        <div class="field">
+          <label>الوجهة</label>
+          <input id="e_destination"
+            value="${esc(x.destination)}"
+            placeholder="دبي">
+        </div>
 
-    $("cancelOffer").onclick = () => {
+        <div class="field">
+          <label>التصنيف</label>
+          <input id="e_category"
+            value="${esc(x.category)}"
+            placeholder="رحلات سياحية">
+        </div>
 
-        show(
-            $("offerEditor"),
-            false
-        );
+        <div class="field">
+          <label>مدة الرحلة</label>
+          <input id="e_duration"
+            value="${esc(x.duration)}"
+            placeholder="5 أيام / 4 ليالي">
+        </div>
 
-    };
+        <div class="field">
+          <label>السعر</label>
+          <input id="e_price"
+            value="${esc(x.price)}"
+            placeholder="$950">
+        </div>
 
+        <div class="field">
+          <label>الترتيب</label>
+          <input id="e_order"
+            type="number"
+            value="${Number(x.order || 0)}">
+        </div>
 
-    $("saveOffer").onclick =
-        async () => {
+      </div>
 
 
-        const id =
-            $("e_id").value.trim();
+      <h3>الصور</h3>
 
+      <div class="field">
+        <label>الصورة الرئيسية</label>
 
-        const name =
-            $("e_name").value.trim();
+        <input id="e_image"
+          value="${esc(x.image)}"
+          placeholder="assets/images/offers/main.png">
+      </div>
 
 
-        if (!id || !name) {
+      <div class="field">
 
-            alert(
-                "المعرّف واسم العرض مطلوبان."
-            );
+        <label>
+          جميع صور العرض
+        </label>
 
-            return;
-        }
+        <textarea id="e_images"
+          rows="6"
+          dir="ltr"
+          placeholder="ضع كل صورة في سطر مستقل">${esc(
+            images.join("\n")
+          )}</textarea>
 
+        <small>
+          يمكنك إضافة صورة واحدة أو عدة صور.
+        </small>
 
-        /*
-         * الصور
-         */
+      </div>
 
-        const imageList =
-            $("e_images")
-                .value
-                .split("\n")
-                .map(
-                    (item) =>
-                        item.trim()
-                )
-                .filter(Boolean);
 
+      <div id="imagePreview"></div>
 
-        /*
-         * الصورة الرئيسية
-         */
 
-        const mainImage =
-            $("e_image")
-                .value
-                .trim();
+      <h3>تفاصيل العرض</h3>
 
+      <div class="field">
 
-        /*
-         * إذا كانت الصورة الرئيسية
-         * غير موجودة داخل القائمة
-         * نضيفها تلقائيًا.
-         */
+        <label>الوصف المختصر</label>
 
-        if (
-            mainImage &&
-            !imageList.includes(mainImage)
-        ) {
+        <textarea id="e_description"
+          rows="5"
+          placeholder="وصف مختصر للعرض">${esc(
+            x.description
+          )}</textarea>
 
-            imageList.unshift(
-                mainImage
-            );
+      </div>
 
-        }
 
+      <div class="field">
 
-        /*
-         * البيانات الجديدة
-         */
+        <label>
+          محتويات العرض بالكامل
+        </label>
 
-        const updatedData = {
+        <textarea id="e_content"
+          rows="10"
+          placeholder="اكتب تفاصيل العرض بالكامل هنا...">${esc(
+            x.content
+          )}</textarea>
 
-            name,
+      </div>
 
-            country:
-                $("e_country")
-                    .value
-                    .trim(),
 
-            category:
-                $("e_category")
-                    .value
-                    .trim(),
+      <div class="field">
 
-            duration:
-                $("e_duration")
-                    .value
-                    .trim(),
+        <label>
+          يشمل العرض
+        </label>
 
-            price:
-                $("e_price")
-                    .value
-                    .trim(),
+        <textarea id="e_included"
+          rows="6"
+          placeholder="خدمة في كل سطر">${esc(
+            arr(x.included).join("\n")
+          )}</textarea>
 
-            image:
-                mainImage ||
-                imageList[0] ||
-                "",
+      </div>
 
-            images:
-                imageList,
 
-            description:
-                $("e_description")
-                    .value
-                    .trim(),
+      <div class="field">
 
-            content:
-                $("e_content")
-                    .value
-                    .trim(),
+        <label>
+          لا يشمل العرض
+        </label>
 
-            included:
-                $("e_included")
-                    .value
-                    .split("\n")
-                    .map(
-                        (item) =>
-                            item.trim()
-                    )
-                    .filter(Boolean),
+        <textarea id="e_excluded"
+          rows="6"
+          placeholder="خدمة في كل سطر">${esc(
+            arr(x.excluded).join("\n")
+          )}</textarea>
 
-            excluded:
-                $("e_excluded")
-                    .value
-                    .split("\n")
-                    .map(
-                        (item) =>
-                            item.trim()
-                    )
-                    .filter(Boolean),
+      </div>
 
-            notes:
-                $("e_notes")
-                    .value
-                    .trim(),
 
-            order:
-                Number(
-                    $("e_order")
-                        .value || 0
-                ),
+      <div class="field">
 
-            active:
-                $("e_active")
-                    .checked,
+        <label>
+          ملاحظات
+        </label>
 
-            updatedAt:
-                serverTimestamp(),
+        <textarea id="e_notes"
+          rows="5"
+          placeholder="ملاحظات وشروط العرض">${esc(
+            x.notes
+          )}</textarea>
 
-            updatedBy:
-                currentUser.uid
+      </div>
 
-        };
 
+      <label class="checkbox">
 
-        try {
+        <input
+          type="checkbox"
+          id="e_active"
+          ${x.active !== false ? "checked" : ""}
+        >
 
+        <span>
+          إظهار العرض للعملاء
+        </span>
 
-            /*
-             * UPDATE
-             */
+      </label>
 
-            if (offer) {
 
-                await updateDoc(
+      <div class="editor-actions">
 
-                    doc(
-                        db,
-                        "offers",
-                        id
-                    ),
+        <button
+          id="saveOffer"
+          class="primary"
+          type="button">
+          حفظ العرض
+        </button>
 
-                    updatedData
+        <button
+          id="cancelOffer"
+          class="secondary"
+          type="button">
+          إلغاء
+        </button>
 
-                );
+      </div>
 
-            }
+    </div>
+  `;
 
+  show("offerEditor", true);
 
-            /*
-             * CREATE
-             */
+  previewImages();
 
-            else {
+  $("e_images").oninput = previewImages;
+  $("e_image").oninput = previewImages;
 
-                await setDoc(
+  $("cancelOffer").onclick =
+    closeEditor;
 
-                    doc(
-                        db,
-                        "offers",
-                        id
-                    ),
-
-                    {
-
-                        ...updatedData,
-
-                        createdAt:
-                            serverTimestamp(),
-
-                        createdBy:
-                            currentUser.uid
-
-                    }
-
-                );
-
-            }
-
-
-            show(
-                $("offerEditor"),
-                false
-            );
-
-
-            await loadAll();
-
-
-            alert(
-                "تم حفظ العرض بنجاح."
-            );
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Save offer error:",
-                error
-            );
-
-
-            alert(
-                "حدث خطأ أثناء حفظ العرض:\n" +
-                error.message
-            );
-
-        }
-
-    };
-
+  $("saveOffer").onclick =
+    saveOffer;
 }
 
 
-/*==========================================================
-  NEW OFFER
-==========================================================*/
+/* =========================
+   IMAGE PREVIEW
+========================= */
 
-$("newOffer").onclick = () => {
+function previewImages() {
 
-    openEditor();
+  const box = $("imagePreview");
+  if (!box) return;
 
-};
+  const main =
+    $("e_image")?.value.trim() || "";
+
+  const list =
+    $("e_images")?.value
+      .split("\n")
+      .map(x => x.trim())
+      .filter(Boolean) || [];
+
+  const images = [];
+
+  if (main)
+    images.push(main);
+
+  list.forEach(x => {
+    if (!images.includes(x))
+      images.push(x);
+  });
+
+  box.innerHTML = images.length
+    ? images.map((src, i) => `
+        <div class="preview-image">
+          <img
+            src="${esc(src)}"
+            alt="صورة ${i + 1}"
+            onerror="
+              this.style.display='none'
+            ">
+          <small>
+            صورة ${i + 1}
+          </small>
+        </div>
+      `).join("")
+    : "<p>لا توجد صور.</p>";
+}
 
 
-/*==========================================================
-  IMPORT DEFAULT OFFERS
-==========================================================*/
+/* =========================
+   CLOSE EDITOR
+========================= */
 
-$("seedOffers").onclick =
-    async () => {
+function closeEditor() {
+
+  currentOffer = null;
+
+  const e = $("offerEditor");
+
+  if (!e) return;
+
+  e.innerHTML = "";
+
+  show("offerEditor", false);
+}
 
 
-    if (
-        !confirm(
-            "استيراد العروض الحالية إلى قاعدة البيانات؟\n\nالعروض الموجودة لن يتم استبدالها."
-        )
-    ) {
+/* =========================
+   GET EDITOR DATA
+========================= */
 
-        return;
+function editorData() {
+
+  const main =
+    $("e_image")?.value.trim() || "";
+
+  const lines =
+    $("e_images")?.value
+      .split("\n")
+      .map(x => x.trim())
+      .filter(Boolean) || [];
+
+  const images = [];
+
+  if (main)
+    images.push(main);
+
+  lines.forEach(x => {
+    if (!images.includes(x))
+      images.push(x);
+  });
+
+  return {
+
+    id: $("e_id")?.value.trim() || "",
+
+    name: $("e_name")?.value.trim() || "",
+
+    country:
+      $("e_country")?.value.trim() || "",
+
+    destination:
+      $("e_destination")?.value.trim() || "",
+
+    category:
+      $("e_category")?.value.trim() ||
+      "رحلات سياحية",
+
+    duration:
+      $("e_duration")?.value.trim() || "",
+
+    price:
+      $("e_price")?.value.trim() || "",
+
+    image:
+      images[0] || "",
+
+    images,
+
+    description:
+      $("e_description")?.value.trim() || "",
+
+    content:
+      $("e_content")?.value.trim() || "",
+
+    included:
+      arr($("e_included")?.value),
+
+    excluded:
+      arr($("e_excluded")?.value),
+
+    notes:
+      $("e_notes")?.value.trim() || "",
+
+    order:
+      Number($("e_order")?.value || 0),
+
+    active:
+      $("e_active")?.checked !== false
+
+  };
+}
+
+
+/* =========================
+   SAVE OFFER
+========================= */
+
+async function saveOffer() {
+
+  const data = editorData();
+
+  if (!data.id) {
+    alert("اكتب معرف العرض.");
+    return;
+  }
+
+  if (!data.name) {
+    alert("اكتب اسم العرض.");
+    return;
+  }
+
+  if (!currentUser) {
+    alert("لم يتم التحقق من المدير.");
+    return;
+  }
+
+  const button = $("saveOffer");
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = "جاري الحفظ...";
+  }
+
+  try {
+
+    const ref =
+      doc(db, "offers", data.id);
+
+    const old =
+      await getDoc(ref);
+
+    const payload = {
+
+      name: data.name,
+      country: data.country,
+      destination: data.destination,
+      category: data.category,
+      duration: data.duration,
+      price: data.price,
+
+      image: data.image,
+      images: data.images,
+
+      description:
+        data.description,
+
+      content:
+        data.content,
+
+      included:
+        data.included,
+
+      excluded:
+        data.excluded,
+
+      notes:
+        data.notes,
+
+      order:
+        data.order,
+
+      active:
+        data.active,
+
+      updatedAt:
+        serverTimestamp(),
+
+      updatedBy:
+        currentUser.uid
+    };
+
+    if (old.exists()) {
+
+      await updateDoc(
+        ref,
+        payload
+      );
+
+      alert("تم تحديث العرض.");
+
+    } else {
+
+      await setDoc(
+        ref,
+        {
+          ...payload,
+
+          createdAt:
+            serverTimestamp(),
+
+          createdBy:
+            currentUser.uid
+        }
+      );
+
+      alert("تم إنشاء العرض.");
+
     }
 
+    closeEditor();
 
-    for (
-        const offer
-        of DEFAULT_OFFERS
-    ) {
+    await loadOffers();
+
+  } catch (e) {
+
+    console.error(e);
+
+    alert(
+      "حدث خطأ أثناء الحفظ:\n" +
+      e.message
+    );
+
+  } finally {
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = "حفظ العرض";
+    }
+
+  }
+}
 
 
-        const ref =
-            doc(
-                db,
-                "offers",
-                offer.id
-            );
+/* =========================
+   DELETE OFFER
+========================= */
+
+async function removeOffer(id) {
+
+  const offer =
+    offers.find(x => x.id === id);
+
+  if (!offer) return;
+
+  if (
+    !confirm(
+      `حذف العرض "${offer.name || id}"؟`
+    )
+  ) return;
+
+  try {
+
+    await deleteDoc(
+      doc(db, "offers", id)
+    );
+
+    alert("تم حذف العرض.");
+
+    await loadOffers();
+
+  } catch (e) {
+
+    console.error(e);
+
+    alert(
+      "تعذر حذف العرض:\n" +
+      e.message
+    );
+
+  }
+                }
+
+/* =========================
+   START ADMIN
+========================= */
+
+onAuthStateChanged(auth, async user => {
+
+  if (!user) {
+    show("accessDenied", true);
+    show("dashboard", false);
+    return;
+  }
+
+  currentUser = user;
+
+  const allowed =
+    await checkAdmin(user);
+
+  if (!allowed) {
+    show("accessDenied", true);
+    show("dashboard", false);
+    return;
+  }
+
+  show("accessDenied", false);
+  show("dashboard", true);
+
+  const welcome =
+    $("adminWelcome");
+
+  if (welcome) {
+    welcome.textContent =
+      `مرحبًا ${user.email || ""}`;
+  }
+
+  await loadDashboard();
+
+  initTabs();
+  initButtons();
+});
 
 
-        const snapshot =
-            await getDoc(ref);
+/* =========================
+   BUTTONS
+========================= */
+
+function initButtons() {
+
+  const newOffer =
+    $("newOffer");
+
+  if (newOffer) {
+    newOffer.onclick = () =>
+      openEditor();
+  }
 
 
-        if (!snapshot.exists()) {
+  const refresh =
+    $("refreshBookings");
 
-            await setDoc(
+  if (refresh) {
 
-                ref,
+    refresh.onclick = async () => {
 
-                {
+      refresh.disabled = true;
+      refresh.textContent =
+        "جاري التحديث...";
 
-                    ...offer,
+      await loadDashboard();
 
-                    images:
-                        offer.images ||
-                        (
-                            offer.image
-                                ? [offer.image]
-                                : []
-                        ),
+      refresh.disabled = false;
+      refresh.textContent =
+        "تحديث";
+    };
+  }
 
-                    content:
-                        offer.content ||
-                        of
+
+  const logout =
+    $("adminLogout");
+
+  if (logout) {
+
+    logout.onclick = async () => {
+
+      if (
+        !confirm(
+          "هل تريد تسجيل الخروج؟"
+        )
+      ) return;
+
+      try {
+
+        await signOut(auth);
+
+        location.href =
+          "index.html";
+
+      } catch (e) {
+
+        alert(
+          "تعذر تسجيل الخروج."
+        );
+
+      }
+    };
+  }
+
+
+  /* استيراد العروض الموجودة
+     من Firestore لا يحتاج أي تعديل
+     يدوي للكود. */
+
+  const seed =
+    $("seedOffers");
+
+  if (seed) {
+
+    seed.onclick = async () => {
+
+      alert(
+        "العروض الموجودة في Firestore تظهر تلقائيًا في لوحة الإدارة."
+      );
+
+      await loadOffers();
+    };
+  }
+}
+
+
+/* =========================
+   TABS
+========================= */
+
+function initTabs() {
+
+  document
+    .querySelectorAll(".tab")
+    .forEach(button => {
+
+      button.onclick = () => {
+
+        document
+          .querySelectorAll(".tab")
+          .forEach(x =>
+            x.classList.remove(
+              "active"
+            )
+          );
+
+        document
+          .querySelectorAll(
+            ".tab-panel"
+          )
+          .forEach(x =>
+            x.classList.remove(
+              "active"
+            )
+          );
+
+        button.classList.add(
+          "active"
+        );
+
+        const id =
+          button.dataset.tab;
+
+        const panel =
+          $(id);
+
+        if (panel)
+          panel.classList.add(
+            "active"
+          );
+      };
+
+    });
+}
+
+
+/* =========================
+   GLOBAL ERROR HANDLER
+========================= */
+
+window.addEventListener(
+  "error",
+  event => {
+
+    console.error(
+      "Admin error:",
+      event.error
+    );
+
+  }
+);
+
+
+/* =========================
+   FIRESTORE CONNECTION TEST
+========================= */
+
+async function testConnection() {
+
+  try {
+
+    await getDocs(
+      collection(
+        db,
+        "offers"
+      )
+    );
+
+    console.log(
+      "FLORIN Admin: Firestore connected."
+    );
+
+  } catch (e) {
+
+    console.error(
+      "Firestore connection failed:",
+      e
+    );
+
+  }
+}
+
+
+/* =========================
+   END ADMIN.JS
+========================= */
+
+console.log(
+  "FLORIN Admin Panel loaded."
+);
