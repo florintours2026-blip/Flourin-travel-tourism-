@@ -1,10 +1,3 @@
-import { auth, db } from "./firebase-config.js";
-
-import {
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
 import {
   collection,
   getDocs,
@@ -13,7 +6,8 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
-  serverTimestamp
+  serverTimestamp,
+  arrayUnion
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
@@ -160,13 +154,92 @@ async function loadBookings() {
           `;
         }).join("");
 
+    document.querySelectorAll(".update-booking-status").forEach(button => {
+  button.onclick = () => {
+    updateBookingStatus(button.dataset.bookingId, button);
+  };
+});
+
   } catch (e) {
     console.error("Bookings:", e);
     table.innerHTML =
-      `<tr><td colspan="6">تعذر تحميل الحجوزات.</td></tr>`;
+    <td>
+  <select class="booking-status" data-status-id="${esc(d.id)}">
+    <option value="تم الاستلام" ${x.status === "تم الاستلام" ? "selected" : ""}>
+      تم الاستلام
+    </option>
+    <option value="تم إدخال البيانات" ${x.status === "تم إدخال البيانات" ? "selected" : ""}>
+      تم إدخال البيانات
+    </option>
+    <option value="تمت معالجة وقبول الطلب" ${x.status === "تمت معالجة وقبول الطلب" ? "selected" : ""}>
+      تمت معالجة وقبول الطلب
+    </option>
+  </select>
+</td>
+<td>
+  <button class="small primary update-booking-status"
+          data-booking-id="${esc(d.id)}">
+    تحديث
+  </button>
+</td>
   }
 }
 
+/* =========================
+   UPDATE BOOKING STATUS
+========================= */
+
+async function updateBookingStatus(id, button) {
+
+  const select = document.querySelector(
+    `[data-status-id="${CSS.escape(id)}"]`
+  );
+
+  if (!select) return;
+
+  const status = select.value;
+
+  if (!currentUser) {
+    alert("لم يتم التحقق من المدير.");
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "جاري التحديث...";
+
+  try {
+
+    const ref = doc(db, "bookings", id);
+
+    await updateDoc(ref, {
+      status: status,
+      statusUpdatedAt: serverTimestamp(),
+      statusUpdatedBy: currentUser.uid,
+
+      statusHistory: arrayUnion({
+        status: status,
+        updatedBy: currentUser.uid,
+        updatedAt: new Date().toISOString()
+      })
+    });
+
+    alert("تم تحديث حالة الطلب بنجاح");
+
+    await loadBookings();
+
+  } catch (e) {
+
+    console.error("Booking status:", e);
+
+    alert("تعذر تحديث حالة الطلب: " + e.message);
+
+  } finally {
+
+    button.disabled = false;
+    button.textContent = "تحديث";
+
+  }
+}
 
 /* =========================
    ACTIVITY
