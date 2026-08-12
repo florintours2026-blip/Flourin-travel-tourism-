@@ -1,22 +1,565 @@
-<!doctype html><html lang="ar" dir="rtl"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>لوحة الإدارة | FLORIN</title>
-<link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/admin.css">
-</head><body><main class="admin-page"><div class="admin-shell">
-<header class="admin-header"><div><span class="badge">FLORIN ADMIN</span><h1>لوحة الإدارة</h1><p id="adminWelcome">جاري التحقق من الصلاحيات...</p></div><button id="adminLogout" class="danger">تسجيل الخروج</button></header>
-<div id="accessDenied" class="panel hidden"><h2>غير مصرح</h2><p>هذا الحساب ليس ضمن مديري الموقع. يجب إنشاء مستند المدير في مجموعة <code>admins</code> في Firestore مرة واحدة.</p><a href="index.html" class="btn">العودة للموقع</a></div>
-<section id="dashboard" class="hidden">
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>لوحة الإدارة | FLORIN</title>
+
+    <link
+        rel="stylesheet"
+        href="assets/css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="assets/css/admin.css"
+    >
+
+</head>
+
+
+<body>
+
+<main class="admin-page">
+
+<div class="admin-shell">
+
+
+<!-- =====================================================
+     ADMIN HEADER
+====================================================== -->
+
+<header class="admin-header">
+
+    <div>
+
+        <span class="badge">
+            FLORIN ADMIN
+        </span>
+
+        <h1>
+            لوحة الإدارة
+        </h1>
+
+        <p id="adminWelcome">
+            جاري التحقق من الصلاحيات...
+        </p>
+
+    </div>
+
+
+    <button
+        id="adminLogout"
+        class="danger"
+        type="button"
+    >
+        تسجيل الخروج
+    </button>
+
+</header>
+
+
+
+<!-- =====================================================
+     ACCESS DENIED
+====================================================== -->
+
+<div
+    id="accessDenied"
+    class="panel hidden"
+>
+
+    <h2>
+        غير مصرح
+    </h2>
+
+    <p>
+        هذا الحساب ليس ضمن مديري الموقع.
+        يجب إنشاء مستند المدير في مجموعة
+        <code>admins</code>
+        في Firestore.
+    </p>
+
+    <a
+        href="index.html"
+        class="btn"
+    >
+        العودة للموقع
+    </a>
+
+</div>
+
+
+
+<!-- =====================================================
+     DASHBOARD
+====================================================== -->
+
+<section
+    id="dashboard"
+    class="hidden"
+>
+
+
+
+<!-- =====================================================
+     STATISTICS
+====================================================== -->
+
 <div class="stats">
-<div class="stat"><span>العملاء</span><strong id="usersCount">0</strong></div>
-<div class="stat"><span>الحجوزات</span><strong id="bookingsCount">0</strong></div>
-<div class="stat"><span>الزيارات/النشاط</span><strong id="activityCount">0</strong></div>
-<div class="stat"><span>العروض</span><strong id="offersCount">0</strong></div>
+
+
+    <div class="stat">
+
+        <span>
+            العملاء
+        </span>
+
+        <strong id="usersCount">
+            0
+        </strong>
+
+    </div>
+
+
+    <div class="stat">
+
+        <span>
+            الحجوزات
+        </span>
+
+        <strong id="bookingsCount">
+            0
+        </strong>
+
+    </div>
+
+
+    <div class="stat">
+
+        <span>
+            الزيارات/النشاط
+        </span>
+
+        <strong id="activityCount">
+            0
+        </strong>
+
+    </div>
+
+
+    <div class="stat">
+
+        <span>
+            العروض
+        </span>
+
+        <strong id="offersCount">
+            0
+        </strong>
+
+    </div>
+
+
 </div>
+
+
+
+<!-- =====================================================
+     TABS
+====================================================== -->
+
 <div class="tabs">
-<button class="tab active" data-tab="offersTab">العروض</button><button class="tab" data-tab="bookingsTab">الحجوزات</button><button class="tab" data-tab="usersTab">العملاء</button><button class="tab" data-tab="activityTab">الدخول والخروج</button>
+
+
+    <button
+        class="tab active"
+        data-tab="offersTab"
+        type="button"
+    >
+        العروض
+    </button>
+
+
+    <button
+        class="tab"
+        data-tab="bookingsTab"
+        type="button"
+    >
+        الحجوزات
+    </button>
+
+
+    <button
+        class="tab"
+        data-tab="usersTab"
+        type="button"
+    >
+        العملاء
+    </button>
+
+
+    <button
+        class="tab"
+        data-tab="activityTab"
+        type="button"
+    >
+        الدخول والخروج
+    </button>
+
+
 </div>
-<section id="offersTab" class="tab-panel active"><div class="toolbar"><h2>إدارة العروض</h2><button id="seedOffers" class="secondary">استيراد العروض الحالية</button><button id="newOffer" class="primary">+ إضافة عرض</button></div><div id="offerEditor" class="panel hidden"></div><div class="table-wrap"><table><thead><tr><th>العرض</th><th>الوجهة</th><th>السعر</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="offersTable"></tbody></table></div></section>
-<section id="bookingsTab" class="tab-panel"><div class="toolbar"><h2>طلبات الحجز</h2><button id="refreshBookings" class="secondary">تحديث</button></div><div class="table-wrap"><table><thead><tr><th>العميل</th><th>الهاتف</th><th>العرض</th><th>تاريخ السفر</th><th>المسافرون</th><th>الحالة</th></tr></thead><tbody id="bookingsTable"></tbody></table></div></section>
-<section id="usersTab" class="tab-panel"><div class="toolbar"><h2>بيانات العملاء المسجلين</h2></div><div class="table-wrap"><table><thead><tr><th>الاسم</th><th>البريد</th><th>UID</th><th>تاريخ التسجيل</th></tr></thead><tbody id="usersTable"></tbody></table></div></section>
-<section id="activityTab" class="tab-panel"><div class="toolbar"><h2>سجل الدخول والخروج</h2><p class="note">السجل يعتمد على الأحداث التي يسجلها الموقع منذ تثبيت هذا التحديث.</p></div><div class="table-wrap"><table><thead><tr><th>الحدث</th><th>البريد</th><th>UID</th><th>الوقت</th></tr></thead><tbody id="activityTable"></tbody></table></div></section>
-</section></div></main><script type="module" src="assets/js/admin.js"></script></body></html>
+
+
+
+<!-- =====================================================
+     OFFERS TAB
+====================================================== -->
+
+<section
+    id="offersTab"
+    class="tab-panel active"
+>
+
+
+    <!-- OFFERS TOOLBAR -->
+
+    <div class="toolbar">
+
+        <h2>
+            إدارة العروض
+        </h2>
+
+
+        <div class="toolbar-actions">
+
+            <button
+                id="seedOffers"
+                class="secondary"
+                type="button"
+            >
+                استيراد العروض الحالية
+            </button>
+
+
+            <button
+                id="newOffer"
+                class="primary"
+                type="button"
+            >
+                + إضافة عرض
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         OFFER EDITOR
+
+         admin.js will create the complete editor here.
+    ================================================== -->
+
+    <div
+        id="offerEditor"
+        class="panel hidden"
+    ></div>
+
+
+
+    <!-- =================================================
+         OFFERS TABLE
+    ================================================== -->
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        العرض
+                    </th>
+
+                    <th>
+                        الوجهة
+                    </th>
+
+                    <th>
+                        السعر
+                    </th>
+
+                    <th>
+                        الحالة
+                    </th>
+
+                    <th>
+                        الصور
+                    </th>
+
+                    <th>
+                        إجراء
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="offersTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     BOOKINGS TAB
+====================================================== -->
+
+<section
+    id="bookingsTab"
+    class="tab-panel"
+>
+
+
+    <div class="toolbar">
+
+        <h2>
+            طلبات الحجز
+        </h2>
+
+
+        <button
+            id="refreshBookings"
+            class="secondary"
+            type="button"
+        >
+            تحديث
+        </button>
+
+    </div>
+
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        العميل
+                    </th>
+
+                    <th>
+                        الهاتف
+                    </th>
+
+                    <th>
+                        العرض
+                    </th>
+
+                    <th>
+                        تاريخ السفر
+                    </th>
+
+                    <th>
+                        المسافرون
+                    </th>
+
+                    <th>
+                        الحالة
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="bookingsTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     USERS TAB
+====================================================== -->
+
+<section
+    id="usersTab"
+    class="tab-panel"
+>
+
+
+    <div class="toolbar">
+
+        <h2>
+            بيانات العملاء المسجلين
+        </h2>
+
+    </div>
+
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        الاسم
+                    </th>
+
+                    <th>
+                        البريد
+                    </th>
+
+                    <th>
+                        UID
+                    </th>
+
+                    <th>
+                        تاريخ التسجيل
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="usersTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     ACTIVITY TAB
+====================================================== -->
+
+<section
+    id="activityTab"
+    class="tab-panel"
+>
+
+
+    <div class="toolbar">
+
+        <div>
+
+            <h2>
+                سجل الدخول والخروج
+            </h2>
+
+            <p class="note">
+                السجل يعتمد على الأحداث التي يسجلها
+                الموقع منذ تثبيت هذا التحديث.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        الحدث
+                    </th>
+
+                    <th>
+                        البريد
+                    </th>
+
+                    <th>
+                        UID
+                    </th>
+
+                    <th>
+                        الوقت
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="activityTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+</section>
+
+
+</section>
+
+
+</div>
+
+</main>
+
+
+
+<!-- =====================================================
+     ADMIN JAVASCRIPT
+====================================================== -->
+
+<script
+    type="module"
+    src="assets/js/admin.js"
+></script>
+
+
+</body>
+
+       </html>
