@@ -1,3 +1,10 @@
+import { auth, db } from "./firebase-config.js";
+
+import {
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
 import {
   collection,
   getDocs,
@@ -138,9 +145,10 @@ async function loadBookings() {
       $("bookingsCount").textContent = snap.size;
 
     table.innerHTML = snap.empty
-      ? `<tr><td colspan="6">لا توجد حجوزات.</td></tr>`
+      ? `<tr><td colspan="7">لا توجد حجوزات.</td></tr>`
       : snap.docs.map(d => {
           const x = d.data();
+          const status = x.status || "تم الاستلام";
 
           return `
             <tr>
@@ -149,42 +157,62 @@ async function loadBookings() {
               <td>${esc(x.offerName || x.offer || "—")}</td>
               <td>${esc(x.travelDate || "—")}</td>
               <td>${esc(x.travelers || x.guests || "—")}</td>
-              <td>${esc(x.status || "جديد")}</td>
+
+              <td>
+                <select
+                  class="booking-status"
+                  data-status-id="${esc(d.id)}">
+
+                  <option value="تم الاستلام"
+                    ${status === "تم الاستلام" ? "selected" : ""}>
+                    تم الاستلام
+                  </option>
+
+                  <option value="تم إدخال البيانات"
+                    ${status === "تم إدخال البيانات" ? "selected" : ""}>
+                    تم إدخال البيانات
+                  </option>
+
+                  <option value="تمت معالجة وقبول الطلب"
+                    ${status === "تمت معالجة وقبول الطلب" ? "selected" : ""}>
+                    تمت معالجة وقبول الطلب
+                  </option>
+
+                </select>
+              </td>
+
+              <td>
+                <button
+                  class="small primary update-booking-status"
+                  data-booking-id="${esc(d.id)}"
+                  type="button">
+                  تحديث
+                </button>
+              </td>
+
             </tr>
           `;
         }).join("");
 
-    document.querySelectorAll(".update-booking-status").forEach(button => {
-  button.onclick = () => {
-    updateBookingStatus(button.dataset.bookingId, button);
-  };
-});
+    document
+      .querySelectorAll(".update-booking-status")
+      .forEach(button => {
+        button.onclick = () => {
+          updateBookingStatus(
+            button.dataset.bookingId,
+            button
+          );
+        };
+      });
 
   } catch (e) {
+
     console.error("Bookings:", e);
+
     table.innerHTML =
-    <td>
-  <select class="booking-status" data-status-id="${esc(d.id)}">
-    <option value="تم الاستلام" ${x.status === "تم الاستلام" ? "selected" : ""}>
-      تم الاستلام
-    </option>
-    <option value="تم إدخال البيانات" ${x.status === "تم إدخال البيانات" ? "selected" : ""}>
-      تم إدخال البيانات
-    </option>
-    <option value="تمت معالجة وقبول الطلب" ${x.status === "تمت معالجة وقبول الطلب" ? "selected" : ""}>
-      تمت معالجة وقبول الطلب
-    </option>
-  </select>
-</td>
-<td>
-  <button class="small primary update-booking-status"
-          data-booking-id="${esc(d.id)}">
-    تحديث
-  </button>
-</td>
+      `<tr><td colspan="7">تعذر تحميل الحجوزات.</td></tr>`;
   }
 }
-
 /* =========================
    UPDATE BOOKING STATUS
 ========================= */
