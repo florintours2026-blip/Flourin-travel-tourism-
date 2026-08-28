@@ -1,565 +1,1885 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
 
-    <meta charset="utf-8">
+  <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1"
-    >
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-    <title>لوحة الإدارة | FLORIN</title>
+  <title>
+    FLORIN ADMIN | لوحة الإدارة
+  </title>
 
-    <link
-        rel="stylesheet"
-        href="assets/css/style.css"
-    >
 
-    <link
-        rel="stylesheet"
-        href="assets/css/admin.css"
-    >
+  <!-- Font Awesome -->
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+  >
+
+
+  <!-- Admin CSS -->
+
+  <link
+    rel="stylesheet"
+    href="assets/css/admin.css"
+  >
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      color: #111827;
+    }
+
+
+    .hidden {
+      display: none !important;
+    }
+
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .admin-header {
+
+      background:
+        linear-gradient(
+          135deg,
+          #050505,
+          #111827
+        );
+
+      color: white;
+
+      padding: 16px 20px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 15px;
+
+      position: sticky;
+
+      top: 0;
+
+      z-index: 1000;
+
+    }
+
+
+    .admin-brand {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+    }
+
+
+    .admin-brand img {
+
+      width: 48px;
+
+      height: 48px;
+
+      object-fit: contain;
+
+    }
+
+
+    .admin-brand h1 {
+
+      margin: 0;
+
+      font-size: 20px;
+
+    }
+
+
+    .admin-brand span {
+
+      display: block;
+
+      font-size: 12px;
+
+      opacity: .7;
+
+      margin-top: 4px;
+
+    }
+
+
+    .admin-header-actions {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 8px;
+
+    }
+
+
+    .admin-header button {
+
+      border: 0;
+
+      border-radius: 8px;
+
+      padding: 10px 14px;
+
+      cursor: pointer;
+
+    }
+
+
+    .logout {
+
+      background: #dc2626;
+
+      color: white;
+
+    }
+
+
+    /* =========================
+       LAYOUT
+    ========================= */
+
+    .admin-layout {
+
+      display: flex;
+
+      min-height: calc(100vh - 80px);
+
+    }
+
+
+    /* =========================
+       SIDEBAR
+    ========================= */
+
+    .admin-sidebar {
+
+      width: 240px;
+
+      background: #0b0f19;
+
+      color: white;
+
+      padding: 20px 12px;
+
+      flex-shrink: 0;
+
+    }
+
+
+    .admin-sidebar-title {
+
+      font-size: 12px;
+
+      opacity: .5;
+
+      padding: 10px 12px;
+
+    }
+
+
+    .tab {
+
+      width: 100%;
+
+      border: 0;
+
+      background: transparent;
+
+      color: #d1d5db;
+
+      text-align: right;
+
+      padding: 13px 14px;
+
+      margin-bottom: 5px;
+
+      border-radius: 8px;
+
+      cursor: pointer;
+
+      font-size: 14px;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+    }
+
+
+    .tab:hover {
+
+      background: #172033;
+
+      color: white;
+
+    }
+
+
+    .tab.active {
+
+      background: #2563eb;
+
+      color: white;
+
+    }
+
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    .admin-main {
+
+      flex: 1;
+
+      padding: 20px;
+
+      min-width: 0;
+
+    }
+
+
+    .admin-welcome {
+
+      background: white;
+
+      border-radius: 12px;
+
+      padding: 18px;
+
+      margin-bottom: 20px;
+
+      border: 1px solid #e5e7eb;
+
+    }
+
+
+    .admin-welcome h2 {
+
+      margin: 0 0 6px;
+
+      font-size: 22px;
+
+    }
+
+
+    .admin-welcome p {
+
+      margin: 0;
+
+      color: #6b7280;
+
+    }
+
+
+    /* =========================
+       DASHBOARD CARDS
+    ========================= */
+
+    .stats-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          4,
+          minmax(0, 1fr)
+        );
+
+      gap: 15px;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .stat-card {
+
+      background: white;
+
+      border: 1px solid #e5e7eb;
+
+      border-radius: 12px;
+
+      padding: 18px;
+
+    }
+
+
+    .stat-card .icon {
+
+      width: 42px;
+
+      height: 42px;
+
+      border-radius: 10px;
+
+      background: #eff6ff;
+
+      color: #2563eb;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      margin-bottom: 12px;
+
+    }
+
+
+    .stat-card strong {
+
+      display: block;
+
+      font-size: 25px;
+
+      margin-bottom: 4px;
+
+    }
+
+
+    .stat-card span {
+
+      color: #6b7280;
+
+      font-size: 13px;
+
+    }
+
+
+    /* =========================
+       PANELS
+    ========================= */
+
+    .tab-panel {
+
+      display: none;
+
+    }
+
+
+    .tab-panel.active {
+
+      display: block;
+
+    }
+
+
+    .panel {
+
+      background: white;
+
+      border: 1px solid #e5e7eb;
+
+      border-radius: 12px;
+
+      margin-bottom: 20px;
+
+      overflow: hidden;
+
+    }
+
+
+    .panel-header {
+
+      padding: 16px;
+
+      border-bottom: 1px solid #e5e7eb;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+
+    }
+
+
+    .panel-header h2 {
+
+      margin: 0;
+
+      font-size: 18px;
+
+    }
+
+
+    .panel-body {
+
+      padding: 16px;
+
+      overflow-x: auto;
+
+    }
+
+
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    button {
+
+      font-family: inherit;
+
+    }
+
+
+    button.primary {
+
+      background: #2563eb;
+
+      color: white;
+
+      border: 0;
+
+      border-radius: 8px;
+
+      padding: 10px 16px;
+
+      cursor: pointer;
+
+    }
+
+
+    button.secondary {
+
+      background: #e5e7eb;
+
+      color: #111827;
+
+      border: 0;
+
+      border-radius: 8px;
+
+      padding: 10px 16px;
+
+      cursor: pointer;
+
+    }
+
+
+    button.small {
+
+      padding: 7px 10px;
+
+      border: 0;
+
+      border-radius: 6px;
+
+      cursor: pointer;
+
+      margin: 2px;
+
+    }
+
+
+    button.edit {
+
+      background: #dbeafe;
+
+      color: #1d4ed8;
+
+    }
+
+
+    button.delete {
+
+      background: #fee2e2;
+
+      color: #b91c1c;
+
+    }
+
+
+    /* =========================
+       TABLE
+    ========================= */
+
+    table {
+
+      width: 100%;
+
+      border-collapse: collapse;
+
+      min-width: 700px;
+
+    }
+
+
+    th,
+    td {
+
+      padding: 12px;
+
+      border-bottom:
+        1px solid #e5e7eb;
+
+      text-align: right;
+
+      font-size: 13px;
+
+    }
+
+
+    th {
+
+      background: #f9fafb;
+
+      font-weight: bold;
+
+    }
+
+
+    tr:hover td {
+
+      background: #fafafa;
+
+    }
+
+
+    /* =========================
+       FORMS
+    ========================= */
+
+    .form-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(0, 1fr)
+        );
+
+      gap: 14px;
+
+    }
+
+
+    .field {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 6px;
+
+      margin-bottom: 14px;
+
+    }
+
+
+    .field.full {
+
+      grid-column:
+        1 / -1;
+
+    }
+
+
+    .field label {
+
+      font-size: 13px;
+
+      font-weight: bold;
+
+    }
+
+
+    .field input,
+    .field textarea,
+    .field select {
+
+      width: 100%;
+
+      border: 1px solid #d1d5db;
+
+      border-radius: 8px;
+
+      padding: 10px;
+
+      font-family: inherit;
+
+      background: white;
+
+    }
+
+
+    .field textarea {
+
+      resize: vertical;
+
+      min-height: 100px;
+
+    }
+
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+
+      outline: none;
+
+      border-color: #2563eb;
+
+    }
+
+
+    .checkbox {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 8px;
+
+      margin: 12px 0;
+
+      font-size: 14px;
+
+    }
+
+
+    .checkbox input {
+
+      width: 18px;
+
+      height: 18px;
+
+    }
+
+
+    /* =========================
+       SITE EDITOR
+    ========================= */
+
+    .site-editor {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 18px;
+
+    }
+
+
+    .admin-section {
+
+      background: white;
+
+      border: 1px solid #e5e7eb;
+
+      border-radius: 12px;
+
+      padding: 18px;
+
+    }
+
+
+    .admin-section h2 {
+
+      margin-top: 0;
+
+      margin-bottom: 18px;
+
+      padding-bottom: 12px;
+
+      border-bottom:
+        1px solid #e5e7eb;
+
+      font-size: 18px;
+
+    }
+
+
+    .admin-section h3 {
+
+      margin-top: 20px;
+
+    }
+
+
+    .admin-section small {
+
+      color: #6b7280;
+
+      display: block;
+
+      margin-top: 6px;
+
+    }
+
+
+    .site-save-bar {
+
+      position: sticky;
+
+      bottom: 10px;
+
+      background: white;
+
+      border: 1px solid #d1d5db;
+
+      border-radius: 12px;
+
+      padding: 12px;
+
+      display: flex;
+
+      gap: 10px;
+
+      justify-content: center;
+
+      box-shadow:
+        0 5px 25px
+        rgba(0,0,0,.12);
+
+      z-index: 50;
+
+    }
+
+
+    /* =========================
+       OFFER EDITOR
+    ========================= */
+
+    .offer-editor {
+
+      background: white;
+
+      border: 1px solid #e5e7eb;
+
+      border-radius: 12px;
+
+      padding: 20px;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .offer-editor h2 {
+
+      margin-top: 0;
+
+    }
+
+
+    .editor-actions {
+
+      display: flex;
+
+      gap: 10px;
+
+      margin-top: 20px;
+
+    }
+
+
+    /* =========================
+       ACCESS DENIED
+    ========================= */
+
+    .access-denied {
+
+      min-height: 100vh;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      background: #f3f4f6;
+
+      padding: 20px;
+
+    }
+
+
+    .access-box {
+
+      background: white;
+
+      border-radius: 15px;
+
+      padding: 35px;
+
+      max-width: 450px;
+
+      width: 100%;
+
+      text-align: center;
+
+      box-shadow:
+        0 10px 35px
+        rgba(0,0,0,.08);
+
+    }
+
+
+    .access-box i {
+
+      font-size: 50px;
+
+      margin-bottom: 15px;
+
+    }
+
+
+    .access-box h2 {
+
+      margin-top: 0;
+
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 900px) {
+
+      .admin-sidebar {
+
+        width: 75px;
+
+      }
+
+
+      .admin-sidebar .tab span {
+
+        display: none;
+
+      }
+
+
+      .admin-sidebar-title {
+
+        display: none;
+
+      }
+
+
+      .tab {
+
+        justify-content: center;
+
+      }
+
+
+      .stats-grid {
+
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0, 1fr)
+          );
+
+      }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+      .admin-header {
+
+        padding: 12px;
+
+      }
+
+
+      .admin-brand h1 {
+
+        font-size: 16px;
+
+      }
+
+
+      .admin-brand span {
+
+        font-size: 10px;
+
+      }
+
+
+      .admin-brand img {
+
+        width: 38px;
+
+        height: 38px;
+
+      }
+
+
+      .admin-layout {
+
+        display: block;
+
+      }
+
+
+      .admin-sidebar {
+
+        width: 100%;
+
+        display: flex;
+
+        overflow-x: auto;
+
+        padding: 8px;
+
+        position: sticky;
+
+        top: 73px;
+
+        z-index: 900;
+
+      }
+
+
+      .admin-sidebar-title {
+
+        display: none;
+
+      }
+
+
+      .tab {
+
+        min-width: 52px;
+
+        width: auto;
+
+        justify-content: center;
+
+        margin: 0 3px;
+
+        padding: 10px;
+
+      }
+
+
+      .tab span {
+
+        display: none;
+
+      }
+
+
+      .admin-main {
+
+        padding: 12px;
+
+      }
+
+
+      .stats-grid {
+
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0, 1fr)
+          );
+
+        gap: 8px;
+
+      }
+
+
+      .stat-card {
+
+        padding: 12px;
+
+      }
+
+
+      .stat-card strong {
+
+        font-size: 20px;
+
+      }
+
+
+      .form-grid {
+
+        grid-template-columns: 1fr;
+
+      }
+
+
+      .field.full {
+
+        grid-column: auto;
+
+      }
+
+
+      .panel-header {
+
+        align-items: stretch;
+
+      }
+
+
+      .panel-header button {
+
+        width: 100%;
+
+      }
+
+
+      .site-save-bar {
+
+        flex-direction: column;
+
+      }
+
+
+      .site-save-bar button {
+
+        width: 100%;
+
+      }
+
+    }
+
+  </style>
 
 </head>
 
 
 <body>
 
-<main class="admin-page">
 
-<div class="admin-shell">
+  <!-- =================================================
+       ACCESS DENIED
+  ================================================== -->
 
+  <div
+    id="accessDenied"
+    class="access-denied"
+  >
 
-<!-- =====================================================
-     ADMIN HEADER
-====================================================== -->
+    <div class="access-box">
 
-<header class="admin-header">
+      <i
+        class="fa-solid fa-lock"
+      ></i>
 
-    <div>
+      <h2>
+        جاري التحقق من الصلاحيات...
+      </h2>
 
-        <span class="badge">
-            FLORIN ADMIN
-        </span>
-
-        <h1>
-            لوحة الإدارة
-        </h1>
-
-        <p id="adminWelcome">
-            جاري التحقق من الصلاحيات...
-        </p>
+      <p>
+        يرجى الانتظار حتى يتم التحقق من حساب الإدارة.
+      </p>
 
     </div>
 
-
-    <button
-        id="adminLogout"
-        class="danger"
-        type="button"
-    >
-        تسجيل الخروج
-    </button>
-
-</header>
+  </div>
 
 
+  <!-- =================================================
+       DASHBOARD
+  ================================================== -->
 
-<!-- =====================================================
-     ACCESS DENIED
-====================================================== -->
-
-<div
-    id="accessDenied"
-    class="panel hidden"
->
-
-    <h2>
-        غير مصرح
-    </h2>
-
-    <p>
-        هذا الحساب ليس ضمن مديري الموقع.
-        يجب إنشاء مستند المدير في مجموعة
-        <code>admins</code>
-        في Firestore.
-    </p>
-
-    <a
-        href="index.html"
-        class="btn"
-    >
-        العودة للموقع
-    </a>
-
-</div>
-
-
-
-<!-- =====================================================
-     DASHBOARD
-====================================================== -->
-
-<section
+  <div
     id="dashboard"
     class="hidden"
->
+  >
 
 
+    <!-- HEADER -->
 
-<!-- =====================================================
-     STATISTICS
-====================================================== -->
+    <header class="admin-header">
 
-<div class="stats">
+      <div class="admin-brand">
 
-
-    <div class="stat">
-
-        <span>
-            العملاء
-        </span>
-
-        <strong id="usersCount">
-            0
-        </strong>
-
-    </div>
-
-
-    <div class="stat">
-
-        <span>
-            الحجوزات
-        </span>
-
-        <strong id="bookingsCount">
-            0
-        </strong>
-
-    </div>
-
-
-    <div class="stat">
-
-        <span>
-            الزيارات/النشاط
-        </span>
-
-        <strong id="activityCount">
-            0
-        </strong>
-
-    </div>
-
-
-    <div class="stat">
-
-        <span>
-            العروض
-        </span>
-
-        <strong id="offersCount">
-            0
-        </strong>
-
-    </div>
-
-
-</div>
-
-
-
-<!-- =====================================================
-     TABS
-====================================================== -->
-
-<div class="tabs">
-
-
-    <button
-        class="tab active"
-        data-tab="offersTab"
-        type="button"
-    >
-        العروض
-    </button>
-
-
-    <button
-        class="tab"
-        data-tab="bookingsTab"
-        type="button"
-    >
-        الحجوزات
-    </button>
-
-
-    <button
-        class="tab"
-        data-tab="usersTab"
-        type="button"
-    >
-        العملاء
-    </button>
-
-
-    <button
-        class="tab"
-        data-tab="activityTab"
-        type="button"
-    >
-        الدخول والخروج
-    </button>
-
-
-</div>
-
-
-
-<!-- =====================================================
-     OFFERS TAB
-====================================================== -->
-
-<section
-    id="offersTab"
-    class="tab-panel active"
->
-
-
-    <!-- OFFERS TOOLBAR -->
-
-    <div class="toolbar">
-
-        <h2>
-            إدارة العروض
-        </h2>
-
-
-        <div class="toolbar-actions">
-
-            <button
-                id="seedOffers"
-                class="secondary"
-                type="button"
-            >
-                استيراد العروض الحالية
-            </button>
-
-
-            <button
-                id="newOffer"
-                class="primary"
-                type="button"
-            >
-                + إضافة عرض
-            </button>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =================================================
-         OFFER EDITOR
-
-         admin.js will create the complete editor here.
-    ================================================== -->
-
-    <div
-        id="offerEditor"
-        class="panel hidden"
-    ></div>
-
-
-
-    <!-- =================================================
-         OFFERS TABLE
-    ================================================== -->
-
-    <div class="table-wrap">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        العرض
-                    </th>
-
-                    <th>
-                        الوجهة
-                    </th>
-
-                    <th>
-                        السعر
-                    </th>
-
-                    <th>
-                        الحالة
-                    </th>
-
-                    <th>
-                        الصور
-                    </th>
-
-                    <th>
-                        إجراء
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody id="offersTable">
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-
-</section>
-
-
-
-<!-- =====================================================
-     BOOKINGS TAB
-====================================================== -->
-
-<section
-    id="bookingsTab"
-    class="tab-panel"
->
-
-
-    <div class="toolbar">
-
-        <h2>
-            طلبات الحجز
-        </h2>
-
-
-        <button
-            id="refreshBookings"
-            class="secondary"
-            type="button"
+        <img
+          src="assets/images/logo.png"
+          alt="FLORIN"
         >
-            تحديث
-        </button>
-
-    </div>
-
-
-
-    <div class="table-wrap">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        العميل
-                    </th>
-
-                    <th>
-                        الهاتف
-                    </th>
-
-                    <th>
-                        العرض
-                    </th>
-
-                    <th>
-                        تاريخ السفر
-                    </th>
-
-                    <th>
-                        المسافرون
-                    </th>
-
-                    <th>
-                        الحالة
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody id="bookingsTable">
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-
-</section>
-
-
-
-<!-- =====================================================
-     USERS TAB
-====================================================== -->
-
-<section
-    id="usersTab"
-    class="tab-panel"
->
-
-
-    <div class="toolbar">
-
-        <h2>
-            بيانات العملاء المسجلين
-        </h2>
-
-    </div>
-
-
-
-    <div class="table-wrap">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        الاسم
-                    </th>
-
-                    <th>
-                        البريد
-                    </th>
-
-                    <th>
-                        UID
-                    </th>
-
-                    <th>
-                        تاريخ التسجيل
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody id="usersTable">
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-
-</section>
-
-
-
-<!-- =====================================================
-     ACTIVITY TAB
-====================================================== -->
-
-<section
-    id="activityTab"
-    class="tab-panel"
->
-
-
-    <div class="toolbar">
 
         <div>
 
-            <h2>
-                سجل الدخول والخروج
-            </h2>
+          <h1>
+            FLORIN ADMIN
+          </h1>
 
-            <p class="note">
-                السجل يعتمد على الأحداث التي يسجلها
-                الموقع منذ تثبيت هذا التحديث.
-            </p>
+          <span>
+            لوحة إدارة الموقع
+          </span>
 
         </div>
 
+      </div>
+
+
+      <div
+        class="admin-header-actions"
+      >
+
+        <span
+          id="adminWelcome"
+        ></span>
+
+
+        <button
+          id="adminLogout"
+          class="logout"
+          type="button"
+        >
+
+          <i
+            class="fa-solid fa-right-from-bracket"
+          ></i>
+
+          تسجيل الخروج
+
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <div class="admin-layout">
+
+
+      <!-- SIDEBAR -->
+
+      <aside class="admin-sidebar">
+
+
+        <div class="admin-sidebar-title">
+          الإدارة
+        </div>
+
+
+        <button
+          class="tab active"
+          data-tab="dashboardHome"
+          type="button"
+        >
+
+          <i
+            class="fa-solid fa-chart-line"
+          ></i>
+
+          <span>
+            الرئيسية
+          </span>
+
+        </button>
+
+
+        <button
+          class="tab"
+          data-tab="siteContent"
+          type="button"
+        >
+
+          <i
+            class="fa-solid fa-globe"
+          ></i>
+
+          <span>
+            محتوى الموقع
+          </span>
+
+        </button>
+
+
+        <button
+          class="tab"
+          data-tab="offersPanel"
+          type="button"
+        >
+
+          <i
+            class="fa-solid fa-tags"
+          ></i>
+
+          <span>
+            العروض
+          </span>
+
+        </button>
+
+
+        <button
+          class="tab"
+          data-tab="bookingsPanel"
+          type="button"
+        >
+
+          <i
+            class="fa-solid fa-calendar-check"
+          ></i>
+
+          <span>
+            الحجوزات
+          </span>
+
+        </button>
+
+
+        <button
+          class="tab"
+          data-tab="usersPanel"
+          type="button"
+        >
+
+          <i
+            class="fa-solid fa-users"
+          ></i>
+
+          <span>
+            العملاء
+          </span>
+
+        </button>
+
+
+        <button
+          class="tab"
+          data-tab="activityPanel"
+          type="button"
+        >
+
+          <i
+            class="fa-solid fa-clock-rotate-left"
+          ></i>
+
+          <span>
+            النشاط
+          </span>
+
+        </button>
+
+
+      </aside>
+
+
+      <!-- MAIN -->
+
+      <main class="admin-main">
+
+
+        <!-- WELCOME -->
+
+        <div class="admin-welcome">
+
+          <h2>
+            لوحة تحكم FLORIN
+          </h2>
+
+          <p>
+            من هنا يمكنك إدارة الموقع والعروض والحجوزات والعملاء.
+          </p>
+
+        </div>
+
+
+        <!-- =================================================
+             HOME
+        ================================================== -->
+
+        <section
+          id="dashboardHome"
+          class="tab-panel active"
+        >
+
+
+          <div class="stats-grid">
+
+
+            <div class="stat-card">
+
+              <div class="icon">
+
+                <i
+                  class="fa-solid fa-tags"
+                ></i>
+
+              </div>
+
+              <strong
+                id="offersCount"
+              >
+                0
+              </strong>
+
+              <span>
+                إجمالي العروض
+              </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+              <div class="icon">
+
+                <i
+                  class="fa-solid fa-calendar-check"
+                ></i>
+
+              </div>
+
+              <strong
+                id="bookingsCount"
+              >
+                0
+              </strong>
+
+              <span>
+                إجمالي الحجوزات
+              </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+              <div class="icon">
+
+                <i
+                  class="fa-solid fa-users"
+                ></i>
+
+              </div>
+
+              <strong
+                id="usersCount"
+              >
+                0
+              </strong>
+
+              <span>
+                العملاء
+              </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+              <div class="icon">
+
+                <i
+                  class="fa-solid fa-clock"
+                ></i>
+
+              </div>
+
+              <strong
+                id="activityCount"
+              >
+                0
+              </strong>
+
+              <span>
+                سجل النشاط
+              </span>
+
+            </div>
+
+
+          </div>
+
+
+          <div class="panel">
+
+            <div class="panel-header">
+
+              <h2>
+                مركز الإدارة
+              </h2>
+
+              <button
+                id="refreshBookings"
+                class="primary"
+                type="button"
+              >
+
+                <i
+                  class="fa-solid fa-rotate"
+                ></i>
+
+                تحديث
+
+              </button>
+
+            </div>
+
+
+            <div class="panel-body">
+
+              <p>
+                استخدم القائمة الجانبية للوصول إلى جميع أقسام لوحة الإدارة.
+              </p>
+
+              <p>
+                قسم <strong>محتوى الموقع</strong>
+                يسمح لك بالتحكم في محتوى صفحات الموقع من قاعدة البيانات.
+              </p>
+
+            </div>
+
+          </div>
+
+
+        </section>
+
+
+        <!-- =================================================
+             SITE CONTENT
+        ================================================== -->
+
+        <section
+          id="siteContent"
+          class="tab-panel"
+        >
+
+          <div class="panel">
+
+            <div class="panel-header">
+
+              <h2>
+                🌐 التحكم الكامل في الموقع
+              </h2>
+
+            </div>
+
+
+            <div class="panel-body">
+
+              <p>
+                من هذه الصفحة يمكنك تعديل النصوص والصور والروابط وإظهار أو إخفاء أقسام الموقع.
+              </p>
+
+
+              <div
+                id="siteContentEditor"
+              >
+
+                <p>
+                  جاري تحميل محتوى الموقع...
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =================================================
+             OFFERS
+        ================================================== -->
+
+        <section
+          id="offersPanel"
+          class="tab-panel"
+        >
+
+          <div
+            id="offerEditor"
+            class="hidden"
+          ></div>
+
+
+          <div class="panel">
+
+            <div class="panel-header">
+
+              <h2>
+                🏷️ إدارة العروض السياحية
+              </h2>
+
+              <button
+                id="newOffer"
+                class="primary"
+                type="button"
+              >
+
+                <i
+                  class="fa-solid fa-plus"
+                ></i>
+
+                إضافة عرض
+
+              </button>
+
+            </div>
+
+
+            <div class="panel-body">
+
+              <table>
+
+                <thead>
+
+                  <tr>
+
+                    <th>
+                      العرض
+                    </th>
+
+                    <th>
+                      الدولة
+                    </th>
+
+                    <th>
+                      السعر
+                    </th>
+
+                    <th>
+                      الحالة
+                    </th>
+
+                    <th>
+                      الصور
+                    </th>
+
+                    <th>
+                      الإجراءات
+                    </th>
+
+                  </tr>
+
+                </thead>
+
+
+                <tbody
+                  id="offersTable"
+                >
+
+                  <tr>
+
+                    <td
+                      colspan="6"
+                    >
+                      جاري تحميل العروض...
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+                      <table/>
+
+                          <dive/>
+                              
+                              <secion/>
+
+                                          <!-- =================================================
+             BOOKINGS
+        ================================================== -->
+
+        <section
+          id="bookingsPanel"
+          class="tab-panel"
+        >
+
+          <div class="panel">
+
+            <div class="panel-header">
+
+              <h2>
+                📋 إدارة الحجوزات والطلبات
+              </h2>
+
+              <button
+                id="refreshBookings"
+                class="primary"
+                type="button"
+              >
+                🔄 تحديث
+              </button>
+
+            </div>
+
+
+            <div class="panel-body">
+
+              <table>
+
+                <thead>
+
+                  <tr>
+
+                    <th>
+                      الاسم
+                    </th>
+
+                    <th>
+                      الهاتف
+                    </th>
+
+                    <th>
+                      الخدمة / العرض
+                    </th>
+
+                    <th>
+                      تاريخ السفر
+                    </th>
+
+                    <th>
+                      المسافرون
+                    </th>
+
+                    <th>
+                      الحالة
+                    </th>
+
+                    <th>
+                      الإجراء
+                    </th>
+
+                  </tr>
+
+                </thead>
+
+
+                <tbody
+                  id="bookingsTable"
+                >
+
+                  <tr>
+
+                    <td
+                      colspan="7"
+                    >
+                      جاري تحميل الحجوزات...
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             USERS
+        ================================================== -->
+
+        <section
+          id="usersPanel"
+          class="tab-panel"
+        >
+
+          <div class="panel">
+
+            <div class="panel-header">
+
+              <h2>
+                👥 العملاء
+              </h2>
+
+            </div>
+
+
+            <div class="panel-body">
+
+              <table>
+
+                <thead>
+
+                  <tr>
+
+                    <th>
+                      الاسم
+                    </th>
+
+                    <th>
+                      البريد الإلكتروني
+                    </th>
+
+                    <th>
+                      UID
+                    </th>
+
+                    <th>
+                      تاريخ التسجيل
+                    </th>
+
+                  </tr>
+
+                </thead>
+
+
+                <tbody
+                  id="usersTable"
+                >
+
+                  <tr>
+
+                    <td
+                      colspan="4"
+                    >
+                      جاري تحميل العملاء...
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ACTIVITY
+        ================================================== -->
+
+        <section
+          id="activityPanel"
+          class="tab-panel"
+        >
+
+          <div class="panel">
+
+            <div class="panel-header">
+
+              <h2>
+                🕒 سجل نشاط الإدارة
+              </h2>
+
+            </div>
+
+
+            <div class="panel-body">
+
+              <table>
+
+                <thead>
+
+                  <tr>
+
+                    <th>
+                      النشاط
+                    </th>
+
+                    <th>
+                      البريد
+                    </th>
+
+                    <th>
+                      UID
+                    </th>
+
+                    <th>
+                      التاريخ
+                    </th>
+
+                  </tr>
+
+                </thead>
+
+
+                <tbody
+                  id="activityTable"
+                >
+
+                  <tr>
+
+                    <td
+                      colspan="4"
+                    >
+                      جاري تحميل السجل...
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+
+      </main>
+
     </div>
 
-
-
-    <div class="table-wrap">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        الحدث
-                    </th>
-
-                    <th>
-                        البريد
-                    </th>
-
-                    <th>
-                        UID
-                    </th>
-
-                    <th>
-                        الوقت
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody id="activityTable">
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-
-</section>
-
-
-</section>
-
-
-</div>
-
-</main>
+  </div>
 
 
 
-<!-- =====================================================
-     ADMIN JAVASCRIPT
-====================================================== -->
+  <!-- =====================================================
+       ADMIN JAVASCRIPT
+  ====================================================== -->
 
-<script
+  <script
     type="module"
     src="assets/js/admin.js"
-></script>
+  ></script>
 
 
-</body>
+<body/>
 
-       </html>
+                              <html/>
+                                  
+                          
