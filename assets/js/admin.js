@@ -116,31 +116,80 @@ function date(value) {
 ===================================================== */
 
 async function checkAdmin(user) {
+async function checkAdmin(user) {
 
-  if (!user) return false;
+  if (!user) {
+
+    console.error("FLORIN ADMIN: No authenticated user.");
+
+    return false;
+
+  }
+
+  console.log(
+    "FLORIN ADMIN: Logged in user:",
+    user.email
+  );
+
+  console.log(
+    "FLORIN ADMIN: User UID:",
+    user.uid
+  );
 
   try {
 
-    const ref =
-      doc(
-        db,
-        "admins",
-        user.uid
+    const ref = doc(
+      db,
+      "admins",
+      user.uid
+    );
+
+    console.log(
+      "FLORIN ADMIN: Checking:",
+      `admins/${user.uid}`
+    );
+
+    const snap = await getDoc(ref);
+
+    console.log(
+      "FLORIN ADMIN: Document exists:",
+      snap.exists()
+    );
+
+    if (!snap.exists()) {
+
+      console.error(
+        "FLORIN ADMIN: Admin document does not exist."
       );
 
-    const snap =
-      await getDoc(ref);
+      return false;
 
-    return (
-      snap.exists() &&
-      snap.data().active === true
+    }
+
+    const data = snap.data();
+
+    console.log(
+      "FLORIN ADMIN: Admin data:",
+      data
     );
+
+    console.log(
+      "FLORIN ADMIN: Active:",
+      data.active
+    );
+
+    return data.active === true;
 
   } catch (error) {
 
     console.error(
-      "Admin check:",
+      "FLORIN ADMIN CHECK ERROR:",
       error
+    );
+
+    alert(
+      "حدث خطأ أثناء التحقق من صلاحيات المدير:\n\n" +
+      error.message
     );
 
     return false;
