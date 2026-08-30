@@ -1359,37 +1359,6 @@ function openOfferEditor(
 }
 
 
-/* =====================================================
-   CLOSE OFFER EDITOR
-===================================================== */
-
-function closeOfferEditor() {
-
-  currentOffer =
-    null;
-
-  const editor =
-    $("offerEditor");
-
-  if (!editor) return;
-
-  editor.innerHTML =
-    "";
-
-  show(
-     "offerEditor",
-    true
-  );
-
-
-  $("cancelOffer").onclick =
-    closeOfferEditor;
-
-
-  $("saveOffer").onclick =
-    saveOffer;
-
-}
 
 
 /* =====================================================
@@ -3143,11 +3112,68 @@ async function saveSiteContent() {
    START ADMIN
 ===================================================== */
 
+const adminStatus =
+  document.querySelector(
+    "#accessDenied h2"
+  );
+
+const adminMessage =
+  document.querySelector(
+    "#accessDenied p"
+  );
+
+
+setTimeout(() => {
+
+  if (
+    adminStatus &&
+    adminStatus.textContent.includes(
+      "جاري التحقق"
+    )
+  ) {
+
+    adminStatus.textContent =
+      "تعذر إكمال التحقق";
+
+    adminMessage.textContent =
+      "لم يتم الرد من نظام تسجيل الدخول. يرجى تحديث الصفحة والمحاولة مرة أخرى.";
+
+  }
+
+}, 10000);
+
+
 onAuthStateChanged(
   auth,
   async user => {
 
+    console.log(
+      "FLORIN ADMIN: Auth state changed"
+    );
+
+
     if (!user) {
+
+      console.warn(
+        "FLORIN ADMIN: لا يوجد مستخدم مسجل الدخول."
+      );
+
+
+      if (adminStatus) {
+
+        adminStatus.textContent =
+          "يجب تسجيل الدخول أولاً";
+
+      }
+
+
+      if (adminMessage) {
+
+        adminMessage.textContent =
+          "قم بتسجيل الدخول بحساب الإدارة ثم افتح لوحة التحكم مرة أخرى.";
+
+      }
+
 
       show(
         "accessDenied",
@@ -3164,17 +3190,63 @@ onAuthStateChanged(
     }
 
 
+    console.log(
+      "FLORIN ADMIN: User:",
+      user.email
+    );
+
+    console.log(
+      "FLORIN ADMIN: UID:",
+      user.uid
+    );
+
+
     currentUser =
       user;
 
 
+    if (adminStatus) {
+
+      adminStatus.textContent =
+        "جاري التحقق من صلاحيات المدير...";
+
+    }
+
+
+    if (adminMessage) {
+
+      adminMessage.textContent =
+        "يتم الآن التحقق من حساب الإدارة.";
+
+    }
+
+
     const allowed =
-      await checkAdmin(
-        user
-      );
+      await checkAdmin(user);
 
 
     if (!allowed) {
+
+      console.error(
+        "FLORIN ADMIN: المستخدم ليس Admin."
+      );
+
+
+      if (adminStatus) {
+
+        adminStatus.textContent =
+          "تم رفض الوصول";
+
+      }
+
+
+      if (adminMessage) {
+
+        adminMessage.textContent =
+          "هذا الحساب لا يملك صلاحية الدخول إلى لوحة الإدارة.";
+
+      }
+
 
       show(
         "accessDenied",
@@ -3187,6 +3259,27 @@ onAuthStateChanged(
       );
 
       return;
+
+    }
+
+
+    console.log(
+      "FLORIN ADMIN: تم قبول المدير ✅"
+    );
+
+
+    if (adminStatus) {
+
+      adminStatus.textContent =
+        "تم التحقق بنجاح";
+
+    }
+
+
+    if (adminMessage) {
+
+      adminMessage.textContent =
+        "مرحبًا بك في لوحة إدارة FLORIN.";
 
     }
 
@@ -3214,7 +3307,23 @@ onAuthStateChanged(
     }
 
 
-    await loadDashboard();
+    try {
+
+      await loadDashboard();
+
+    } catch (error) {
+
+      console.error(
+        "FLORIN ADMIN: Dashboard loading error:",
+        error
+      );
+
+      alert(
+        "تم التحقق من المدير، لكن حدث خطأ أثناء تحميل بيانات لوحة الإدارة:\n\n" +
+        error.message
+      );
+
+    }
 
 
     initTabs();
@@ -3244,7 +3353,50 @@ function initButtons() {
 
   }
 
+const refreshDashboard =
+  $("refreshDashboard");
 
+if (refreshDashboard) {
+
+  refreshDashboard.onclick =
+    async () => {
+
+      refreshDashboard.disabled =
+        true;
+
+      refreshDashboard.textContent =
+        "جاري التحديث...";
+
+      try {
+
+        await loadDashboard();
+
+      } catch (error) {
+
+        console.error(
+          "Dashboard refresh error:",
+          error
+        );
+
+        alert(
+          "تعذر تحديث لوحة الإدارة:\n" +
+          error.message
+        );
+
+      } finally {
+
+        refreshDashboard.disabled =
+          false;
+
+        refreshDashboard.textContent =
+          "تحديث";
+
+      }
+
+    };
+
+}
+  
   const refresh =
     $("refreshBookings");
 
