@@ -116,7 +116,6 @@ function date(value) {
 ===================================================== */
 
 async function checkAdmin(user) {
-async function checkAdmin(user) {
 
   if (!user) {
 
