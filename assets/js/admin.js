@@ -126,9 +126,14 @@ async function checkAdmin(user) {
   }
 
   console.log(
-    "FLORIN ADMIN: Logged in user:",
-    user.email
-  );
+  "FLORIN ADMIN: Logged in user:",
+  user.email
+);
+
+alert(
+  "UID: " + user.uid +
+  "\n\nActive: " + data.active
+);
 
   console.log(
     "FLORIN ADMIN: User UID:",
@@ -167,10 +172,17 @@ async function checkAdmin(user) {
 
     const data = snap.data();
 
-    console.log(
-      "FLORIN ADMIN: Admin data:",
-      data
-    );
+alert(
+  "الإيميل: " + user.email +
+  "\n\nUID: " + user.uid +
+  "\n\nAdmin Document: موجود" +
+  "\n\nActive: " + data.active
+);
+
+console.log(
+  "FLORIN ADMIN: Admin data:",
+  data
+);
 
     console.log(
       "FLORIN ADMIN: Active:",
