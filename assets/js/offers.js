@@ -12,16 +12,25 @@ const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 function show(o){
  selected=o;
  details.classList.add("active");
- details.innerHTML=`<div class="offer-details-grid">
- <div class="offer-details-media"><img src="${esc(o.image)}" alt="${esc(o.name)}"></div>
- <div class="offer-details-content"><span class="country">${esc(o.country)}</span><h2>${esc(o.name)}</h2>
- <div class="detail-meta"><span>${esc(o.duration)}</span><span>${esc(o.category)}</span><span>${esc(o.price)}</span></div>
- <p>${esc(o.description)}</p><div class="detail-columns">
- <div class="detail-box"><h3>يشمل</h3><ul>${(o.included||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
- <div class="detail-box"><h3>لا يشمل</h3><ul>${(o.excluded||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div>
- <div class="offer-note">${esc(o.notes)}</div>
- <a class="details-btn" style="display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:13px;margin-top:18px" href="booking.html?offer=${encodeURIComponent(o.id)}&offerName=${encodeURIComponent(o.name)}">الانتقال إلى الحجز</a>
- </div></div>`;
+ const h=o.hotel||{};
+ const images=Array.isArray(o.images)&&o.images.length?o.images:(o.image?[o.image]:[]);
+ details.innerHTML=`<div class="hotel-mini">
+   <div class="hotel-mini-gallery">${images.slice(0,4).map((src,i)=>`<img class="${i===0?'main':''}" src="${esc(src)}" alt="${esc(o.name)}">`).join("")}</div>
+   <div class="hotel-mini-content">
+     <span class="country">${esc(o.country)}</span>
+     <h2>${esc(o.name)}</h2>
+     ${h.name?`<div class="mini-hotel"><strong>${esc(h.name)}</strong> <span class="stars">${"★".repeat(Number(h.stars||4))}</span><small>${esc(h.location||o.destination||"")}</small></div>`:""}
+     <div class="detail-meta"><span>${esc(o.duration)}</span><span>${esc(o.category)}</span><span>${esc(o.price)}</span></div>
+     <p>${esc(o.description)}</p>
+     ${h.rooms?.length?`<div class="mini-rooms"><strong>الغرف:</strong> ${h.rooms.map(x=>esc(x)).join(" · ")}</div>`:""}
+     <div class="detail-columns">
+       <div class="detail-box"><h3>يشمل</h3><ul>${(o.included||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+       <div class="detail-box"><h3>لا يشمل</h3><ul>${(o.excluded||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+     </div>
+     <div class="offer-note">${esc(o.notes)}</div>
+     <a class="details-btn" style="display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:13px;margin-top:18px" href="offer-details.html?id=${encodeURIComponent(o.id)}">عرض الفندق والباقة بالتفصيل</a>
+   </div>
+ </div>`;
  details.scrollIntoView({behavior:"smooth",block:"start"});
  document.getElementById("selectedOfferId").value=o.id;
  document.getElementById("selectedOfferName").value=o.name;

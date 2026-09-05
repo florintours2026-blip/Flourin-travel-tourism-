@@ -1,4 +1,5 @@
-import { auth, db } from "./firebase-config.js";
+import { auth, db, storage } from "./firebase-config.js";
+import { DEFAULT_OFFERS } from "./offers-data.js";
 
 import {
   onAuthStateChanged,
@@ -16,6 +17,12 @@ import {
   serverTimestamp,
   arrayUnion
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import {
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
 
 /* =====================================================
@@ -130,10 +137,6 @@ async function checkAdmin(user) {
   user.email
 );
 
-alert(
-  "UID: " + user.uid +
-  "\n\nActive: " + data.active
-);
 
   console.log(
     "FLORIN ADMIN: User UID:",
@@ -172,17 +175,7 @@ alert(
 
     const data = snap.data();
 
-alert(
-  "الإيميل: " + user.email +
-  "\n\nUID: " + user.uid +
-  "\n\nAdmin Document: موجود" +
-  "\n\nActive: " + data.active
-);
-
-console.log(
-  "FLORIN ADMIN: Admin data:",
-  data
-);
+    console.log("FLORIN ADMIN: Admin data:", data);
 
     console.log(
       "FLORIN ADMIN: Active:",
@@ -1030,12 +1023,30 @@ function openOfferEditor(
 
       notes: "",
 
+      hotel: {
+        name: "",
+        stars: 4,
+        location: "",
+        type: "فندق 4 نجوم",
+        rooms: [],
+        amenities: []
+      },
+
       order: 0,
 
       active: true
 
     };
 
+
+  const h = x.hotel || {
+    name: "",
+    stars: 4,
+    location: "",
+    type: "فندق 4 نجوم",
+    rooms: [],
+    amenities: []
+  };
 
   let editor =
     $("offerEditor");
@@ -1228,6 +1239,24 @@ function openOfferEditor(
 
       </div>
 
+
+      <div class="field full">
+        <label>رفع صور جديدة (اختياري)</label>
+        <input id="e_image_files" type="file" accept="image/*" multiple>
+        <small>اختر عدة صور من الهاتف. سيتم رفعها إلى Firebase Storage وإضافتها تلقائيًا للعرض.</small>
+      </div>
+
+      <h3>🏨 بيانات الفندق</h3>
+      <div class="form-grid">
+        <div class="field"><label>اسم الفندق</label><input id="e_hotel_name" value="${esc(h.name)}"></div>
+        <div class="field"><label>التقييم بالنجوم</label><select id="e_hotel_stars">
+          ${[3,4,5].map(n=>`<option value="${n}" ${Number(h.stars||4)===n?"selected":""}>${n} نجوم</option>`).join("")}
+        </select></div>
+        <div class="field"><label>موقع الفندق</label><input id="e_hotel_location" value="${esc(h.location)}"></div>
+        <div class="field"><label>نوع الإقامة</label><input id="e_hotel_type" value="${esc(h.type || "فندق 4 نجوم")}"></div>
+      </div>
+      <div class="field"><label>أنواع الغرف - كل نوع في سطر</label><textarea id="e_hotel_rooms" rows="5">${esc(arr(h.rooms).join("\n"))}</textarea></div>
+      <div class="field"><label>الخدمات والمرافق - كل خدمة في سطر</label><textarea id="e_hotel_amenities" rows="5">${esc(arr(h.amenities).join("\n"))}</textarea></div>
 
       <div class="field">
 
@@ -1495,6 +1524,15 @@ function getOfferData() {
       $("e_notes")?.value
         .trim() || "",
 
+    hotel: {
+      name: $("e_hotel_name")?.value.trim() || "",
+      stars: Number($("e_hotel_stars")?.value || 4),
+      location: $("e_hotel_location")?.value.trim() || "",
+      type: $("e_hotel_type")?.value.trim() || "فندق 4 نجوم",
+      rooms: arr($("e_hotel_rooms")?.value),
+      amenities: arr($("e_hotel_amenities")?.value)
+    },
+
     order:
       Number(
         $("e_order")?.value ||
@@ -1505,11 +1543,35 @@ function getOfferData() {
       $("e_active")?.checked !== false
 
   };
+}
 
 
-    /* =====================================================
-   SAVE OFFER
+/* =====================================================
+   UPLOAD OFFER IMAGES
 ===================================================== */
+
+async function uploadOfferImages(offerId, existingImages = []) {
+  const input = $("e_image_files");
+  if (!input || !input.files || !input.files.length) return existingImages;
+
+  const uploaded = [...existingImages];
+  for (const file of [...input.files]) {
+    if (!file.type.startsWith("image/")) continue;
+    if (file.size > 8 * 1024 * 1024) throw new Error(`الصورة ${file.name} أكبر من 8MB.`);
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+    const path = `offers/${offerId}/${Date.now()}-${safeName}`;
+    const snapshot = await uploadBytes(storageRef(storage,path),file);
+    const url = await getDownloadURL(snapshot.ref);
+    if (!uploaded.includes(url)) uploaded.push(url);
+  }
+  return uploaded;
+}
+
+
+/* =====================================================
+   SAVE OFFER
+=====================================================
+*/
 
 async function saveOffer() {
 
@@ -1555,6 +1617,9 @@ async function saveOffer() {
       data.id ||
       `offer_${Date.now()}`;
 
+
+    data.images = await uploadOfferImages(id, data.images);
+    data.image = data.images[0] || data.image || "";
 
     const payload = {
 
@@ -1640,6 +1705,32 @@ async function saveOffer() {
 
   }
 
+}
+
+
+/* =====================================================
+   SEED STARTER OFFERS
+===================================================== */
+
+async function seedDefaultOffers() {
+  if (!currentUser) {
+    alert("لم يتم التحقق من صلاحيات المدير.");
+    return;
+  }
+
+  if (!confirm("سيتم إضافة/تحديث البكجات السياحية المبدئية في Firestore. هل تريد المتابعة؟")) return;
+
+  try {
+    for (const offer of DEFAULT_OFFERS) {
+      const payload = { ...offer, seededAt: serverTimestamp(), seededBy: currentUser.uid };
+      await setDoc(doc(db, "offers", offer.id), payload, { merge: true });
+    }
+    alert("تمت مزامنة البكجات المبدئية. يمكنك الآن تعديلها أو حذفها من لوحة الإدارة.");
+    await loadOffers();
+  } catch (e) {
+    console.error("Seed offers:", e);
+    alert("تعذر مزامنة البكجات:\n" + e.message);
+  }
 }
 
 
@@ -3485,16 +3576,7 @@ if (refreshDashboard) {
 
   if (seed) {
 
-    seed.onclick =
-      async () => {
-
-        await loadOffers();
-
-        alert(
-          "تم تحديث قائمة العروض."
-        );
-
-      };
+    seed.onclick = seedDefaultOffers;
 
   }
 
