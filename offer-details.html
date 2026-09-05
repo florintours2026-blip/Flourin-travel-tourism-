@@ -1,21 +1,56 @@
-<!doctype html><html lang="ar" dir="rtl"><head>
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>تفاصيل العرض | FLORIN Travel & Tourism Agency</title>
 <link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css"><link rel="stylesheet" href="assets/css/offers.css">
-</head><body><main class="details-wrap"><div class="container"><a class="back" href="offers.html">← العودة إلى العروض</a>
-<div id="offerDetailsPage"></div></div></main>
+</head>
+<body>
+<main class="hotel-page">
+<div class="container">
+<a class="back" href="offers.html">← العودة إلى العروض</a>
+<div id="offerDetailsPage"><p>جاري تحميل التفاصيل...</p></div>
+</div>
+</main>
 <script type="module">
 import {getOffer} from "./assets/js/offers-data.js";
-const box=document.getElementById("offerDetailsPage");const id=new URLSearchParams(location.search).get("id")||"dubai";
+const box=document.getElementById("offerDetailsPage");
+const id=new URLSearchParams(location.search).get("id")||"dubai";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+const arr=v=>Array.isArray(v)?v:[];
 const o=await getOffer(id);
-if(!o){box.innerHTML="<p>العرض غير موجود أو تم إخفاؤه.</p>";}
-else{document.title=o.name+" | FLORIN";box.innerHTML=`<div class="details"><section class="details-main"><span class="badge">${esc(o.category)}</span>
-<h1>${esc(o.name)}</h1><div class="meta"><span>📍 ${esc(o.country)}</span><span>⏱️ ${esc(o.duration)}</span></div>
-<p>${esc(o.description)}</p><div class="section-title">ماذا يشمل العرض؟</div><ul class="list">${(o.included||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
-<div class="section-title">ما لا يشمل</div><ul class="list">${(o.excluded||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
-<div class="section-title">ملاحظات مهمة</div><p class="note">${esc(o.notes)}</p></section>
-<aside class="details-side"><div class="note">السعر</div><div class="price">${esc(o.price)}</div><p class="note">السعر النهائي والتوفر يتم تأكيدهما بعد مراجعة بيانات السفر.</p>
-<a class="btn" href="booking.html?offer=${encodeURIComponent(o.id)}&offerName=${encodeURIComponent(o.name)}">احجز الآن يدويًا</a>
-<a class="btn secondary" href="offers.html">عروض أخرى</a></aside></div>`}
-</script></body></html>
+if(!o){box.innerHTML="<div class='hotel-empty'>العرض غير موجود أو تم إخفاؤه.</div>";}
+else{
+ document.title=o.name+" | FLORIN";
+ const h=o.hotel||{};
+ const images=arr(o.images).length?arr(o.images):(o.image?[o.image]:[]);
+ const isHotel=!!h.name;
+ box.innerHTML=`
+ <div class="hotel-head">
+   <div><span class="hotel-badge">${esc(o.category)}</span><h1>${esc(o.name)}</h1>
+   <p class="hotel-location">📍 ${esc(o.destination||o.country)} · ${esc(o.duration)}</p></div>
+   <div class="hotel-price-box"><small>السعر</small><strong>${esc(o.price)}</strong></div>
+ </div>
+ ${images.length?`<section class="hotel-gallery">${images.slice(0,6).map((src,i)=>`<img class="${i===0?'gallery-main':''}" src="${esc(src)}" alt="${esc(o.name)} - ${i+1}">`).join("")}</section>`:""}
+ ${isHotel?`
+ <section class="hotel-card">
+   <div class="hotel-card-head"><div><h2>${esc(h.name)} <span class="stars">${"★".repeat(Number(h.stars||4))}</span></h2>
+   <p>${esc(h.type||"فندق 4 نجوم")} · ${esc(h.location||o.destination||o.country)}</p></div>
+   <span class="rating">4.0 <small>4 نجوم</small></span></div>
+   <div class="hotel-amenities">${arr(h.amenities).map(x=>`<span>✓ ${esc(x)}</span>`).join("")}</div>
+ </section>
+ <section class="rooms-section"><div class="section-title">خيارات الغرف</div>
+   <div class="rooms-grid">${arr(h.rooms).map((r,i)=>`<article class="room-card"><img src="${esc(images[(i+1)%Math.max(images.length,1)]||o.image)}" alt="${esc(r)}"><div><h3>${esc(r)}</h3><p>إقامة في فندق 4 نجوم · التفاصيل والتوفر حسب تاريخ السفر</p><strong>متاح حسب الطلب</strong></div></article>`).join("")}</div>
+ </section>`:""}
+ <section class="hotel-info-grid">
+   <div class="hotel-info-main"><div class="section-title">عن الباقة</div><p>${esc(o.description)}</p>
+   <div class="info-cols"><div><h3>يشمل</h3><ul>${arr(o.included).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+   <div><h3>لا يشمل</h3><ul>${arr(o.excluded).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div>
+   <div class="hotel-note">${esc(o.notes)}</div></div>
+   <aside class="booking-card"><small>احجز هذه الباقة</small><h2>${esc(o.price)}</h2><p>التوفر والسعر النهائي يتم تأكيدهما قبل الحجز.</p>
+   <a class="details-btn" href="booking.html?offer=${encodeURIComponent(o.id)}&offerName=${encodeURIComponent(o.name)}">احجز الآن</a></aside>
+ </section>`;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "version": "1.0",
+  "purpose": "FLORIN Travel & Tourism - hotel-style tourism package assets",
+  "note": "الصور والفنادق في هذا الإصدار تجريبية مبدئيًا وليست تأكيدًا لحجز فندق حقيقي. يجب استبدالها واعتماد بيانات الفنادق قبل النشر التجاري.",
+  "packages": {
+    "dubai": {
+      "hotel": "Marina Crown Dubai Hotel",
+      "images": [
+        "hotel.png",
+        "room.png",
+        "sea.png"
+      ]
+    },
+    "maldives": {
+      "hotel": "Coral Breeze Maldives Resort",
+      "images": [
+        "hotel.png",
+        "room.png",
+        "sea.png"
+      ]
+    },
+    "istanbul": {
+      "hotel": "Bosphorus Pearl Istanbul Hotel",
+      "images": [
+        "hotel.png",
+        "room.png",
+        "destination.png"
+      ]
+    },
+    "umrah": {
+      "hotel": "FLORIN Makkah Residence",
+      "images": [
+        "hotel.png",
+        "room.png",
+        "destination.png"
+      ]
+    },
+    "egypt": {
+      "hotel": "Nile Horizon Cairo Hotel",
+      "images": [
+        "hotel.png",
+        "room.png",
+        "sea.png"
+      ]
+    }
+  },
+  "admin": "إدارة العروض أصبحت تشمل الإضافة والتعديل والحذف والإخفاء والصور وبيانات الفندق والغرف والمرافق، مع رفع الصور من الهاتف عبر Firebase Storage."
+}
