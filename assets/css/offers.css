@@ -341,3 +341,31 @@ FLORIN OFFERS & MANUAL BOOKING
         grid-column:auto;
     }
 }
+
+/* FLORIN Booking-style hotel/package details */
+.hotel-page{padding:45px 0 90px;background:#071320;min-height:100vh;color:#fff}
+.hotel-head{display:flex;justify-content:space-between;gap:25px;align-items:flex-end;margin:25px 0}
+.hotel-head h1{font-size:clamp(30px,5vw,52px);margin:8px 0}
+.hotel-badge{display:inline-block;padding:7px 12px;border-radius:999px;background:#123b5e;color:#55b5ff;font-weight:700}
+.hotel-location{color:#b8c9d9;margin:0}
+.hotel-price-box{background:#102b45;border:1px solid #ffffff14;border-radius:16px;padding:16px 20px;min-width:210px}
+.hotel-price-box small{display:block;color:#aab9c8}.hotel-price-box strong{font-size:23px;color:#55b5ff;display:block;margin-top:5px}
+.hotel-gallery{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:230px 230px;gap:8px;border-radius:18px;overflow:hidden;margin-bottom:22px}
+.hotel-gallery img{width:100%;height:100%;object-fit:cover;background:#10263d}
+.hotel-gallery .gallery-main{grid-row:1/3}
+.hotel-card,.rooms-section,.hotel-info-main,.booking-card{background:#10263d;border:1px solid #ffffff10;border-radius:18px}
+.hotel-card{padding:20px;margin-bottom:22px}.hotel-card-head{display:flex;justify-content:space-between;gap:20px;align-items:center}.hotel-card h2{margin:0 0 5px}.hotel-card p{color:#aab9c8;margin:0}.stars{color:#f7c948;font-size:17px;letter-spacing:2px}.rating{background:#0d6b9d;border-radius:8px;padding:9px 12px;font-weight:800}.rating small{display:block;font-weight:500;margin-top:3px}
+.hotel-amenities{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}.hotel-amenities span{padding:8px 11px;border-radius:9px;background:#0b2035;color:#dceafa;font-size:13px}
+.rooms-section{padding:20px;margin-bottom:22px}.section-title{font-size:23px;font-weight:800;margin:0 0 15px}.rooms-grid{display:grid;gap:12px}.room-card{display:grid;grid-template-columns:180px 1fr;background:#0b2035;border:1px solid #ffffff10;border-radius:13px;overflow:hidden}.room-card img{width:180px;height:150px;object-fit:cover}.room-card>div{padding:14px}.room-card h3{margin:0 0 8px}.room-card p{color:#aab9c8;font-size:13px;line-height:1.7}.room-card strong{color:#55b5ff;font-size:13px}
+.hotel-info-grid{display:grid;grid-template-columns:1fr 310px;gap:20px}.hotel-info-main{padding:24px}.hotel-info-main>p{color:#c8d7e8;line-height:1.9}.info-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}.info-cols h3{margin-bottom:8px}.info-cols ul{margin:0;padding-right:20px;color:#c8d7e8;line-height:1.9}.hotel-note{margin-top:20px;padding:14px;border-radius:12px;background:#241f0b;color:#f5e5a7;border:1px solid #ffffff10}
+.booking-card{padding:22px;height:max-content;position:sticky;top:20px}.booking-card small{color:#aab9c8}.booking-card h2{color:#55b5ff;margin:8px 0}.booking-card p{color:#b9cadd;line-height:1.7}.booking-card .details-btn{display:flex;text-decoration:none;align-items:center;justify-content:center;min-height:50px;border-radius:12px;background:#1e88e5;color:#fff;font-weight:800}
+.hotel-empty{padding:40px;background:#10263d;border-radius:18px}
+@media(max-width:800px){.hotel-head{flex-direction:column;align-items:stretch}.hotel-price-box{min-width:0}.hotel-gallery{grid-template-columns:1fr 1fr;grid-template-rows:230px 150px}.hotel-gallery .gallery-main{grid-column:1/3;grid-row:auto}.hotel-info-grid{grid-template-columns:1fr}.booking-card{position:static}.info-cols{grid-template-columns:1fr}.room-card{grid-template-columns:120px 1fr}.room-card img{width:120px;height:140px}}
+@media(max-width:520px){.hotel-page{padding-top:30px}.hotel-gallery{grid-template-columns:1fr;grid-template-rows:220px 160px 160px}.hotel-gallery .gallery-main{grid-column:auto}.hotel-gallery img:nth-child(n+4){display:none}.hotel-card-head{align-items:flex-start;flex-direction:column}.room-card{grid-template-columns:1fr}.room-card img{width:100%;height:170px}}
+
+.hotel-mini{display:grid;grid-template-columns:1fr 1.15fr;background:#0d1e30}
+.hotel-mini-gallery{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:180px 180px;gap:6px;overflow:hidden}
+.hotel-mini-gallery img{width:100%;height:100%;object-fit:cover}
+.hotel-mini-gallery .main{grid-row:1/3}
+.hotel-mini-content{padding:26px}.mini-hotel{margin:10px 0;padding:11px 13px;background:#0b2035;border-radius:10px}.mini-hotel small{display:block;color:#aab9c8;margin-top:4px}.mini-rooms{margin:12px 0;color:#c8d7e8;font-size:13px}.mini-hotel .stars{color:#f7c948}
+@media(max-width:767px){.hotel-mini{grid-template-columns:1fr}.hotel-mini-gallery{grid-template-rows:190px 120px}.hotel-mini-gallery .main{grid-row:auto;grid-column:1/3}.hotel-mini-gallery img:nth-child(n+3){display:none}.hotel-mini-content{padding:20px}}
