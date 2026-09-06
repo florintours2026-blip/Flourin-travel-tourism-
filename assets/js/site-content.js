@@ -43,7 +43,7 @@ export const DEFAULT_SITE_CONTENT = {
   hero: {
 
     badge:
-      "✈️ Florin Tours Agency",
+      "Florin Tours Agency",
 
     title:
       "اكتشف العالم مع",

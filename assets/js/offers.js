@@ -15,7 +15,7 @@ function show(o){
  const h=o.hotel||{};
  const images=Array.isArray(o.images)&&o.images.length?o.images:(o.image?[o.image]:[]);
  details.innerHTML=`<div class="hotel-mini">
-   <div class="hotel-mini-gallery">${images.slice(0,4).map((src,i)=>`<img class="${i===0?'main':''}" src="${esc(src)}" alt="${esc(o.name)}">`).join("")}</div>
+   <div class="hotel-mini-gallery">${images.slice(0,4).map((src,i)=>`<img class="${i===0?'main':''}" src="${esc(src)}" alt="${esc(o.name)}" onerror="this.onerror=null;this.src='${esc(o.image)}'">`).join("")}</div>
    <div class="hotel-mini-content">
      <span class="country">${esc(o.country)}</span>
      <h2>${esc(o.name)}</h2>
@@ -39,7 +39,7 @@ function show(o){
 async function init(){
  const offers=await getOffers();
  catalog.innerHTML=offers.map(o=>`<article class="offer-item">
- <img src="${esc(o.image)}" alt="${esc(o.name)}"><div class="offer-item-body">
+ <img src="${esc(o.image)}" alt="${esc(o.name)}" onerror="this.onerror=null;this.src='assets/images/logo/logo.png'"><div class="offer-item-body">
  <span class="country">${esc(o.country)}</span><h2>${esc(o.name)}</h2><p>${esc(o.description)}</p><div class="offer-price">${esc(o.price)}</div>
  <div class="offer-actions"><a class="details-btn" href="offer-details.html?id=${encodeURIComponent(o.id)}">صفحة التفاصيل</a><button class="booking-btn-outline" data-id="${esc(o.id)}">اختيار للحجز</button></div>
  </div></article>`).join("");
