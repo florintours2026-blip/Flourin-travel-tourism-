@@ -1,0 +1,236 @@
+[
+  {
+    "id": "dubai",
+    "name": "باقة دبي الفاخرة",
+    "country": "الإمارات العربية المتحدة",
+    "destination": "دبي",
+    "duration": "5 أيام / 4 ليالٍ",
+    "price": "يحدد حسب تاريخ السفر",
+    "category": "رحلات سياحية",
+    "description": "إقامة فاخرة في فندق 5 نجوم مع خيارات غرف وأجنحة ومرافق مميزة وبرنامج سياحي قابل للتخصيص.",
+    "image": "assets/images/offers/cleaned/dubai-offer-clean.png",
+    "images": [
+      "https://cache.marriott.com/content/dam/marriott-renditions/DXBJW/dxbjw-exterior-0209-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+      "https://cache.marriott.com/content/dam/marriott-renditions/DXBJW/dxbjw-king-deluxe-9679-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+      "https://cache.marriott.com/content/dam/marriott-renditions/DXBJW/dxbjw-room-0206-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+      "https://cache.marriott.com/is/image/marriotts7prod/dxbjw-business-0085%3AWide-Ver?fit=constrain&wid=1200"
+    ],
+    "hotel": {
+      "name": "JW Marriott Marquis Hotel Dubai",
+      "stars": 5,
+      "location": "Business Bay, Dubai, UAE",
+      "source": "https://www.marriott.com/en-us/hotels/dxbjw-jw-marriott-marquis-hotel-dubai/photos/",
+      "images": [
+        "https://cache.marriott.com/content/dam/marriott-renditions/DXBJW/dxbjw-exterior-0209-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+        "https://cache.marriott.com/content/dam/marriott-renditions/DXBJW/dxbjw-king-deluxe-9679-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+        "https://cache.marriott.com/content/dam/marriott-renditions/DXBJW/dxbjw-room-0206-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+        "https://cache.marriott.com/is/image/marriotts7prod/dxbjw-business-0085%3AWide-Ver?fit=constrain&wid=1200"
+      ]
+    },
+    "active": true,
+    "order": 1
+  },
+  {
+    "id": "maldives",
+    "name": "باقة المالديف الفاخرة",
+    "country": "المالديف",
+    "destination": "Raa Atoll",
+    "duration": "5 أيام / 4 ليالٍ",
+    "price": "يحدد حسب تاريخ السفر",
+    "category": "رحلات سياحية",
+    "description": "إقامة في منتجع 5 نجوم بفيلات فوق الماء وفيلات شاطئية مع مسابح خاصة وخيارات إقامة فاخرة.",
+    "image": "assets/images/offers/cleaned/maldives-offer-clean.png",
+    "images": [
+      "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/12/08/0856/MLDAL-P0168-Sunrise-Water-Villa-Bedroom.jpg/MLDAL-P0168-Sunrise-Water-Villa-Bedroom.16x9.jpg?imwidth=2560",
+      "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/06/07/1314/MLDAL-P0020-Water-Villa-Interior.jpg/MLDAL-P0020-Water-Villa-Interior.16x9.jpg?imwidth=2560",
+      "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/03/07/0531/MLDAL-P0014-Water-Villa-Pool-Deck.jpg/MLDAL-P0014-Water-Villa-Pool-Deck.16x9.jpg?imwidth=2560",
+      "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/06/05/0209/MLDAL-P0018-Water-Villa-Exterior.jpg/MLDAL-P0018-Water-Villa-Exterior.16x9.jpg?imwidth=2560"
+    ],
+    "hotel": {
+      "name": "Alila Kothaifaru Maldives",
+      "stars": 5,
+      "location": "Raa Atoll, Maldives",
+      "source": "https://www.hyatt.com/alila-hotels-and-resorts/en-US/mldal-alila-kothaifaru-maldives/gallery",
+      "images": [
+        "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/12/08/0856/MLDAL-P0168-Sunrise-Water-Villa-Bedroom.jpg/MLDAL-P0168-Sunrise-Water-Villa-Bedroom.16x9.jpg?imwidth=2560",
+        "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/06/07/1314/MLDAL-P0020-Water-Villa-Interior.jpg/MLDAL-P0020-Water-Villa-Interior.16x9.jpg?imwidth=2560",
+        "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/03/07/0531/MLDAL-P0014-Water-Villa-Pool-Deck.jpg/MLDAL-P0014-Water-Villa-Pool-Deck.16x9.jpg?imwidth=2560",
+        "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/06/05/0209/MLDAL-P0018-Water-Villa-Exterior.jpg/MLDAL-P0018-Water-Villa-Exterior.16x9.jpg?imwidth=2560"
+      ]
+    },
+    "active": true,
+    "order": 2
+  },
+  {
+    "id": "istanbul",
+    "name": "باقة إسطنبول الفاخرة",
+    "country": "تركيا",
+    "destination": "إسطنبول",
+    "duration": "6 أيام / 5 ليالٍ",
+    "price": "يحدد حسب تاريخ السفر",
+    "category": "رحلات سياحية",
+    "description": "إقامة في فندق 5 نجوم في إسطنبول مع غرف وأجنحة فاخرة ومرافق سبا ومطاعم وخيارات جولات.",
+    "image": "assets/images/offers/cleaned/istanbul-offer-clean.png",
+    "images": [
+      "https://cache.marriott.com/is/image/marriotts7prod/xr-istxr-hotel-exterior--22584-77790%3AWide-Hor?fit=constrain&wid=1200",
+      "https://cache.marriott.com/content/dam/marriott-renditions/ISTXR/istxr-king-guestroom-5681-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+      "https://cache.marriott.com/content/dam/marriott-renditions/ISTXR/istxr-grand-rooms-8005-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85"
+    ],
+    "hotel": {
+      "name": "The St. Regis Istanbul",
+      "stars": 5,
+      "location": "Nişantaşı, Istanbul, Türkiye",
+      "source": "https://www.marriott.com/en-us/hotels/istxr-the-st-regis-istanbul/photos/",
+      "images": [
+        "https://cache.marriott.com/is/image/marriotts7prod/xr-istxr-hotel-exterior--22584-77790%3AWide-Hor?fit=constrain&wid=1200",
+        "https://cache.marriott.com/content/dam/marriott-renditions/ISTXR/istxr-king-guestroom-5681-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+        "https://cache.marriott.com/content/dam/marriott-renditions/ISTXR/istxr-grand-rooms-8005-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85"
+      ]
+    },
+    "active": true,
+    "order": 3
+  },
+  {
+    "id": "umrah",
+    "name": "باقة العمرة الفاخرة",
+    "country": "المملكة العربية السعودية",
+    "destination": "مكة المكرمة",
+    "duration": "حسب البرنامج",
+    "price": "يحدد حسب التاريخ والخدمات",
+    "category": "عمرة",
+    "description": "برنامج عمرة قابل للتخصيص مع إقامة في فندق 5 نجوم قريب جدًا من المسجد الحرام وخيارات غرف وأجنحة متعددة.",
+    "image": "assets/images/offers/cleaned/makkah-offer-clean.png",
+    "images": [
+      "https://digital.ihg.com/is/image/ihg/intercontinental-makkah-4178759574-2x1",
+      "https://digital.ihg.com/is/image/ihg/intercontinental-makkah-6854797441-2x1",
+      "https://digital.ihg.com/is/image/ihg/intercontinental-makkah-6352014015-2x1",
+      "https://digital.ihg.com/is/image/ihg/intercontinental-makkah-8817018288-2x1"
+    ],
+    "hotel": {
+      "name": "InterContinental Dar Al Tawhid Makkah",
+      "stars": 5,
+      "location": "Ibrahim Al Khalil Road, Makkah, Saudi Arabia",
+      "source": "https://www.ihg.com/intercontinental/hotels/us/en/makkah/qcahd/hoteldetail/gallery",
+      "images": [
+        "https://digital.ihg.com/is/image/ihg/intercontinental-makkah-4178759574-2x1",
+        "https://digital.ihg.com/is/image/ihg/intercontinental-makkah-6854797441-2x1",
+        "https://digital.ihg.com/is/image/ihg/intercontinental-makkah-6352014015-2x1",
+        "https://digital.ihg.com/is/image/ihg/intercontinental-makkah-8817018288-2x1"
+      ]
+    },
+    "active": true,
+    "order": 4
+  },
+  {
+    "id": "egypt",
+    "name": "اكتشف شرم الشيخ",
+    "country": "مصر",
+    "destination": "شرم الشيخ",
+    "duration": "حسب البرنامج",
+    "price": "يحدد حسب التاريخ",
+    "category": "رحلات سياحية",
+    "description": "برنامج سياحي في شرم الشيخ مع إقامة في منتجع 5 نجوم وشاطئ ومسابح ومرافق سبا.",
+    "image": "assets/images/offers/cleaned/egypt-offer-clean.png",
+    "images": [
+      "https://cache.marriott.com/content/dam/marriott-renditions/SSHBR/sshbr-view-0100-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+      "https://cache.marriott.com/content/dam/marriott-renditions/SSHBR/sshbr-lower-lobby-5892-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+      "https://cache.marriott.com/is/image/marriotts7prod/br-sshbr-standard-guestroom---king-20757%3AWide-Hor?fit=constrain&wid=1200",
+      "https://cache.marriott.com/is/image/marriotts7prod/br-sshbr-king-seaview-guestroom-10635%3AWide-Hor?fit=constrain&wid=1200",
+      "https://cache.marriott.com/content/dam/marriott-renditions/SSHBR/sshbr-lobby-bar-5890-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+      "https://cache.marriott.com/content/dam/marriott-renditions/SSHBR/sshbr-pool-0089-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85"
+    ],
+    "hotel": {
+      "name": "Renaissance Sharm El Sheikh Golden View Beach Resort",
+      "stars": 5,
+      "location": "Al Fanar Street, Sharm El Sheikh, Egypt",
+      "source": "https://www.marriott.com/en-us/hotels/sshbr-renaissance-sharm-el-sheikh-golden-view-beach-resort/photos/",
+      "images": [
+        "https://cache.marriott.com/content/dam/marriott-renditions/SSHBR/sshbr-view-0100-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+        "https://cache.marriott.com/content/dam/marriott-renditions/SSHBR/sshbr-lower-lobby-5892-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+        "https://cache.marriott.com/is/image/marriotts7prod/br-sshbr-standard-guestroom---king-20757%3AWide-Hor?fit=constrain&wid=1200",
+        "https://cache.marriott.com/is/image/marriotts7prod/br-sshbr-king-seaview-guestroom-10635%3AWide-Hor?fit=constrain&wid=1200",
+        "https://cache.marriott.com/content/dam/marriott-renditions/SSHBR/sshbr-lobby-bar-5890-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+        "https://cache.marriott.com/content/dam/marriott-renditions/SSHBR/sshbr-pool-0089-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85"
+      ]
+    },
+    "active": true,
+    "order": 5
+  },
+  {
+    "id": "dubai-flight",
+    "name": "رحلة القاهرة إلى دبي",
+    "country": "الإمارات العربية المتحدة",
+    "destination": "دبي",
+    "duration": "حسب تاريخ السفر",
+    "price": "يحدد حسب تاريخ السفر",
+    "category": "رحلات طيران",
+    "description": "خيارات رحلات جوية من القاهرة إلى دبي مع مراجعة مواعيد السفر والتوفر والسعر النهائي قبل الحجز.",
+    "image": "assets/images/offers/cleaned/dubai-offer-clean.png",
+    "images": [
+      "assets/images/offers/cleaned/dubai-offer-clean.png"
+    ],
+    "included": [
+      "مراجعة الرحلات المتاحة",
+      "مقارنة المواعيد والأسعار",
+      "تنسيق طلب الحجز"
+    ],
+    "excluded": [
+      "أي رسوم إضافية من شركة الطيران",
+      "الأمتعة أو الخدمات الإضافية حسب التذكرة"
+    ],
+    "notes": "السعر والتوفر يتغيران حسب تاريخ السفر وشركة الطيران.",
+    "active": true,
+    "order": 7
+  },
+  {
+    "id": "malaysia-flight",
+    "name": "رحلة القاهرة إلى كوالالمبور",
+    "country": "ماليزيا",
+    "destination": "كوالالمبور",
+    "duration": "حسب تاريخ السفر",
+    "price": "يحدد حسب تاريخ السفر",
+    "category": "رحلات طيران",
+    "description": "خيارات رحلات جوية من القاهرة إلى كوالالمبور مع مراجعة المواعيد والتوفر والسعر النهائي قبل الحجز.",
+    "image": "assets/images/offers/dubai.webp",
+    "images": [
+      "assets/images/offers/dubai.webp"
+    ],
+    "included": [
+      "مراجعة الرحلات المتاحة",
+      "مقارنة المواعيد والأسعار",
+      "تنسيق طلب الحجز"
+    ],
+    "excluded": [
+      "أي رسوم إضافية من شركة الطيران",
+      "الأمتعة أو الخدمات الإضافية حسب التذكرة"
+    ],
+    "notes": "السعر والتوفر يتغيران حسب تاريخ السفر وشركة الطيران.",
+    "active": true,
+    "order": 8
+  },
+  {
+    "id": "egypt-security",
+    "name": "الموافقة الأمنية لدخول مصر",
+    "country": "مصر",
+    "destination": "مصر",
+    "duration": "حسب الخدمة",
+    "price": "يحدد حسب الطلب",
+    "category": "خدمات سفر",
+    "description": "متابعة طلب خدمة الموافقة الأمنية وفق البيانات والمتطلبات المعتمدة.",
+    "image": "assets/images/offers/cleaned/egypt-security-offer-clean.png",
+    "images": [
+      "assets/images/offers/cleaned/egypt-security-offer-clean.png"
+    ],
+    "included": [
+      "مراجعة البيانات الأولية",
+      "توضيح المستندات المطلوبة",
+      "متابعة الطلب بعد التأكيد"
+    ],
+    "excluded": [
+      "الرسوم الحكومية أو الخارجية إن وجدت"
+    ],
+    "notes": "القبول ومدة الإنجاز يخضعان للجهة المختصة.",
+    "active": true,
+    "order": 9
+  }
+]
