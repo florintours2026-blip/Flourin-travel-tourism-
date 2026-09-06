@@ -3,15 +3,14 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>تفاصيل العرض | FLORIN Travel & Tourism Agency</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 <link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css"><link rel="stylesheet" href="assets/css/offers.css">
 </head>
 <body>
-<main class="hotel-page">
-<div class="container">
-<a class="back" href="offers.html">← العودة إلى العروض</a>
+<main class="hotel-page"><div class="container">
+<a class="back" href="offers.html"><i class="fa-solid fa-arrow-right"></i> العودة إلى العروض</a>
 <div id="offerDetailsPage"><p>جاري تحميل التفاصيل...</p></div>
-</div>
-</main>
+</div></main>
 <script type="module">
 import {getOffer} from "./assets/js/offers-data.js";
 const box=document.getElementById("offerDetailsPage");
@@ -25,32 +24,33 @@ else{
  const h=o.hotel||{};
  const images=arr(o.images).length?arr(o.images):(o.image?[o.image]:[]);
  const isHotel=!!h.name;
+ const stars=Math.max(1,Number(h.stars||0));
  box.innerHTML=`
  <div class="hotel-head">
    <div><span class="hotel-badge">${esc(o.category)}</span><h1>${esc(o.name)}</h1>
-   <p class="hotel-location">📍 ${esc(o.destination||o.country)} · ${esc(o.duration)}</p></div>
+   <p class="hotel-location"><i class="fa-solid fa-location-dot"></i> ${esc(o.destination||o.country)} · ${esc(o.duration)}</p></div>
    <div class="hotel-price-box"><small>السعر</small><strong>${esc(o.price)}</strong></div>
  </div>
- ${images.length?`<section class="hotel-gallery">${images.slice(0,6).map((src,i)=>`<img class="${i===0?'gallery-main':''}" src="${esc(src)}" alt="${esc(o.name)} - ${i+1}">`).join("")}</section>`:""}
+ ${images.length?`<section class="hotel-gallery" aria-label="صور الفندق والعرض">${images.slice(0,6).map((src,i)=>`<figure class="gallery-item ${i===0?'gallery-main':''}"><img src="${esc(src)}" alt="${esc(o.name)} - صورة ${i+1}" loading="${i===0?'eager':'lazy'}" onerror="this.onerror=null;this.src='${esc(o.image)}'"><figcaption>${i===0?'واجهة / منظر رئيسي':i===1?'غرفة أو جناح':i===2?'مرافق الفندق':i===3?'إقامة أو إطلالة':i===4?'الاستقبال / المطاعم':'المسبح / المرافق'}</figcaption></figure>`).join("")}</section>`:""}
  ${isHotel?`
  <section class="hotel-card">
-   <div class="hotel-card-head"><div><h2>${esc(h.name)} <span class="stars">${"★".repeat(Number(h.stars||4))}</span></h2>
-   <p>${esc(h.type||"فندق 4 نجوم")} · ${esc(h.location||o.destination||o.country)}</p></div>
-   <span class="rating">4.0 <small>4 نجوم</small></span></div>
-   <div class="hotel-amenities">${arr(h.amenities).map(x=>`<span>✓ ${esc(x)}</span>`).join("")}</div>
+   <div class="hotel-card-head"><div><h2><i class="fa-solid fa-hotel"></i> ${esc(h.name)} <span class="stars">${Array.from({length:stars},()=>'<i class="fa-solid fa-star"></i>').join("")}</span></h2>
+   <p>${esc(h.type||"فندق 5 نجوم")} · ${esc(h.location||o.destination||o.country)}</p></div>
+   <span class="rating"><i class="fa-solid fa-star"></i> ${stars} <small>تصنيف الفندق</small></span></div>
+   <div class="hotel-amenities">${arr(h.amenities).map(x=>`<span><i class="fa-solid fa-check"></i> ${esc(x)}</span>`).join("")}</div>
+   ${h.source?`<a class="hotel-source" href="${esc(h.source)}" target="_blank" rel="noopener"><i class="fa-solid fa-camera"></i> مشاهدة معرض الصور الرسمي للفندق</a>`:""}
  </section>
- <section class="rooms-section"><div class="section-title">خيارات الغرف</div>
-   <div class="rooms-grid">${arr(h.rooms).map((r,i)=>`<article class="room-card"><img src="${esc(images[(i+1)%Math.max(images.length,1)]||o.image)}" alt="${esc(r)}"><div><h3>${esc(r)}</h3><p>إقامة في فندق 4 نجوم · التفاصيل والتوفر حسب تاريخ السفر</p><strong>متاح حسب الطلب</strong></div></article>`).join("")}</div>
+ <section class="rooms-section"><div class="section-title"><i class="fa-solid fa-bed"></i> خيارات الغرف والأجنحة</div>
+   <div class="rooms-grid">${arr(h.rooms).map((r,i)=>`<article class="room-card"><img src="${esc(images[(i+1)%Math.max(images.length,1)]||o.image)}" alt="${esc(r)}" onerror="this.onerror=null;this.src='${esc(o.image)}'"><div><h3>${esc(r)}</h3><p>نوع إقامة ضمن الفندق، والتوفر الفعلي والسعر يعتمدان على تاريخ السفر.</p><strong><i class="fa-solid fa-circle-check"></i> متاح حسب الطلب</strong></div></article>`).join("")}</div>
  </section>`:""}
  <section class="hotel-info-grid">
-   <div class="hotel-info-main"><div class="section-title">عن الباقة</div><p>${esc(o.description)}</p>
+   <div class="hotel-info-main"><div class="section-title"><i class="fa-solid fa-suitcase-rolling"></i> عن الباقة</div><p>${esc(o.description)}</p>
    <div class="info-cols"><div><h3>يشمل</h3><ul>${arr(o.included).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
    <div><h3>لا يشمل</h3><ul>${arr(o.excluded).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div>
    <div class="hotel-note">${esc(o.notes)}</div></div>
    <aside class="booking-card"><small>احجز هذه الباقة</small><h2>${esc(o.price)}</h2><p>التوفر والسعر النهائي يتم تأكيدهما قبل الحجز.</p>
-   <a class="details-btn" href="booking.html?offer=${encodeURIComponent(o.id)}&offerName=${encodeURIComponent(o.name)}">احجز الآن</a></aside>
+   <a class="details-btn" href="booking.html?offer=${encodeURIComponent(o.id)}&offerName=${encodeURIComponent(o.name)}"><i class="fa-solid fa-calendar-check"></i> احجز الآن</a></aside>
  </section>`;
 }
 </script>
-</body>
-</html>
+</body></html>

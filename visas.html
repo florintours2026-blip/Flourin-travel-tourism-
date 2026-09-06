@@ -1,26 +1,53 @@
 <!doctype html>
-<html lang="ar" dir="rtl"><head>
+<html lang="ar" dir="rtl">
+<head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>التأشيرات والخدمات | FLORIN Travel & Tourism Agency</title>
+<title>التأشيرات الإلكترونية | FLORIN Travel & Tourism Agency</title>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
 <style>
 :root{--bg:#061525;--card:#102b45;--blue:#2495e8;--text:#f7f9fc;--muted:#aab9c8}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Tahoma,sans-serif;direction:rtl}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Cairo,Arial,Tahoma,sans-serif}
 a{text-decoration:none;color:inherit}.container{width:min(1180px,92%);margin:auto}.page-head{text-align:center;padding:65px 0 30px}
-.badge{display:inline-block;padding:9px 16px;border-radius:999px;background:#0b2943;color:#48aaf2;border:1px solid #17466b;font-weight:700}
-.page-head h1{font-size:clamp(30px,4vw,48px);margin:18px 0 10px}.page-head p,.card p,.note{color:var(--muted);line-height:1.9}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;padding-bottom:70px}.card{background:var(--card);border:1px solid #ffffff12;border-radius:22px;overflow:hidden;box-shadow:0 14px 35px #0003}
-.card-icon{height:150px;display:grid;place-items:center;background:#0b2035;font-size:58px}.card-body{padding:22px}.card h2{margin:0 0 10px}
-.btn{display:flex;align-items:center;justify-content:center;min-height:48px;padding:12px 18px;background:var(--blue);border-radius:14px;font-weight:800;margin-top:16px}
-.btn.secondary{background:transparent;border:1px solid #2495e877;color:#48aaf2}.details-wrap{padding:35px 0 80px}.back{color:#48aaf2}
-.details{display:grid;grid-template-columns:1.2fr .8fr;gap:24px}.details-main,.details-side{background:var(--card);border:1px solid #ffffff12;border-radius:22px;padding:28px}
-.details-main h1{font-size:clamp(28px,4vw,44px);margin:15px 0}.meta{display:flex;flex-wrap:wrap;gap:10px}.meta span{background:#ffffff0b;padding:8px 12px;border-radius:10px;color:var(--muted)}
-.section-title{font-size:21px;font-weight:800;margin:28px 0 12px}.list{list-style:none;padding:0;margin:0;display:grid;gap:10px}.list li:before{content:"✓";color:#48aaf2;font-weight:bold;margin-left:8px}.price{font-size:30px;color:#48aaf2;font-weight:900;margin:10px 0}
-@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.details{grid-template-columns:1fr}}
-@media(max-width:600px){.container{width:94%}.grid{grid-template-columns:1fr;gap:15px}.page-head{padding:45px 0 22px}.card-icon{height:130px}.details-main,.details-side{padding:20px;border-radius:18px}}
-</style></head><body><header class="page-head"><div class="container"><span class="badge">🛂 التأشيرات والخدمات</span><h1>التأشيرات والخدمات السياحية</h1><p>أرسل بياناتك وسنراجع المتطلبات والسعر ومدة الإنجاز قبل التأكيد.</p></div></header>
-<main class="container"><section class="grid">
-<article class="card"><div class="card-icon">🇪🇬</div><div class="card-body"><h2>خدمة سفر إلى مصر</h2><p>مراجعة طلبك ومتطلبات الخدمة.</p><a class="btn" href="offer-details.html?id=egypt-service">التفاصيل وطلب الخدمة</a></div></article>
-<article class="card"><div class="card-icon">🛂</div><div class="card-body"><h2>تأشيرة سياحية</h2><p>أرسل جنسيتك ووجهتك وتاريخ السفر.</p><a class="btn" href="offer-details.html?id=tourist-visa">التفاصيل وطلب الخدمة</a></div></article>
-<article class="card"><div class="card-icon">📋</div><div class="card-body"><h2>طلب خدمة مخصصة</h2><p>إذا لم تجد الخدمة المطلوبة، أرسل طلبك.</p><a class="btn" href="booking.html?type=visa">أرسل الطلب</a></div></article>
-</section></main></body></html>
+.badge{display:inline-flex;gap:9px;align-items:center;padding:9px 16px;border-radius:999px;background:#0b2943;color:#48aaf2;border:1px solid #17466b;font-weight:800}
+.page-head h1{font-size:clamp(30px,4vw,48px);margin:18px 0 10px}.page-head p{color:var(--muted);line-height:1.9}
+.region{margin:25px 0}.region-title{display:flex;align-items:center;gap:10px;margin:0 0 15px;font-size:24px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;padding-bottom:20px}.card{background:var(--card);border:1px solid #ffffff12;border-radius:22px;overflow:hidden;box-shadow:0 14px 35px #0003;transition:.25s}
+.card:hover{transform:translateY(-4px)}.card-image{height:170px;position:relative;background:#0b2035;overflow:hidden}
+.card-image img{width:100%;height:100%;object-fit:cover}.icon-badge{position:absolute;right:14px;top:14px;width:50px;height:50px;border-radius:15px;display:grid;place-items:center;background:#071a2cdd;border:1px solid #48aaf277;color:#55b5ff;font-size:23px}
+.card-body{padding:20px}.country-row{display:flex;align-items:center;gap:10px}.country-row h2{margin:0;font-size:21px}.type{font-size:12px;color:#8fd0ff;margin-top:5px}.price{font-size:28px;color:#55b5ff;font-weight:900;margin:14px 0 5px}.card p{color:var(--muted);line-height:1.75;font-size:13px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 18px;background:var(--blue);border-radius:14px;font-weight:800;margin-top:16px}.note{color:#9fb2c5;text-align:center;padding:30px 0 70px;font-size:13px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.container{width:94%}.grid{grid-template-columns:1fr;gap:15px}.page-head{padding:45px 0 22px}.card-image{height:150px}}
+</style>
+</head>
+<body>
+<header class="page-head"><div class="container">
+<span class="badge"><i class="fa-solid fa-passport"></i> التأشيرات الإلكترونية</span>
+<h1>تأشيرات السفر بأسعار واضحة</h1>
+<p>اختَر الدولة لعرض السعر ونوع الخدمة ثم أرسل طلبك للمراجعة قبل التأكيد النهائي.</p>
+</div></header>
+<main class="container" id="visaCatalog"><p class="note">جاري تحميل التأشيرات...</p></main>
+<script type="module">
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+const catalog=document.getElementById("visaCatalog");
+const data=await fetch("assets/data/visas.json").then(r=>r.json());
+const groups={};
+data.items.forEach(v=>(groups[v.region]??=[]).push(v));
+catalog.innerHTML=Object.entries(groups).map(([region,items])=>`
+<section class="region">
+<h2 class="region-title"><i class="fa-solid fa-earth-asia"></i>${esc(region)}</h2>
+<div class="grid">${items.map(v=>`
+<article class="card">
+<div class="card-image"><img src="${esc(v.flag)}" alt="علم ${esc(v.country)}" loading="lazy"><span class="icon-badge"><i class="${esc(v.icon)}"></i></span></div>
+<div class="card-body">
+<div class="country-row"><h2>${esc(v.country)}</h2></div>
+<div class="type">${esc(v.serviceType)}</div>
+<div class="price">${esc(v.price)}</div>
+<p>${esc(v.description)}</p>
+<a class="btn" href="visa-details.html?id=${encodeURIComponent(v.id)}"><i class="fa-solid fa-circle-info"></i> التفاصيل</a>
+</div></article>`).join("")}</div>
+</section>`).join("")+`<p class="note">الأسعار المعروضة هي الأسعار التي زودتنا بها. قد تتغير المتطلبات أو الرسوم الخارجية وفق الجنسية والجهات المختصة.</p>`;
+</script>
+</body></html>
