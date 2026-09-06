@@ -1,0 +1,63 @@
+{
+  "dubai": {
+    "name": "JW Marriott Marquis Hotel Dubai",
+    "stars": 5,
+    "location": "Business Bay, Dubai, UAE",
+    "source": "https://www.marriott.com/en-us/hotels/dxbjw-jw-marriott-marquis-hotel-dubai/photos/",
+    "images": [
+      "https://cache.marriott.com/content/dam/marriott-renditions/DXBJW/dxbjw-exterior-0209-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+      "https://cache.marriott.com/content/dam/marriott-renditions/DXBJW/dxbjw-king-deluxe-9679-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+      "https://cache.marriott.com/content/dam/marriott-renditions/DXBJW/dxbjw-room-0206-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+      "https://cache.marriott.com/is/image/marriotts7prod/dxbjw-business-0085%3AWide-Ver?fit=constrain&wid=1200"
+    ]
+  },
+  "maldives": {
+    "name": "Alila Kothaifaru Maldives",
+    "stars": 5,
+    "location": "Raa Atoll, Maldives",
+    "source": "https://www.hyatt.com/alila-hotels-and-resorts/en-US/mldal-alila-kothaifaru-maldives/gallery",
+    "images": [
+      "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/12/08/0856/MLDAL-P0168-Sunrise-Water-Villa-Bedroom.jpg/MLDAL-P0168-Sunrise-Water-Villa-Bedroom.16x9.jpg?imwidth=2560",
+      "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/06/07/1314/MLDAL-P0020-Water-Villa-Interior.jpg/MLDAL-P0020-Water-Villa-Interior.16x9.jpg?imwidth=2560",
+      "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/03/07/0531/MLDAL-P0014-Water-Villa-Pool-Deck.jpg/MLDAL-P0014-Water-Villa-Pool-Deck.16x9.jpg?imwidth=2560",
+      "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/06/05/0209/MLDAL-P0018-Water-Villa-Exterior.jpg/MLDAL-P0018-Water-Villa-Exterior.16x9.jpg?imwidth=2560"
+    ]
+  },
+  "istanbul": {
+    "name": "The St. Regis Istanbul",
+    "stars": 5,
+    "location": "Nişantaşı, Istanbul, Türkiye",
+    "source": "https://www.marriott.com/en-us/hotels/istxr-the-st-regis-istanbul/photos/",
+    "images": [
+      "https://cache.marriott.com/is/image/marriotts7prod/xr-istxr-hotel-exterior--22584-77790%3AWide-Hor?fit=constrain&wid=1200",
+      "https://cache.marriott.com/content/dam/marriott-renditions/ISTXR/istxr-king-guestroom-5681-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+      "https://cache.marriott.com/content/dam/marriott-renditions/ISTXR/istxr-grand-rooms-8005-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85"
+    ]
+  },
+  "umrah": {
+    "name": "InterContinental Dar Al Tawhid Makkah",
+    "stars": 5,
+    "location": "Ibrahim Al Khalil Road, Makkah, Saudi Arabia",
+    "source": "https://www.ihg.com/intercontinental/hotels/us/en/makkah/qcahd/hoteldetail/gallery",
+    "images": [
+      "https://digital.ihg.com/is/image/ihg/intercontinental-makkah-4178759574-2x1",
+      "https://digital.ihg.com/is/image/ihg/intercontinental-makkah-6854797441-2x1",
+      "https://digital.ihg.com/is/image/ihg/intercontinental-makkah-6352014015-2x1",
+      "https://digital.ihg.com/is/image/ihg/intercontinental-makkah-8817018288-2x1"
+    ]
+  },
+  "egypt": {
+    "name": "Renaissance Sharm El Sheikh Golden View Beach Resort",
+    "stars": 5,
+    "location": "Al Fanar Street, Sharm El Sheikh, Egypt",
+    "source": "https://www.marriott.com/en-us/hotels/sshbr-renaissance-sharm-el-sheikh-golden-view-beach-resort/photos/",
+    "images": [
+      "https://cache.marriott.com/content/dam/marriott-renditions/SSHBR/sshbr-view-0100-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+      "https://cache.marriott.com/content/dam/marriott-renditions/SSHBR/sshbr-lower-lobby-5892-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+      "https://cache.marriott.com/is/image/marriotts7prod/br-sshbr-standard-guestroom---king-20757%3AWide-Hor?fit=constrain&wid=1200",
+      "https://cache.marriott.com/is/image/marriotts7prod/br-sshbr-king-seaview-guestroom-10635%3AWide-Hor?fit=constrain&wid=1200",
+      "https://cache.marriott.com/content/dam/marriott-renditions/SSHBR/sshbr-lobby-bar-5890-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85",
+      "https://cache.marriott.com/content/dam/marriott-renditions/SSHBR/sshbr-pool-0089-hor-wide.jpg?downsize=1200px%3A%2A&interpolation=progressive-bilinear&output-quality=85"
+    ]
+  }
+}
