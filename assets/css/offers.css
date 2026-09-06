@@ -369,3 +369,11 @@ FLORIN OFFERS & MANUAL BOOKING
 .hotel-mini-gallery .main{grid-row:1/3}
 .hotel-mini-content{padding:26px}.mini-hotel{margin:10px 0;padding:11px 13px;background:#0b2035;border-radius:10px}.mini-hotel small{display:block;color:#aab9c8;margin-top:4px}.mini-rooms{margin:12px 0;color:#c8d7e8;font-size:13px}.mini-hotel .stars{color:#f7c948}
 @media(max-width:767px){.hotel-mini{grid-template-columns:1fr}.hotel-mini-gallery{grid-template-rows:190px 120px}.hotel-mini-gallery .main{grid-row:auto;grid-column:1/3}.hotel-mini-gallery img:nth-child(n+3){display:none}.hotel-mini-content{padding:20px}}
+
+/* Official hotel gallery presentation */
+.hotel-gallery .gallery-item{margin:0;position:relative;overflow:hidden;background:#10263d}
+.hotel-gallery .gallery-item figcaption{position:absolute;right:10px;bottom:10px;padding:6px 9px;border-radius:8px;background:#061525cc;color:#fff;font-size:11px}
+.hotel-gallery .gallery-main{grid-row:1/3}
+.hotel-source{display:inline-flex;align-items:center;gap:8px;margin-top:18px;color:#62baff;font-size:13px;font-weight:700}
+.hotel-card h2 .stars{margin-right:8px}
+.hotel-card h2 .stars i{font-size:13px;margin-left:2px}
