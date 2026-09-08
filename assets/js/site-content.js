@@ -238,7 +238,7 @@ export const DEFAULT_SITE_CONTENT = {
 
       {
         image:
-          "assets/images/offers/maldives-offer.png",
+          "assets/images/offers/cleaned/maldives-offer-clean.png",
 
         title:
           "المالديف",
@@ -252,7 +252,7 @@ export const DEFAULT_SITE_CONTENT = {
 
       {
         image:
-          "assets/images/offers/egypt-offer.png",
+          "assets/images/offers/cleaned/egypt-offer-clean.png",
 
         title:
           "شرم الشيخ",
@@ -266,7 +266,7 @@ export const DEFAULT_SITE_CONTENT = {
 
       {
         image:
-          "assets/images/offers/egypt-offer.png",
+          "assets/images/offers/cleaned/egypt-offer-clean.png",
 
         title:
           "دهب",
@@ -280,7 +280,7 @@ export const DEFAULT_SITE_CONTENT = {
 
       {
         image:
-          "assets/images/offers/istanbul-offer.png",
+          "assets/images/offers/cleaned/istanbul-offer-clean.png",
 
         title:
           "كوالالمبور",
@@ -386,7 +386,7 @@ export const DEFAULT_SITE_CONTENT = {
 
       {
         image:
-          "assets/images/offers/maldives-offer.png",
+          "assets/images/offers/cleaned/maldives-offer-clean.png",
 
         discount:
           "خصم 25%",
@@ -406,7 +406,7 @@ export const DEFAULT_SITE_CONTENT = {
 
       {
         image:
-          "assets/images/offers/dubai-offer.png",
+          "assets/images/offers/cleaned/dubai-offer-clean.png",
 
         discount:
           "خصم 20%",
@@ -426,7 +426,7 @@ export const DEFAULT_SITE_CONTENT = {
 
       {
         image:
-          "assets/images/offers/istanbul-offer.png",
+          "assets/images/offers/cleaned/istanbul-offer-clean.png",
 
         discount:
           "خصم 18%",
@@ -562,7 +562,7 @@ export const DEFAULT_SITE_CONTENT = {
 
       {
         image:
-          "assets/images/offers/maldives-offer.png",
+          "assets/images/offers/cleaned/maldives-offer-clean.png",
 
         name:
           "Maldives Water Resort",
@@ -579,7 +579,7 @@ export const DEFAULT_SITE_CONTENT = {
 
       {
         image:
-          "assets/images/offers/dubai-offer.png",
+          "assets/images/offers/cleaned/dubai-offer-clean.png",
 
         name:
           "Dubai Luxury Hotel",
@@ -596,7 +596,7 @@ export const DEFAULT_SITE_CONTENT = {
 
       {
         image:
-          "assets/images/offers/egypt-offer.png",
+          "assets/images/offers/cleaned/egypt-offer-clean.png",
 
         name:
           "Sharm Elite Resort",
@@ -637,7 +637,7 @@ export const DEFAULT_SITE_CONTENT = {
 
       {
         image:
-          "assets/images/offers/maldives-offer.png",
+          "assets/images/offers/cleaned/maldives-offer-clean.png",
 
         title:
           "برنامج المالديف",
@@ -657,7 +657,7 @@ export const DEFAULT_SITE_CONTENT = {
 
       {
         image:
-          "assets/images/offers/istanbul-offer.png",
+          "assets/images/offers/cleaned/istanbul-offer-clean.png",
 
         title:
           "برنامج ماليزيا",
@@ -677,7 +677,7 @@ export const DEFAULT_SITE_CONTENT = {
 
       {
         image:
-          "assets/images/offers/egypt-offer.png",
+          "assets/images/offers/cleaned/egypt-offer-clean.png",
 
         title:
           "برنامج شرم الشيخ",

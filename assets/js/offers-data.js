@@ -75,11 +75,11 @@ export const DEFAULT_OFFERS = [
   {
     id:"egypt-security", name:"الموافقة الأمنية لدخول مصر", country:"مصر", destination:"مصر",
     duration:"حسب الخدمة", price:"يحدد حسب الطلب", category:"خدمات سفر",
-    description:"متابعة طلب الخدمة وفق البيانات والمتطلبات المعتمدة.",
+    description:"متابعة طلب خدمة الموافقة الأمنية وفق البيانات والمتطلبات المعتمدة.",
     image:A+"egypt-security-offer-clean.png", images:[A+"egypt-security-offer-clean.png"],
     included:["مراجعة البيانات الأولية","توضيح المستندات المطلوبة","متابعة الطلب بعد التأكيد"],
     excluded:["الرسوم الحكومية أو الخارجية إن وجدت"], notes:"القبول ومدة الإنجاز يخضعان للجهة المختصة.", active:true, order:6
-  }
+  },
   {
     id:"dubai-flight", name:"رحلة القاهرة إلى دبي", country:"الإمارات العربية المتحدة", destination:"دبي",
     duration:"حسب تاريخ السفر", price:"يحدد حسب تاريخ السفر", category:"رحلات طيران",
@@ -93,34 +93,69 @@ export const DEFAULT_OFFERS = [
     id:"malaysia-flight", name:"رحلة القاهرة إلى كوالالمبور", country:"ماليزيا", destination:"كوالالمبور",
     duration:"حسب تاريخ السفر", price:"يحدد حسب تاريخ السفر", category:"رحلات طيران",
     description:"خيارات رحلات جوية من القاهرة إلى كوالالمبور مع مراجعة المواعيد والتوفر والسعر النهائي قبل الحجز.",
-    image:"assets/images/offers/dubai.webp", images:["assets/images/offers/dubai.webp"],
+    image:"assets/images/tours/kuala-tour.webp", images:["assets/images/tours/kuala-tour.webp"],
     included:["مراجعة الرحلات المتاحة","مقارنة المواعيد والأسعار","تنسيق طلب الحجز"],
     excluded:["أي رسوم إضافية من شركة الطيران","الأمتعة أو الخدمات الإضافية حسب التذكرة"],
     notes:"السعر والتوفر يتغيران حسب تاريخ السفر وشركة الطيران.", active:true, order:8
   },
-  {
-    id:"egypt-security", name:"الموافقة الأمنية لدخول مصر", country:"مصر", destination:"مصر",
-    duration:"حسب الخدمة", price:"يحدد حسب الطلب", category:"خدمات سفر",
-    description:"متابعة طلب خدمة الموافقة الأمنية وفق البيانات والمتطلبات المعتمدة.",
-    image:A+"egypt-security-offer-clean.png", images:[A+"egypt-security-offer-clean.png"],
-    included:["مراجعة البيانات الأولية","توضيح المستندات المطلوبة","متابعة الطلب بعد التأكيد"],
-    excluded:["الرسوم الحكومية أو الخارجية إن وجدت"], notes:"القبول ومدة الإنجاز يخضعان للجهة المختصة.", active:true, order:9
-  },
 ];
 
+const GALLERY_KEYS = {
+  dubai: "dubai",
+  maldives: "maldives",
+  istanbul: "istanbul",
+  umrah: "umrah",
+  egypt: "egypt"
+};
+
+let galleryPromise = null;
+async function loadHotelGalleries() {
+  if (!galleryPromise) {
+    galleryPromise = fetch("assets/data/hotel-galleries.json", { cache: "no-store" })
+      .then(r => r.ok ? r.json() : {})
+      .catch(() => ({}));
+  }
+  return galleryPromise;
+}
+
+function mergeOffer(base, cloud, galleries) {
+  const merged = { ...base, ...(cloud || {}) };
+  const gallery = galleries[GALLERY_KEYS[base.id]];
+  // Required starter packages always keep their correct cover and hotel gallery.
+  if (gallery && (base.id === "dubai" || base.id === "maldives" || base.id === "istanbul" || base.id === "umrah" || base.id === "egypt")) {
+    merged.image = base.image;
+    merged.images = gallery.images?.length ? gallery.images : base.images;
+    merged.hotel = { ...(base.hotel || {}), ...(merged.hotel || {}),
+      name: gallery.name || base.hotel?.name,
+      stars: gallery.stars || base.hotel?.stars,
+      location: gallery.location || base.hotel?.location,
+      type: base.hotel?.type || merged.hotel?.type,
+      rooms: base.hotel?.rooms || merged.hotel?.rooms || [],
+      amenities: base.hotel?.amenities || merged.hotel?.amenities || []
+    };
+    if (!merged.hotel.source) merged.hotel.source = gallery.source;
+  }
+  return merged;
+}
+
 export async function getOffers() {
+  const galleries = await loadHotelGalleries();
+  let cloudOffers = [];
   try {
     const snap = await getDocs(collection(db,"offers"));
-    if (!snap.empty) {
-      return snap.docs.map(d=>({id:d.id,...d.data()}))
-        .filter(o=>o.active!==false)
-        .sort((a,b)=>Number(a.order||0)-Number(b.order||0));
-    }
+    cloudOffers = snap.docs.map(d => ({ id:d.id, ...d.data() }));
   } catch(e) {
-    console.warn("Offers collection unavailable; using local defaults.",e);
+    console.warn("Offers collection unavailable; using local defaults.", e);
   }
-  return DEFAULT_OFFERS.filter(o=>o.active!==false)
-    .sort((a,b)=>Number(a.order||0)-Number(b.order||0));
+
+  const byId = new Map(cloudOffers.map(o => [o.id, o]));
+  const merged = DEFAULT_OFFERS.map(base => mergeOffer(base, byId.get(base.id), galleries));
+  for (const extra of cloudOffers) {
+    if (!DEFAULT_OFFERS.some(base => base.id === extra.id)) merged.push(extra);
+  }
+  return merged
+    .filter(o => o.active !== false)
+    .sort((a,b) => Number(a.order||0) - Number(b.order||0));
 }
 
 export async function getOffer(id) {

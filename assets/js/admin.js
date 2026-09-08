@@ -156,7 +156,10 @@ async function checkAdmin(user) {
       `admins/${user.uid}`
     );
 
-    const snap = await getDoc(ref);
+    const snap = await Promise.race([
+      getDoc(ref),
+      new Promise((_, reject) => setTimeout(() => reject(new Error("انتهت مهلة الاتصال بـ Firestore أثناء التحقق من المدير.")), 8000))
+    ]);
 
     console.log(
       "FLORIN ADMIN: Document exists:",
@@ -737,15 +740,22 @@ async function loadOffers() {
         )
       );
 
-    offers =
-      snap.docs.map(d => ({
+    const cloudOffers = snap.docs.map(d => ({
+      id: d.id,
+      ...d.data()
+    }));
 
-        id: d.id,
+    const cloudById = new Map(cloudOffers.map(o => [o.id, o]));
+    offers = DEFAULT_OFFERS.map(base => ({
+      ...base,
+      ...(cloudById.get(base.id) || {})
+    }));
 
-        ...d.data()
-
-      }));
-
+    for (const extra of cloudOffers) {
+      if (!DEFAULT_OFFERS.some(base => base.id === extra.id)) {
+        offers.push(extra);
+      }
+    }
 
     offers.sort(
       (a, b) =>
@@ -3230,9 +3240,7 @@ setTimeout(() => {
 
   if (
     adminStatus &&
-    adminStatus.textContent.includes(
-      "جاري التحقق"
-    )
+    (adminStatus.textContent.includes("جاري التحقق") || adminStatus.textContent.includes("التحقق"))
   ) {
 
     adminStatus.textContent =
@@ -3243,7 +3251,7 @@ setTimeout(() => {
 
   }
 
-}, 10000);
+}, 8000);
 
 
 onAuthStateChanged(
