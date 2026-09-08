@@ -34,7 +34,7 @@
 
 ## 5) الصور
 حقل الصورة يقبل مسارًا داخل الموقع مثل:
-`assets/images/offers/dubai-offer.png`
+`assets/images/offers/cleaned/dubai-offer-clean.png`
 أو رابط صورة مباشر.
 رفع الصور إلى Firebase Storage مفعّل في هذه النسخة:
 - من لوحة الإدارة يمكنك اختيار عدة صور من الهاتف.
