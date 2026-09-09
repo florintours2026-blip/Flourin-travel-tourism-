@@ -1,0 +1,41 @@
+إصلاح FLORIN Authentication + Admin
+
+1) استبدل هذه الملفات في مشروعك:
+- assets/js/auth.js
+- assets/js/login.js
+- assets/js/register.js
+- assets/js/navbar-auth.js
+- assets/js/admin-v2.js
+- assets/css/florin-v2.css
+- assets/css/admin-v2.css
+- firestore.rules
+- storage.rules
+- index.html
+- flights.html
+- offers.html
+- booking.html
+
+2) Firebase Console > Authentication > Sign-in method:
+فعّل Email/Password، وفعّل Google إذا كنت تريد تسجيل Google.
+
+3) إنشاء أول مدير (مهم جدًا):
+- أنشئ حساب المدير من register.html أو Firebase Authentication.
+- انسخ UID للحساب.
+- Firestore > admins > Add document.
+- Document ID = UID نفسه.
+- active = true (Boolean)
+- role = super_admin
+- name = اسم المدير
+- email = بريد المدير
+
+4) Firestore Rules:
+افتح Rules والصق محتوى firestore.rules ثم Publish.
+
+5) Storage Rules:
+افتح Storage > Rules والصق storage.rules ثم Publish.
+
+6) افتح الموقع ثم جرّب:
+- عميل: تسجيل الدخول / إنشاء حساب.
+- مدير: login.html?admin=1 ثم لوحة الإدارة.
+
+لا يوجد أي طريق من المتصفح لإنشاء نفسه مديرًا؛ أول مدير يجب أن يتم اعتماده من Firebase Console أو Backend موثوق.
