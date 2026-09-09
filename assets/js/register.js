@@ -1,92 +1,42 @@
-import {
-    registerUser,
-    loginWithGoogle
-} from "./auth.js";
+import { registerUser, loginWithGoogle } from "./auth.js";
 
-import {
-    saveUser
-} from "./database.js";
+const form = document.getElementById("registerForm");
+const submit = form?.querySelector("button[type=submit]");
 
-/*==========================================================
-REGISTER FORM
-==========================================================*/
-
-const registerForm = document.getElementById("registerForm");
-
-if (registerForm) {
-
-    registerForm.addEventListener("submit", async (event) => {
-
-        event.preventDefault();
-
-        const fullName = document.getElementById("fullName").value.trim();
-
-        const email = document.getElementById("email").value.trim();
-
-        const password = document.getElementById("password").value;
-
-        const confirmPassword = document.getElementById("confirmPassword").value;
-
-        if (password !== confirmPassword) {
-
-            alert("Passwords do not match.");
-
-            return;
-
-        }
-
-        try {
-
-            const user = await registerUser(
-                fullName,
-                email,
-                password
-            );
-
-            await saveUser(user);
-
-            alert("Account created successfully.");
-
-            window.location.href = "profile.html";
-
-        }
-
-        catch (error) {
-
-            alert(error.message);
-
-        }
-
-    });
-
+function message(error) {
+  const code = error?.code || "";
+  if (code === "auth/email-already-in-use") return "هذا البريد الإلكتروني مسجل بالفعل. استخدم تسجيل الدخول.";
+  if (code === "auth/weak-password") return "كلمة المرور يجب أن تكون أقوى.";
+  if (code === "auth/invalid-email") return "أدخل بريدًا إلكترونيًا صحيحًا.";
+  if (code === "permission-denied") return "تم إنشاء الحساب، لكن تعذر حفظ ملف العميل. تأكد من نشر قواعد Firestore.";
+  return error?.message || "تعذر إنشاء الحساب.";
 }
 
-/*==========================================================
-GOOGLE REGISTER
-==========================================================*/
+form?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const name = document.getElementById("fullName")?.value.trim();
+  const email = document.getElementById("email")?.value.trim();
+  const password = document.getElementById("password")?.value || "";
+  const confirm = document.getElementById("confirmPassword")?.value || "";
+  if (!name || !email || !password) return alert("أكمل جميع البيانات المطلوبة.");
+  if (password !== confirm) return alert("كلمتا المرور غير متطابقتين.");
+  if (submit) { submit.disabled = true; submit.textContent = "جارٍ إنشاء الحساب..."; }
+  try {
+    await registerUser(name, email, password);
+    location.replace("profile.html");
+  } catch (error) {
+    console.error(error);
+    alert(message(error));
+    if (submit) { submit.disabled = false; submit.textContent = "إنشاء الحساب"; }
+  }
+});
 
-const googleRegister = document.getElementById("googleRegister");
-
-if (googleRegister) {
-
-    googleRegister.addEventListener("click", async () => {
-
-        try {
-
-            const user = await loginWithGoogle();
-
-            await saveUser(user);
-
-            window.location.href = "profile.html";
-
-        }
-
-        catch (error) {
-
-            alert(error.message);
-
-        }
-
-    });
-
-}
+document.getElementById("googleRegister")?.addEventListener("click", async () => {
+  try {
+    const user = await loginWithGoogle();
+    location.replace("profile.html");
+  } catch (error) {
+    console.error(error);
+    alert(message(error));
+  }
+});
