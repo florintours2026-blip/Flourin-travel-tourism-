@@ -191,9 +191,9 @@
     "price": "يحدد حسب تاريخ السفر",
     "category": "رحلات طيران",
     "description": "خيارات رحلات جوية من القاهرة إلى كوالالمبور مع مراجعة المواعيد والتوفر والسعر النهائي قبل الحجز.",
-    "image": "assets/images/tours/kuala-tour.webp",
+    "image": "assets/images/offers/dubai.webp",
     "images": [
-      "assets/images/tours/kuala-tour.webp"
+      "assets/images/offers/dubai.webp"
     ],
     "included": [
       "مراجعة الرحلات المتاحة",
