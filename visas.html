@@ -32,16 +32,7 @@ a{text-decoration:none;color:inherit}.container{width:min(1180px,92%);margin:aut
 <script type="module">
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 const catalog=document.getElementById("visaCatalog");
-let data;
-try {
-  const response = await fetch("assets/data/visas.json?v=20260906", { cache: "no-store" });
-  if (!response.ok) throw new Error("HTTP " + response.status);
-  data = await response.json();
-} catch (error) {
-  console.error("Visa catalog load error:", error);
-  catalog.innerHTML = `<p class="note">تعذر تحميل قائمة التأشيرات. تحقق من رفع الملف assets/data/visas.json ثم أعد المحاولة.</p>`;
-  throw error;
-}
+const data=await fetch("assets/data/visas.json").then(r=>r.json());
 const groups={};
 data.items.forEach(v=>(groups[v.region]??=[]).push(v));
 catalog.innerHTML=Object.entries(groups).map(([region,items])=>`

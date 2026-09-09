@@ -31,7 +31,7 @@ else{
    <p class="hotel-location"><i class="fa-solid fa-location-dot"></i> ${esc(o.destination||o.country)} · ${esc(o.duration)}</p></div>
    <div class="hotel-price-box"><small>السعر</small><strong>${esc(o.price)}</strong></div>
  </div>
- ${images.length?`<section class="hotel-gallery" aria-label="صور الفندق والعرض">${images.slice(0,8).map((src,i)=>{ const labels=["واجهة الفندق / المنظر الخارجي","غرفة النوم / الجناح","الحمام أو التصميم الداخلي","الاستقبال والردهة","المسبح والمرافق","المطاعم والخدمات","إطلالة الفندق / الشاطئ","معلم سياحي قريب"]; return `<figure class="gallery-item ${i===0?'gallery-main':''}"><img src="${esc(src)}" alt="${esc(o.name)} - ${labels[i]||'صورة الفندق'}" loading="${i===0?'eager':'lazy'}" onerror="this.onerror=null;this.src='${esc(o.image)}'"><figcaption>${labels[i]||'صورة الفندق'}</figcaption></figure>`; }).join("")}</section>`:""}
+ ${images.length?`<section class="hotel-gallery" aria-label="صور الفندق والعرض">${images.slice(0,6).map((src,i)=>`<figure class="gallery-item ${i===0?'gallery-main':''}"><img src="${esc(src)}" alt="${esc(o.name)} - صورة ${i+1}" loading="${i===0?'eager':'lazy'}" onerror="this.onerror=null;this.src='${esc(o.image)}'"><figcaption>${i===0?'واجهة / منظر رئيسي':i===1?'غرفة أو جناح':i===2?'مرافق الفندق':i===3?'إقامة أو إطلالة':i===4?'الاستقبال / المطاعم':'المسبح / المرافق'}</figcaption></figure>`).join("")}</section>`:""}
  ${isHotel?`
  <section class="hotel-card">
    <div class="hotel-card-head"><div><h2><i class="fa-solid fa-hotel"></i> ${esc(h.name)} <span class="stars">${Array.from({length:stars},()=>'<i class="fa-solid fa-star"></i>').join("")}</span></h2>
@@ -41,7 +41,7 @@ else{
    ${h.source?`<a class="hotel-source" href="${esc(h.source)}" target="_blank" rel="noopener"><i class="fa-solid fa-camera"></i> مشاهدة معرض الصور الرسمي للفندق</a>`:""}
  </section>
  <section class="rooms-section"><div class="section-title"><i class="fa-solid fa-bed"></i> خيارات الغرف والأجنحة</div>
-   <div class="rooms-grid">${arr(h.rooms).map((r,i)=>`<article class="room-card"><img src="${esc(images[Math.min(i+1, Math.max(images.length-1,0))]||o.image)}" alt="${esc(r)}" onerror="this.onerror=null;this.src='${esc(o.image)}'"><div><h3>${esc(r)}</h3><p>نوع إقامة ضمن الفندق، والتوفر الفعلي والسعر يعتمدان على تاريخ السفر.</p><strong><i class="fa-solid fa-circle-check"></i> متاح حسب الطلب</strong></div></article>`).join("")}</div>
+   <div class="rooms-grid">${arr(h.rooms).map((r,i)=>`<article class="room-card"><img src="${esc(images[(i+1)%Math.max(images.length,1)]||o.image)}" alt="${esc(r)}" onerror="this.onerror=null;this.src='${esc(o.image)}'"><div><h3>${esc(r)}</h3><p>نوع إقامة ضمن الفندق، والتوفر الفعلي والسعر يعتمدان على تاريخ السفر.</p><strong><i class="fa-solid fa-circle-check"></i> متاح حسب الطلب</strong></div></article>`).join("")}</div>
  </section>`:""}
  <section class="hotel-info-grid">
    <div class="hotel-info-main"><div class="section-title"><i class="fa-solid fa-suitcase-rolling"></i> عن الباقة</div><p>${esc(o.description)}</p>

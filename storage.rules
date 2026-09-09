@@ -7,12 +7,19 @@ service firebase.storage {
         firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid)) &&
         firestore.get(/databases/(default)/documents/admins/$(request.auth.uid)).data.active == true;
     }
-
     match /offers/{offerId}/{fileName} {
       allow read: if true;
-      allow write: if admin() &&
-        request.resource.size < 8 * 1024 * 1024 &&
-        request.resource.contentType.matches('image/.*');
+      allow write: if admin() && request.resource.size < 8 * 1024 * 1024 && request.resource.contentType.matches('image/.*');
+      allow delete: if admin();
+    }
+    match /packages/{packageId}/{fileName} {
+      allow read: if true;
+      allow write: if admin() && request.resource.size < 8 * 1024 * 1024 && request.resource.contentType.matches('image/.*');
+      allow delete: if admin();
+    }
+    match /airlines/{airlineId}/{fileName} {
+      allow read: if true;
+      allow write: if admin() && request.resource.size < 4 * 1024 * 1024 && request.resource.contentType.matches('image/.*');
       allow delete: if admin();
     }
   }
