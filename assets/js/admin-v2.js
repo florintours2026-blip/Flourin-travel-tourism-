@@ -15,10 +15,47 @@ function closeModal(){$('modal').hidden=true;$('modalContent').innerHTML=''}
 function arr(v){return Array.isArray(v)?v:(String(v||'').split('\n').map(x=>x.trim()).filter(Boolean));}
 
 async function loadAll(){
- const os=await getDocs(collection(db,'offers')); offers=os.docs.map(d=>({id:d.id,...d.data()}));
- const as=await getDocs(collection(db,'airlines')); airlines=as.docs.map(d=>({id:d.id,...d.data()}));
- if(!airlines.length) airlines=AIRLINES;
- renderStats();renderFlightTable();renderCatalogTable();renderPackageTable();renderAirlineTable();renderBookings();renderUsers();
+  // تحميل كل قسم بشكل مستقل حتى لا تبقى لوحة الإدارة عالقة في شاشة التحقق
+  // إذا فشل قسم واحد بسبب قاعدة أو بيانات ناقصة.
+  let offersError = null;
+  let airlinesError = null;
+
+  try {
+    const os = await getDocs(collection(db,'offers'));
+    offers = os.docs.map(d => ({id:d.id, ...d.data()}));
+  } catch (e) {
+    offers = [];
+    offersError = e;
+    console.error('FLORIN offers load error:', e);
+  }
+
+  try {
+    const as = await getDocs(collection(db,'airlines'));
+    airlines = as.docs.map(d => ({id:d.id, ...d.data()}));
+  } catch (e) {
+    airlines = [];
+    airlinesError = e;
+    console.error('FLORIN airlines load error:', e);
+  }
+
+  if (!airlines.length) airlines = AIRLINES;
+
+  renderStats();
+  renderFlightTable();
+  renderCatalogTable();
+  renderPackageTable();
+  renderAirlineTable();
+  renderBookings();
+  renderUsers();
+
+  if (offersError || airlinesError) {
+    const errors = [offersError, airlinesError].filter(Boolean).map(e => e?.message || 'خطأ غير معروف');
+    const notice = document.createElement('div');
+    notice.className = 'notice';
+    notice.style.margin = '16px';
+    notice.innerHTML = '<b>تم فتح لوحة الإدارة، لكن تعذر تحميل بعض البيانات.</b><br>' + esc(errors.join(' | '));
+    $('adminApp').prepend(notice);
+  }
 }
 function renderStats(){ $('stats').innerHTML=[['✈️',offers.filter(x=>x.type==='flight').length,'عروض طيران'],['🏨',offers.filter(x=>x.type!=='flight').length,'عروض فنادق وخدمات'],['🛫',airlines.length,'شركات طيران'],['📋','—','طلبات العملاء']].map(x=>`<div class="stat"><span>${x[0]}</span><b>${x[1]}</b><span>${x[2]}</span></div>`).join(''); }
 function renderFlightTable(){const rows=offers.filter(x=>x.type==='flight').sort((a,b)=>Number(a.order||0)-Number(b.order||0));$('flightTable').innerHTML=`<table class="data-table"><thead><tr><th>العرض</th><th>المسار</th><th>الطيران</th><th>السعر</th><th>الخصم</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody>${rows.map(o=>rowOffer(o)).join('')||`<tr><td colspan="7">لا توجد عروض. استخدم «مزامنة العروض المبدئية».</td></tr>`}</tbody></table>`;bindOfferActions();}
@@ -43,6 +80,61 @@ async function renderUsers(){try{const s=await getDocs(collection(db,'users'));$
 $('closeModal').onclick=closeModal;$('newFlight').onclick=()=>openOfferEditor({type:'flight',category:'رحلات طيران',name:'',country:'',destination:'',price:0,currency:'USD',image:'',images:[],fromIata:'CAI',toIata:'JED',airlineId:'',cabin:'اقتصادية',baggage:'',duration:'',stopover:'مباشر',active:true,discount:{enabled:false,type:'percent',value:0,label:''}});$('newCatalog').onclick=()=>openOfferEditor({type:'hotel',category:'فنادق',name:'',country:'',destination:'',price:0,currency:'USD',image:'',images:[],active:true,discount:{enabled:false,type:'percent',value:0,label:''},hotel:{stars:5,rooms:[],amenities:[]}});$('newPackage').onclick=()=>openPackageEditor();$('newAirline').onclick=()=>openAirlineEditor({id:`airline_${Date.now()}`,name:'',nameEn:'',iata:'',logo:''});$('refreshBookings').onclick=renderBookings;$('seedCatalog').onclick=async()=>{if(!confirm('مزامنة 20 رحلة + عروض الفنادق والخدمات إلى Firestore؟'))return;for(const o of DEFAULT_OFFERS)await setDoc(doc(db,'offers',o.id),{...o,updatedAt:serverTimestamp(),updatedBy:currentUser.uid},{merge:true});for(const a of AIRLINES)await setDoc(doc(db,'airlines',a.id),a,{merge:true});await loadAll();alert('تمت المزامنة.');};
 document.querySelectorAll('.admin-tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.admin-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.admin-panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active');});
 $('adminTheme').onclick=()=>{const light=!document.body.classList.contains('light');document.body.classList.toggle('light',light);localStorage.setItem('florin-theme',light?'light':'dark');};$('adminLogout').onclick=()=>signOut(auth);
-let authResolved=false;
-const authTimeout=setTimeout(()=>{if(!authResolved){$('authLoading').innerHTML='<div class="admin-auth-error"><h2>تعذر تهيئة تسجيل الدخول</h2><p>لم تصل استجابة Firebase Authentication خلال 12 ثانية.</p><p>تحقق من اتصال الإنترنت وFirebase Authentication وAuthorized domains.</p><a href="login.html?admin=1">فتح تسجيل دخول الإدارة</a></div>'; }},12000);
-onAuthStateChanged(auth,async user=>{authResolved=true;clearTimeout(authTimeout);try{currentUser=user;if(!user){location.replace('login.html?admin=1');return;}if(!(await isAdmin(user))){await signOut(auth).catch(()=>{});alert('الحساب الحالي غير مصرح له كمدير FLORIN.');location.replace('login.html?admin=1');return;}$('authLoading').hidden=true;$('adminApp').hidden=false;$('adminName').textContent=user.displayName?`مرحبًا ${user.displayName}`:'مدير FLORIN';document.body.classList.toggle('light',localStorage.getItem('florin-theme')==='light');await loadAll();}catch(e){console.error('FLORIN ADMIN startup error:',e);$('authLoading').innerHTML=`<div class="admin-auth-error"><h2>تعذر فتح لوحة الإدارة</h2><p>${esc(e.message||'Missing or insufficient permissions')}</p><p>UID الحالي: <b>${esc(auth.currentUser?.uid||'غير معروف')}</b></p><p>تأكد من نشر <b>firestore.rules</b> و<b>storage.rules</b> من النسخة الجديدة.</p><a href="login.html?admin=1">العودة إلى تسجيل دخول الإدارة</a></div>`;}});
+let authResolved = false;
+let authStartedAt = Date.now();
+
+// التقاط أخطاء JavaScript العامة بدل ترك شاشة التحميل معلقة.
+window.addEventListener('error', (event) => {
+  console.error('FLORIN ADMIN window error:', event.error || event.message);
+  if (!$('adminApp').hidden) return;
+  $('authLoading').innerHTML = `<div class="admin-auth-error"><h2>تعذر تشغيل لوحة الإدارة</h2><p>${esc(event.message || 'JavaScript error')}</p><p>UID الحالي: <b>${esc(auth.currentUser?.uid || 'غير معروف')}</b></p><a href="login.html?admin=1">العودة إلى تسجيل الدخول</a></div>`;
+});
+
+const authTimeout = setTimeout(() => {
+  if (!authResolved) {
+    $('authLoading').innerHTML = '<div class="admin-auth-error"><h2>تعذر تهيئة Firebase Authentication</h2><p>لم تصل استجابة Firebase Authentication. هذا يعني أن المشكلة قبل فحص صلاحيات المدير.</p><p>تأكد من Authorized domains وأن الموقع يعمل عبر HTTPS.</p><p>UID الحالي: <b>' + esc(auth.currentUser?.uid || 'غير معروف') + '</b></p><a href="login.html?admin=1">فتح تسجيل دخول الإدارة</a></div>';
+  }
+}, 8000);
+
+onAuthStateChanged(auth, async (user) => {
+  authResolved = true;
+  clearTimeout(authTimeout);
+
+  try {
+    currentUser = user;
+
+    if (!user) {
+      location.replace('login.html?admin=1');
+      return;
+    }
+
+    // المدير الأساسي لا يحتاج إلى قراءة admins من Firestore.
+    // هذا يمنع توقف لوحة الإدارة بسبب Rules قبل فتح الواجهة.
+    let allowed = user.uid === BOOTSTRAP_ADMIN_UID;
+
+    if (!allowed) {
+      allowed = await isAdmin(user);
+    }
+
+    if (!allowed) {
+      await signOut(auth).catch(() => {});
+      alert('الحساب الحالي غير مصرح له كمدير FLORIN.');
+      location.replace('login.html?admin=1');
+      return;
+    }
+
+    // إظهار لوحة الإدارة فور نجاح Authentication + Admin.
+    $('authLoading').hidden = true;
+    $('adminApp').hidden = false;
+    $('adminName').textContent = user.displayName ? `مرحبًا ${user.displayName}` : 'مدير FLORIN';
+    document.body.classList.toggle('light', localStorage.getItem('florin-theme') === 'light');
+
+    // تحميل البيانات بعد فتح الواجهة، وليس قبلها.
+    await loadAll();
+  } catch (e) {
+    console.error('FLORIN ADMIN startup error:', e);
+    $('authLoading').hidden = false;
+    $('adminApp').hidden = true;
+    $('authLoading').innerHTML = `<div class="admin-auth-error"><h2>تعذر فتح لوحة الإدارة</h2><p>${esc(e.message || 'Missing or insufficient permissions')}</p><p>UID الحالي: <b>${esc(auth.currentUser?.uid || 'غير معروف')}</b></p><p>إذا كان UID هو المدير الأساسي فلا تحتاج إلى تغيير حساب Firebase.</p><a href="login.html?admin=1">العودة إلى تسجيل دخول الإدارة</a></div>`;
+  }
+});
