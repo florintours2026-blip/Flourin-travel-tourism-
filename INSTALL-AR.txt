@@ -1,0 +1,23 @@
+إصلاح اختفاء تسجيل الدخول في FLORIN
+
+المشكلة:
+صفحات الموقع كانت تحتوي على welcomeUser فقط، بينما navbar-auth.js يبحث عن عناصر loginLink/profileLink/logoutLink، لذلك لم يكن هناك زر تسجيل الدخول في HTML أصلًا.
+
+التعديلات:
+- إضافة تسجيل الدخول.
+- إضافة إنشاء حساب.
+- إضافة حسابي بعد تسجيل الدخول.
+- إضافة خروج بعد تسجيل الدخول.
+- إضافة دخول الإدارة ويرتبط بـ login.html?admin=1.
+- الحفاظ على تسجيل Firebase الحالي.
+
+الملفات التي يجب استبدالها داخل مشروع FLORIN:
+index.html
+flights.html
+offers.html
+booking.html
+assets/js/navbar-auth.js
+assets/css/florin-v2.css
+
+ملاحظة:
+لا تغيّر assets/js/auth.js أو assets/js/login.js؛ تسجيل الإدارة الموجود فيهما يفحص مجموعة admins، وعند المستخدم الإداري النشط يفتح admin.html.
