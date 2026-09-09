@@ -1586,3 +1586,5 @@ FLORIN MOBILE SAFETY OVERRIDES
         color:#fff;
     }
 }
+
+.logo-light{display:none!important}.logo-dark{display:block!important}body.light .logo-dark{display:none!important}body.light .logo-light{display:block!important}
