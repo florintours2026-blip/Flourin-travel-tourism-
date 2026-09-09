@@ -1,64 +1,54 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function signedIn() {
-      return request.auth != null;
+    function signedIn() { return request.auth != null; }
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true;
     }
 
-    function isActiveAdmin(uid) {
-      return signedIn() &&
-        exists(/databases/$(database)/documents/admins/$(uid)) &&
-        get(/databases/$(database)/documents/admins/$(uid)).data.active == true;
+    match /admins/{userId} {
+      // A signed-in user can read only their own admin record.
+      allow read: if signedIn() && request.auth.uid == userId;
+      // No client can create or promote an administrator.
+      allow create, update, delete: if isAdmin();
     }
 
-    function admin() {
-      return isActiveAdmin(request.auth.uid);
+    match /users/{userId} {
+      allow create, update: if signedIn() && request.auth.uid == userId;
+      allow read: if (signedIn() && request.auth.uid == userId) || isAdmin();
+      allow delete: if isAdmin();
     }
 
     match /offers/{offerId} {
       allow read: if true;
-      allow create, update, delete: if admin();
+      allow create, update, delete: if isAdmin();
     }
 
     match /tourPackages/{packageId} {
       allow read: if true;
-      allow create, update, delete: if admin();
+      allow create, update, delete: if isAdmin();
     }
 
     match /airlines/{airlineId} {
       allow read: if true;
-      allow create, update, delete: if admin();
-    }
-
-    match /users/{userId} {
-      allow create: if signedIn() && request.auth.uid == userId;
-      allow read: if (signedIn() && request.auth.uid == userId) || admin();
-      allow update: if (signedIn() && request.auth.uid == userId) || admin();
-      allow delete: if admin();
+      allow create, update, delete: if isAdmin();
     }
 
     match /bookings/{bookingId} {
       allow create: if true;
-      allow read, update, delete: if admin();
+      allow read, update, delete: if isAdmin();
     }
 
     match /activityLogs/{logId} {
       allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
-      allow read, update, delete: if admin();
+      allow read, update, delete: if isAdmin();
     }
 
     match /siteContent/{contentId} {
       allow read: if true;
-      allow create, update, delete: if admin();
-    }
-
-    // A signed-in user may read ONLY their own admin record so the client
-    // can determine whether to show the admin link. No client can create
-    // or modify an admin record. The first admin must be provisioned
-    // manually in Firebase Console or by a trusted backend.
-    match /admins/{userId} {
-      allow read: if signedIn() && request.auth.uid == userId;
-      allow create, update, delete: if admin();
+      allow create, update, delete: if isAdmin();
     }
   }
 }
