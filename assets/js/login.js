@@ -1,38 +1,45 @@
-import { loginUser, loginWithGoogle, isAdmin, logoutUser } from "./auth.js";
+import { loginUser, loginWithGoogle, logoutUser } from "./auth.js";
+import { db } from "./firebase-config.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-const params = new URLSearchParams(location.search);
-const adminMode = params.get("admin") === "1";
+const adminMode = new URLSearchParams(location.search).get("admin") === "1";
 const form = document.getElementById("loginForm");
+const google = document.getElementById("googleLogin");
 const title = document.querySelector(".login-header h1");
 const subtitle = document.querySelector(".login-header p");
-const submit = form?.querySelector("button[type=submit]");
 
 if (adminMode) {
-  if (title) title.textContent = "دخول إدارة FLORIN";
-  if (subtitle) subtitle.textContent = "سجّل الدخول بحساب المدير المصرح له.";
-  if (submit) submit.textContent = "دخول لوحة الإدارة";
+  if (title) title.textContent = "دخول الإدارة";
+  if (subtitle) subtitle.textContent = "سجّل الدخول بحساب مدير FLORIN المصرح له";
 }
 
-function friendlyError(error) {
+function message(error) {
   const code = error?.code || "";
   if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found") return "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
   if (code === "auth/invalid-email") return "أدخل بريدًا إلكترونيًا صحيحًا.";
-  if (code === "auth/too-many-requests") return "تم تجاوز عدد محاولات الدخول. حاول لاحقًا.";
+  if (code === "auth/too-many-requests") return "تمت محاولات كثيرة. حاول مرة أخرى لاحقًا.";
   if (code === "auth/user-disabled") return "هذا الحساب معطل.";
-  if (code === "permission-denied" || /insufficient permissions/i.test(error?.message || "")) return "تعذر قراءة صلاحية الإدارة. تأكد من نشر firestore.rules ثم أعد المحاولة.";
-  return error?.message || "تعذر تسجيل الدخول.";
+  if (code === "permission-denied") return "قواعد Firestore لا تسمح بالتحقق من صلاحية الإدارة. انشر ملف firestore.rules ثم أعد المحاولة.";
+  return error?.message || "تعذر تسجيل الدخول. حاول مرة أخرى.";
 }
 
-async function finishLogin(user) {
-  const admin = await isAdmin(user);
-  if (adminMode) {
-    if (!admin) {
-      await logoutUser().catch(() => {});
-      throw new Error("هذا الحساب ليس ضمن مديري FLORIN أو أن حساب الإدارة غير نشط.");
+async function continueAfterLogin(user) {
+  if (!adminMode) {
+    location.replace("index.html");
+    return;
+  }
+  try {
+    const snap = await getDoc(doc(db, "admins", user.uid));
+    if (snap.exists() && snap.data()?.active === true) {
+      location.replace("admin.html");
+      return;
     }
-    location.replace("admin.html");
-  } else {
-    location.replace(admin ? "admin.html" : "index.html");
+    await logoutUser();
+    alert("هذا الحساب ليس مديرًا نشطًا في FLORIN. أنشئ سجلًا في admins باستخدام UID الخاص بالمدير.");
+  } catch (error) {
+    console.error(error);
+    await logoutUser().catch(() => {});
+    alert(message(error));
   }
 }
 
@@ -41,23 +48,21 @@ form?.addEventListener("submit", async (event) => {
   const email = document.getElementById("email")?.value.trim();
   const password = document.getElementById("password")?.value || "";
   if (!email || !password) return alert("أدخل البريد الإلكتروني وكلمة المرور.");
-  if (submit) { submit.disabled = true; submit.textContent = "جارٍ الدخول..."; }
   try {
     const user = await loginUser(email, password);
-    await finishLogin(user);
+    await continueAfterLogin(user);
   } catch (error) {
     console.error(error);
-    alert(friendlyError(error));
-    if (submit) { submit.disabled = false; submit.textContent = adminMode ? "دخول لوحة الإدارة" : "تسجيل الدخول"; }
+    alert(message(error));
   }
 });
 
-document.getElementById("googleLogin")?.addEventListener("click", async () => {
+google?.addEventListener("click", async () => {
   try {
     const user = await loginWithGoogle();
-    await finishLogin(user);
+    await continueAfterLogin(user);
   } catch (error) {
     console.error(error);
-    alert(friendlyError(error));
+    alert(message(error));
   }
 });
