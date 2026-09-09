@@ -8,7 +8,7 @@ import {
 
 export async function saveBooking(data) {
 
-    await addDoc(
+    const ref = await addDoc(
 
         collection(db, "bookings"),
 
@@ -23,5 +23,7 @@ export async function saveBooking(data) {
         }
 
     );
+
+    return ref.id;
 
 }

@@ -1,53 +1,15 @@
+import { saveBooking } from './booking-database.js';
+import { auth } from './firebase-config.js';
+import { AIRPORTS } from './catalog-data.js';
 
-import { saveBooking } from "./booking-database.js";
-import { auth } from "./firebase-config.js";
+const $=id=>document.getElementById(id); const params=new URLSearchParams(location.search);
+const offer=params.get('offer')||''; const offerName=params.get('offerName')||'';
+$('offerId').value=offer; $('offerName').value=offerName; $('offerFrom').value=params.get('from')||''; $('offerTo').value=params.get('to')||'';
+if(offerName) $('selectedOfferText').textContent=`العرض المختار: ${offerName}. أدخل بياناتك وسيراجع الفريق السعر والتوفر.`;
+if(params.get('from')) $('bookingFrom').value=params.get('from'); if(params.get('to')) $('bookingTo').value=params.get('to');
 
-const serviceSelect=document.getElementById("service");
-const dynamicFields=document.getElementById("dynamicFields");
-const params=new URLSearchParams(location.search);
-const offerId=params.get("offer")||"";
-const offerName=params.get("offerName")||"";
-
-if(offerId) {
-  const hidden=document.createElement("input");
-  hidden.type="hidden"; hidden.id="offerId"; hidden.value=offerId; document.getElementById("bookingForm")?.appendChild(hidden);
-  const hiddenName=document.createElement("input");
-  hiddenName.type="hidden"; hiddenName.id="offerName"; hiddenName.value=offerName; document.getElementById("bookingForm")?.appendChild(hiddenName);
-  const title=document.querySelector(".booking-header p");
-  if(title) title.textContent=`العرض المختار: ${offerName}. أدخل بياناتك وسيتواصل معك فريق فلورين لتأكيد السعر والتوفر والتفاصيل.`;
-}
-
-if(serviceSelect){
- serviceSelect.addEventListener("change",()=>{
-  const service=serviceSelect.value; dynamicFields.innerHTML="";
-  if(service==="flight") dynamicFields.innerHTML=`<div class="form-grid"><div class="form-group"><label>Flight Class</label><select id="flightClass"><option>Economy</option><option>Business</option><option>First Class</option></select></div><div class="form-group"><label>Trip Type</label><select id="tripType"><option>Round Trip</option><option>One Way</option></select></div></div>`;
-  if(service==="hotel") dynamicFields.innerHTML=`<div class="form-grid"><div class="form-group"><label>Hotel Stars</label><select id="hotelStars"><option>3 Stars</option><option>4 Stars</option><option>5 Stars</option></select></div><div class="form-group"><label>Number of Nights</label><input type="number" id="nights" min="1" value="1"></div></div>`;
-  if(service==="visa") dynamicFields.innerHTML=`<div class="form-group"><label>Visa Type</label><select id="visaType"><option>Tourist</option><option>Business</option><option>Work</option><option>Study</option></select></div>`;
-  if(service==="security") dynamicFields.innerHTML=`<div class="form-group"><label>Security Clearance Type</label><select id="securityType"><option>National Security</option><option>Military Security</option></select></div>`;
- });
-}
-
-const form=document.getElementById("bookingForm");
-if(form) form.addEventListener("submit",async e=>{
- e.preventDefault();
- const data={
-  fullName:document.getElementById("fullName").value.trim(),
-  phone:document.getElementById("phone").value.trim(),
-  email:document.getElementById("email").value.trim(),
-  country:document.getElementById("country").value,
-  service:document.getElementById("service").value,
-  destination:document.getElementById("destination").value,
-  travelDate:document.getElementById("travelDate").value,
-  travelers:Number(document.getElementById("travelers").value||1),
-  notes:document.getElementById("notes").value.trim(),
-  offerId:document.getElementById("offerId")?.value||"",
-  offerName:document.getElementById("offerName")?.value||"",
-  uid:auth.currentUser?.uid||null
- };
- if(!data.fullName||!data.phone||!data.service){alert("يرجى إكمال الاسم والهاتف والخدمة.");return;}
- try{
-  await saveBooking(data);
-  alert("تم إرسال طلب الحجز بنجاح. سيتواصل معك فريق فلورين.");
-  form.reset(); dynamicFields.innerHTML="";
- }catch(err){console.error(err);alert("تعذر إرسال الطلب. يرجى المحاولة مرة أخرى.");}
-});
+function setupAirportSearch(){document.querySelectorAll('[data-airport-search]').forEach(input=>{const list=document.createElement('div');list.className='airport-suggestions';input.parentElement.appendChild(list);const render=()=>{const q=input.value.trim().toLowerCase();if(!q){list.classList.remove('show');return;}const rows=AIRPORTS.filter(a=>[a.iata,a.city,a.cityEn,a.country,a.countryEn,a.name,a.nameEn].some(v=>String(v).toLowerCase().includes(q))).slice(0,8);list.innerHTML=rows.map(a=>`<button type="button" data-code="${a.iata}"><strong>${a.iata}</strong><span>${a.city} — ${a.name}</span></button>`).join('');list.classList.toggle('show',rows.length>0);list.querySelectorAll('button').forEach(b=>b.onclick=()=>{input.value=b.dataset.code;list.classList.remove('show');});};input.addEventListener('input',render);input.addEventListener('focus',render);});}
+setupAirportSearch();
+$('service').addEventListener('change',()=>{$('airportFields').hidden=$('service').value!=='flight';});
+$('travelDate').min=new Date().toISOString().slice(0,10);
+$('bookingForm').addEventListener('submit',async e=>{e.preventDefault();const data={fullName:$('fullName').value.trim(),phone:$('phone').value.trim(),email:$('email').value.trim(),country:$('country').value.trim(),service:$('service').value,destination:$('destination').value.trim(),travelDate:$('travelDate').value,travelers:Number($('travelers').value||1),notes:$('notes').value.trim(),offerId:$('offerId').value,offerName:$('offerName').value,fromIata:$('bookingFrom').value.trim().toUpperCase(),toIata:$('bookingTo').value.trim().toUpperCase(),uid:auth.currentUser?.uid||null};if(!data.fullName||!data.phone||!data.service){$('bookingStatus').textContent='يرجى إكمال الاسم والهاتف والخدمة.';return;}try{const btn=e.submitter;btn.disabled=true;btn.textContent='جاري إرسال الطلب...';const id=await saveBooking(data);$('bookingStatus').textContent=`تم استلام طلبك بنجاح${id?` — رقم الطلب ${id}`:''}.`;e.target.reset();}catch(err){console.error(err);$('bookingStatus').textContent='تعذر إرسال الطلب. تحقق من الاتصال ثم حاول مرة أخرى.';}finally{const btn=e.submitter;if(btn){btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-paper-plane"></i> إرسال الطلب';}}});

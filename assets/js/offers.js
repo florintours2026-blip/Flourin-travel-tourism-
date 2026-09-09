@@ -1,71 +1,35 @@
+import { loadPublicOffers } from './offers-data.js';
+import { AIRLINES } from './catalog-data.js';
+import { db } from './firebase-config.js';
+import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
 
-import { db } from "./firebase-config.js";
-import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-import { getOffers } from "./offers-data.js";
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const money=(n,c)=>`${Number(n||0).toLocaleString('en-US')} ${c||'USD'}`;
+let offers=[];
+const airline=id=>AIRLINES.find(x=>x.id===id);
 
-const catalog=document.getElementById("offersCatalog");
-const details=document.getElementById("offerDetails");
-let selected=null;
-
-const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-
-function show(o){
- selected=o;
- details.classList.add("active");
- const h=o.hotel||{};
- const images=Array.isArray(o.images)&&o.images.length?o.images:(o.image?[o.image]:[]);
- details.innerHTML=`<div class="hotel-mini">
-   <div class="hotel-mini-gallery">${images.slice(0,4).map((src,i)=>`<img class="${i===0?'main':''}" src="${esc(src)}" alt="${esc(o.name)}" onerror="this.onerror=null;this.src='${esc(o.image)}'">`).join("")}</div>
-   <div class="hotel-mini-content">
-     <span class="country">${esc(o.country)}</span>
-     <h2>${esc(o.name)}</h2>
-     ${h.name?`<div class="mini-hotel"><strong>${esc(h.name)}</strong> <span class="stars">${"★".repeat(Number(h.stars||4))}</span><small>${esc(h.location||o.destination||"")}</small></div>`:""}
-     <div class="detail-meta"><span>${esc(o.duration)}</span><span>${esc(o.category)}</span><span>${esc(o.price)}</span></div>
-     <p>${esc(o.description)}</p>
-     ${h.rooms?.length?`<div class="mini-rooms"><strong>الغرف:</strong> ${h.rooms.map(x=>esc(x)).join(" · ")}</div>`:""}
-     <div class="detail-columns">
-       <div class="detail-box"><h3>يشمل</h3><ul>${(o.included||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
-       <div class="detail-box"><h3>لا يشمل</h3><ul>${(o.excluded||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
-     </div>
-     <div class="offer-note">${esc(o.notes)}</div>
-     <a class="details-btn" style="display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:13px;margin-top:18px" href="offer-details.html?id=${encodeURIComponent(o.id)}">عرض الفندق والباقة بالتفصيل</a>
-   </div>
- </div>`;
- details.scrollIntoView({behavior:"smooth",block:"start"});
- document.getElementById("selectedOfferId").value=o.id;
- document.getElementById("selectedOfferName").value=o.name;
+function finalPrice(o){
+ const d=o.discount||{}; if(!d.enabled) return Number(o.price)||0;
+ return d.type==='percent'?Math.max(0,Number(o.price)*(1-Number(d.value||0)/100)):Math.max(0,Number(o.price)-Number(d.value||0));
 }
-
+function card(o){
+ const a=airline(o.airlineId); const final=finalPrice(o);
+ return `<article class="catalog-card"><div class="catalog-image"><img src="${esc(o.image||'assets/images/offers/cleaned/florin-offer-clean.png')}" alt="${esc(o.name)}" loading="lazy">${o.discount?.enabled?`<span class="discount-badge">${esc(o.discount.label||`خصم ${o.discount.value}${o.discount.type==='percent'?'%':''}`)}</span>`:''}</div><div class="catalog-body"><div class="mini-type">${esc(o.category||'عرض')}</div><h3>${esc(o.name)}</h3>${a?`<div class="catalog-airline">${a.logo?`<img src="${esc(a.logo)}" alt="${esc(a.name)}">`:''}<span>${esc(a.name)} ${a.iata?`(${a.iata})`:''}</span></div>`:''}<p>${esc(o.description||'عرض قابل للتخصيص حسب طلب العميل.')}</p><div class="catalog-bottom"><div>${o.discount?.enabled?`<del>${money(o.price,o.currency)}</del>`:''}<strong>${money(final,o.currency)}</strong></div><a class="btn-primary" href="booking.html?offer=${encodeURIComponent(o.id)}&offerName=${encodeURIComponent(o.name)}">التفاصيل وطلب الحجز</a></div></div></article>`;
+}
+function render(){
+ const root=document.querySelector('#offersRoot');
+ const q=document.querySelector('#offerSearch').value.trim().toLowerCase();
+ const category=document.querySelector('#offerCategory').value;
+ let rows=offers.filter(o=>o.active!==false && o.type!=='flight');
+ if(q) rows=rows.filter(o=>[o.name,o.destination,o.country,o.category].some(v=>String(v||'').toLowerCase().includes(q)));
+ if(category) rows=rows.filter(o=>o.category===category);
+ const groups={}; rows.forEach(o=>(groups[o.destination||'عروض متنوعة']??=[]).push(o));
+ root.innerHTML=Object.keys(groups).length?Object.entries(groups).map(([dest,list])=>`<section class="destination-group"><div class="group-head"><div><span class="eyebrow">DESTINATION</span><h2>${esc(dest)}</h2></div><span>${list.length} عرض</span></div><div class="catalog-grid">${list.map(card).join('')}</div></section>`).join(''):`<div class="empty-state">لا توجد عروض مطابقة.</div>`;
+}
 async function init(){
- const offers=await getOffers();
- catalog.innerHTML=offers.map(o=>`<article class="offer-item">
- <img src="${esc(o.image)}" alt="${esc(o.name)}" onerror="this.onerror=null;this.src='assets/images/logo/logo.png'"><div class="offer-item-body">
- <span class="country">${esc(o.country)}</span><h2>${esc(o.name)}</h2><p>${esc(o.description)}</p><div class="offer-price">${esc(o.price)}</div>
- <div class="offer-actions"><a class="details-btn" href="offer-details.html?id=${encodeURIComponent(o.id)}">صفحة التفاصيل</a><button class="booking-btn-outline" data-id="${esc(o.id)}">اختيار للحجز</button></div>
- </div></article>`).join("");
- catalog.querySelectorAll("[data-id]").forEach(b=>b.addEventListener("click",()=>{const o=offers.find(x=>x.id===b.dataset.id); if(o) show(o)}));
- const params=new URLSearchParams(location.search); const id=params.get("id"); if(id){const o=offers.find(x=>x.id===id);if(o)show(o);}
+ offers=await loadPublicOffers();
+ const cats=[...new Set(offers.filter(o=>o.type!=='flight').map(o=>o.category).filter(Boolean))];
+ document.querySelector('#offerCategory').innerHTML='<option value="">كل الخدمات</option>'+cats.map(c=>`<option>${esc(c)}</option>`).join('');
+ document.querySelector('#offerSearch').addEventListener('input',render);document.querySelector('#offerCategory').addEventListener('change',render);render();
 }
 init();
-
-const form=document.getElementById("manualBookingForm");
-if(form) form.addEventListener("submit",async e=>{
- e.preventDefault();
- const status=document.getElementById("bookingStatus");
- try{
-  await addDoc(collection(db,"bookings"),{
-   fullName:document.getElementById("customerName").value.trim(),
-   phone:document.getElementById("customerPhone").value.trim(),
-   email:document.getElementById("customerEmail").value.trim(),
-   country:document.getElementById("customerCountry").value.trim(),
-   travelDate:document.getElementById("travelDateOffer").value,
-   travelers:Number(document.getElementById("travelerCount").value||1),
-   notes:document.getElementById("customerNotes").value.trim(),
-   offerId:document.getElementById("selectedOfferId").value,
-   offerName:document.getElementById("selectedOfferName").value,
-   status:"Pending", createdAt:serverTimestamp()
-  });
-  status.className="booking-status show success";status.textContent="تم إرسال طلبك بنجاح. سيتواصل معك فريق فلورين لتأكيد التفاصيل.";
-  form.reset(); selected=null;
- }catch(err){console.error(err);status.className="booking-status show error";status.textContent="تعذر إرسال الطلب. تأكد من إعدادات Firebase ثم حاول مرة أخرى.";}
-});
