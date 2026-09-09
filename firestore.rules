@@ -1,17 +1,22 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // FLORIN bootstrap administrator UID supplied for this project.
+    // This is not a secret; Firebase Auth still requires a valid signed-in user token.
+    function bootstrapAdmin() {
+      return request.auth != null && request.auth.uid == "7nE6QoTEPFOk0IhwcZUnymkyzoY2";
+    }
     function signedIn() { return request.auth != null; }
     function isAdmin() {
-      return signedIn()
-        && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
-        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true;
+      return bootstrapAdmin()
+        || (signedIn()
+          && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+          && (get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true
+              || get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == "true"));
     }
 
     match /admins/{userId} {
-      // A signed-in user can read only their own admin record.
       allow read: if signedIn() && request.auth.uid == userId;
-      // No client can create or promote an administrator.
       allow create, update, delete: if isAdmin();
     }
 

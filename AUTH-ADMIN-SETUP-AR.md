@@ -25,3 +25,8 @@
 
 ## 5. إذا ظهرت Missing or insufficient permissions
 هذا يعني غالبًا أن قواعد Firestore المنشورة ليست نسخة المشروع الحالية. أعد نشر `firestore.rules` وانتظر اكتمال النشر ثم سجّل الخروج والدخول.
+
+
+## إصلاح إضافي في هذه النسخة
+تم اعتماد UID المدير التالي كمدير تأسيسي داخل التطبيق والقواعد: `7nE6QoTEPFOk0IhwcZUnymkyzoY2`.
+لذلك إذا كان هذا هو UID لحساب المدير المسجّل في Firebase Authentication، فسيعمل الدخول حتى لو كان مستند `admins/7nE6QoTEPFOk0IhwcZUnymkyzoY2` مفقودًا. يظل إنشاء مستند admins موصى به لإدارة الأدوار لاحقًا.
