@@ -1,5 +1,5 @@
 <!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FLORIN ADMIN | مركز إدارة السفر</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"><link rel="stylesheet" href="assets/css/admin-v2.css"></head><body><div id="authLoading" class="admin-loading">جاري التحقق من صلاحيات الإدارة...</div><div id="adminApp" class="admin-app" hidden>
-<header class="admin-top"><div class="admin-brand"><img src="assets/images/logo/logo.png" alt="FLORIN"><div><b>FLORIN</b><span>Travel Management Center</span></div></div><div class="admin-top-actions"><span id="adminName"></span><button id="adminTheme">◐</button><button id="adminLogout">خروج</button></div></header>
+<header class="admin-top"><div class="admin-brand"><img class=" logo-dark" src="assets/images/logo/logo-dark.png"alt="FLORIN"><img class=" logo-light" src="assets/images/logo/logo-light.png"alt="FLORIN"><div><b>FLORIN</b><span>Travel Management Center</span></div></div><div class="admin-top-actions"><span id="adminName"></span><button id="adminTheme">◐</button><button id="adminLogout">خروج</button></div></header>
 <div class="admin-layout"><aside class="admin-side"><button class="admin-tab active" data-tab="dashboard">الرئيسية</button><button class="admin-tab" data-tab="flights">✈️ عروض الطيران</button><button class="admin-tab" data-tab="catalog">🏨 الفنادق والخدمات</button><button class="admin-tab" data-tab="packages">🧳 البكجات السياحية</button><button class="admin-tab" data-tab="airlines">🛫 شركات الطيران</button><button class="admin-tab" data-tab="bookings">📋 طلبات العملاء</button><button class="admin-tab" data-tab="users">👥 العملاء</button></aside>
 <main class="admin-main">
 <section id="dashboard" class="admin-panel active"><div class="panel-head"><div><span class="eyebrow">FLORIN ADMIN</span><h1>مركز التحكم في الحجوزات والعروض</h1><p>كل ما يراه العميل يمكن إدارته من هنا.</p></div><button class="btn primary" id="seedCatalog">مزامنة العروض المبدئية</button></div><div class="stats" id="stats"></div><div class="notice">تم تجهيز 20 عرض طيران للوجهات المطلوبة، ونظام خصومات، وإدارة صور، وسجل شركات الطيران. أسعار الرحلات المبدئية أمثلة قابلة للتعديل قبل النشر.</div></section>
@@ -9,4 +9,17 @@
 <section id="airlines" class="admin-panel"><div class="panel-head"><div><span class="eyebrow">AIRLINE DIRECTORY</span><h2>شركات الطيران واللوقوهات</h2><p>اربط كل عرض بشركة طيران؛ اللوقو المحفوظ للشركة يظهر تلقائيًا داخل العرض.</p></div><button class="btn primary" id="newAirline">+ إضافة شركة</button></div><div id="airlineTable" class="table-wrap"></div></section>
 <section id="bookings" class="admin-panel"><div class="panel-head"><div><span class="eyebrow">CUSTOMER REQUESTS</span><h2>طلبات العملاء</h2></div><button class="btn secondary" id="refreshBookings">تحديث</button></div><div id="bookingTable" class="table-wrap"></div></section>
 <section id="users" class="admin-panel"><div class="panel-head"><div><span class="eyebrow">CUSTOMERS</span><h2>العملاء</h2></div></div><div id="userTable" class="table-wrap"></div></section>
-</main></div></div><div id="modal" class="modal" hidden><div class="modal-box"><button class="modal-close" id="closeModal">×</button><div id="modalContent"></div></div></div><script type="module" src="assets/js/admin-v2.js"></script></body></html>
+</main></div></div><div id="modal" class="modal" hidden><div class="modal-box"><button class="modal-close" id="closeModal">×</button><div id="modalContent"></div></div></div><script>
+window.addEventListener('error',function(e){
+  var box=document.getElementById('authLoading');
+  if(box && document.getElementById('adminApp')?.hidden){
+    box.innerHTML='<div class="admin-auth-error"><h2>تعذر تشغيل لوحة الإدارة</h2><p>'+String(e.message||'حدث خطأ أثناء تحميل ملفات الإدارة')+'</p><a href="login.html">العودة إلى تسجيل الدخول</a></div>';
+  }
+});
+window.addEventListener('unhandledrejection',function(e){
+  var box=document.getElementById('authLoading');
+  if(box && document.getElementById('adminApp')?.hidden){
+    box.innerHTML='<div class="admin-auth-error"><h2>تعذر تشغيل لوحة الإدارة</h2><p>'+String(e.reason?.message||e.reason||'حدث خطأ غير متوقع')+'</p><a href="login.html">العودة إلى تسجيل الدخول</a></div>';
+  }
+});
+</script><script>setTimeout(function(){if(!window.__florinAdminStarted && document.getElementById('adminApp')?.hidden){document.getElementById('authLoading').innerHTML='<div class="admin-auth-error"><h2>تعذر تحميل ملفات الإدارة</h2><p>لم يتم تشغيل ملف لوحة الإدارة. تحقق من رفع assets/js/admin-v2.js وجميع ملفات assets/js على GitHub Pages.</p><a href="login.html">العودة إلى تسجيل الدخول</a></div>';}},20000);</script><script type="module" src="assets/js/admin-v2.js"></script></body></html>

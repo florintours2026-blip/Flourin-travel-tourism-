@@ -20,6 +20,12 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
+
+    match /employees/{userId} {
+      allow read: if (signedIn() && request.auth.uid == userId) || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
     match /users/{userId} {
       allow create, update: if signedIn() && request.auth.uid == userId;
       allow read: if (signedIn() && request.auth.uid == userId) || isAdmin();

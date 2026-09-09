@@ -1,101 +1,73 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>تسجيل الدخول | FLORIN</title>
-
-    <link rel="stylesheet" href="assets/css/style.css">
-
-    <link rel="stylesheet" href="assets/css/login.css">
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تسجيل الدخول | FLORIN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/login.css">
 </head>
-
 <body>
+<main class="login-page">
+  <div class="login-shell">
+    <header class="login-brand">
+      <div class="brand-logo-wrap">
+        <img class="login-logo logo-dark" src="assets/images/logo/logo-dark.png" alt="FLORIN">
+        <img class="login-logo logo-light" src="assets/images/logo/logo-light.png" alt="FLORIN">
+      </div>
+      <div>
+        <span class="eyebrow">FLORIN TRAVEL &amp; TOURISM</span>
+        <h1>مرحبًا بك في فلورين</h1>
+        <p>اختر نوع الحساب ثم سجّل الدخول إلى النظام.</p>
+      </div>
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="تغيير المظهر">◐</button>
+    </header>
 
-    <main class="login-page">
+    <section class="login-columns" aria-label="أنواع تسجيل الدخول">
+      <article class="login-card client-card">
+        <div class="card-icon">👤</div>
+        <span class="card-kicker">CUSTOMER</span>
+        <h2>دخول العميل</h2>
+        <p>لإرسال طلبات الحجز ومتابعة حسابك وطلباتك.</p>
+        <form class="role-form" data-role="client">
+          <label>البريد الإلكتروني<input type="email" name="email" autocomplete="email" placeholder="name@example.com" required></label>
+          <label>كلمة المرور<input type="password" name="password" autocomplete="current-password" placeholder="••••••••" required></label>
+          <button class="login-btn" type="submit">تسجيل دخول العميل</button>
+        </form>
+        <div class="card-links"><a href="register.html">إنشاء حساب عميل</a><a href="forgot-password.html">نسيت كلمة المرور؟</a></div>
+      </article>
 
-        <div class="login-container">
+      <article class="login-card employee-card">
+        <div class="card-icon">🧑‍💼</div>
+        <span class="card-kicker">EMPLOYEE</span>
+        <h2>دخول الموظفين</h2>
+        <p>للوصول إلى مساحة العمل المخصصة للموظفين المصرح لهم.</p>
+        <form class="role-form" data-role="employee">
+          <label>البريد الإلكتروني<input type="email" name="email" autocomplete="username" placeholder="employee@florin.com" required></label>
+          <label>كلمة المرور<input type="password" name="password" autocomplete="current-password" placeholder="••••••••" required></label>
+          <button class="login-btn" type="submit">تسجيل دخول الموظف</button>
+        </form>
+        <div class="card-note">حساب الموظف يجب أن يكون نشطًا ومصرحًا به داخل Firebase.</div>
+      </article>
 
-            <div class="login-header">
-
-                <img src="assets/images/logo/logo.png" alt="FLORIN Logo" class="login-logo">
-
-                <h1>مرحبًا بعودتك</h1>
-
-                <p>سجّل الدخول إلى حسابك في فلورين</p>
-
-            </div>
-
-            <form id="loginForm" class="login-form">
-
-                <div class="input-group">
-
-                    <label>البريد الإلكتروني</label>
-
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="أدخل بريدك الإلكتروني"
-                        required>
-
-                </div>
-
-                <div class="input-group">
-
-                    <label>كلمة المرور</label>
-
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="أدخل كلمة المرور"
-                        required>
-
-                </div>
-
-                <button type="submit" class="btn-login">
-
-                    تسجيل الدخول
-
-                </button>
-
-                <button
-                    type="button"
-                    id="googleLogin"
-                    class="btn-google">
-
-                    المتابعة باستخدام Google
-
-                </button>
-
-                <div class="login-links">
-
-                    <a href="forgot-password.html">
-
-                        Forgot كلمة المرور?
-
-                    </a>
-
-                    <a href="register.html">
-
-                        إنشاء حساب
-
-                    </a>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </main>
-
-    <script type="module" src="assets/js/login.js"></script>
-
+      <article class="login-card admin-card">
+        <div class="card-icon">🛡️</div>
+        <span class="card-kicker">ADMINISTRATION</span>
+        <h2>دخول الإدارة</h2>
+        <p>للوصول إلى لوحة الإدارة والتحكم الكامل في العروض والطلبات.</p>
+        <form class="role-form" data-role="admin">
+          <label>البريد الإلكتروني<input type="email" name="email" autocomplete="username" placeholder="admin@florin.com" required></label>
+          <label>كلمة المرور<input type="password" name="password" autocomplete="current-password" placeholder="••••••••" required></label>
+          <button class="login-btn" type="submit">دخول لوحة الإدارة</button>
+        </form>
+        <div class="card-note">الوصول مقيد بحساب المدير الأساسي أو حساب admins نشط.</div>
+      </article>
+    </section>
+    <div id="loginStatus" class="login-status" hidden></div>
+  </div>
+</main>
+<script type="module" src="assets/js/login.js"></script>
 </body>
-
 </html>
