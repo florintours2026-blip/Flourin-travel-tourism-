@@ -2,6 +2,7 @@ import { authState, logoutUser } from "./auth.js";
 import { db } from "./firebase-config.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+const BOOTSTRAP_ADMIN_UID = "7nE6QoTEPFOk0IhwcZUnymkyzoY2";
 const actions = document.querySelector(".nav-actions");
 if (!actions) throw new Error("FLORIN navbar: .nav-actions not found");
 
@@ -21,7 +22,7 @@ async function checkAdmin(user) {
   if (!user) return false;
   try {
     const snap = await getDoc(doc(db, "admins", user.uid));
-    return snap.exists() && snap.data()?.active === true;
+    return user.uid === BOOTSTRAP_ADMIN_UID || (snap.exists() && (snap.data()?.active === true || snap.data()?.active === "true"));
   } catch (error) {
     console.warn("FLORIN admin check failed:", error);
     return false;

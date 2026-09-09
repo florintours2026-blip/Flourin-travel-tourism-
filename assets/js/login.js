@@ -2,6 +2,7 @@ import { loginUser, loginWithGoogle, logoutUser } from "./auth.js";
 import { db } from "./firebase-config.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+const BOOTSTRAP_ADMIN_UID = "7nE6QoTEPFOk0IhwcZUnymkyzoY2";
 const adminMode = new URLSearchParams(location.search).get("admin") === "1";
 const form = document.getElementById("loginForm");
 const google = document.getElementById("googleLogin");
@@ -30,12 +31,12 @@ async function continueAfterLogin(user) {
   }
   try {
     const snap = await getDoc(doc(db, "admins", user.uid));
-    if (snap.exists() && snap.data()?.active === true) {
+    if (user.uid === BOOTSTRAP_ADMIN_UID || (snap.exists() && (snap.data()?.active === true || snap.data()?.active === "true"))) {
       location.replace("admin.html");
       return;
     }
     await logoutUser();
-    alert("هذا الحساب ليس مديرًا نشطًا في FLORIN. أنشئ سجلًا في admins باستخدام UID الخاص بالمدير.");
+    alert("هذا الحساب ليس مديرًا نشطًا في FLORIN. استخدم حساب المدير المعتمد أو أنشئ admins/UID مع active=true.");
   } catch (error) {
     console.error(error);
     await logoutUser().catch(() => {});
