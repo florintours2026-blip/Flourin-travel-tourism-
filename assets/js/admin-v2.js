@@ -60,3 +60,240 @@ function openAirlineEditor(a){const x=a||{id:'',name:'',nameEn:'',iata:'',logo:'
 
 async function renderBookings(){try{const s=await getDocs(collection(db,'bookings'));const rows=s.docs.map(d=>({id:d.id,...d.data()}));$('bookingTable').innerHTML=`<table class="data-table"><thead><tr><th>الاسم</th><th>الهاتف</th><th>الخدمة</th><th>المسار</th><th>العرض</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${esc(x.fullName||'')}</td><td>${esc(x.phone||'')}</td><td>${esc(x.service||'')}</td><td>${esc(`${x.fromIata||''} → ${x.toIata||''}`)}</td><td>${esc(x.offerName||'')}</td><td>${esc(x.travelDate||'')}</td><td><span class="pill">${esc(x.status||'Pending')}</span></td><td><button data-bstatus="${x.id}">تغيير الحالة</button></td></tr>`).join('')||'<tr><td colspan="8">لا توجد طلبات.</td></tr>'}</tbody></table>`;document.querySelectorAll('[data-bstatus]').forEach(b=>b.onclick=async()=>{const status=prompt('الحالة: Pending / Confirmed / Cancelled / Completed','Confirmed');if(status){await updateDoc(doc(db,'bookings',b.dataset.bstatus),{status,updatedAt:serverTimestamp(),updatedBy:currentUser.uid});renderBookings();}});}catch(e){$('bookingTable').innerHTML='<div class="notice">تعذر تحميل الطلبات.</div>';}}
 async function renderUsers(){try{const s=await getDocs(collection(db,'users'));$('userTable').innerHTML=`<table class="data-table"><thead><tr><th>الاسم</th><th>البريد</th><th>UID</th><th>تاريخ التسجيل</th></tr></thead><tbody>${s.docs.map(d=>{const x=d.data();return `<tr><td>${esc(x.name||x.displayName||'')}</td><td>${esc(x.email||'')}</td><td>${esc(d.id)}</td><td>${x.createdAt?.toDate?esc(x.createdAt.toDate().toLocaleString('ar-EG')):''}</td></tr>`}).join('')}</tbody></table>`;}catch(e){$('userTable').innerHTML='<div class="notice">تعذر تحميل العملاء.</div>';}}
+
+window.__florinAdminStarted = true;
+
+onAuthStateChanged(auth, async user => {
+  try {
+    if (!user) {
+      location.href = 'login.html?admin=1';
+      return;
+    }
+
+    const admin = await isAdmin(user);
+
+    if (!admin) {
+      alert('هذا الحساب ليس ضمن المدراء.');
+      await signOut(auth);
+      location.href = 'login.html?admin=1';
+      return;
+    }
+
+    currentUser = user;
+
+    const loading = $('authLoading');
+    const app = $('adminApp');
+
+    if (loading) {
+      loading.hidden = true;
+      loading.style.display = 'none';
+    }
+
+    if (app) {
+      app.hidden = false;
+      app.style.display = '';
+    }
+
+    if ($('adminName')) {
+      $('adminName').textContent =
+        user.displayName || user.email || 'مدير النظام';
+    }
+
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+      tab.onclick = () => {
+        document.querySelectorAll('.admin-tab').forEach(x =>
+          x.classList.remove('active')
+        );
+
+        document.querySelectorAll('.admin-panel').forEach(x =>
+          x.classList.remove('active')
+        );
+
+        tab.classList.add('active');
+
+        const panel = $(tab.dataset.tab);
+
+        if (panel) {
+          panel.classList.add('active');
+        }
+      };
+    });
+
+    if ($('adminLogout')) {
+      $('adminLogout').onclick = async () => {
+        await signOut(auth);
+        location.href = 'login.html';
+      };
+    }
+
+    if ($('adminTheme')) {
+      $('adminTheme').onclick = () => {
+        document.body.classList.toggle('light');
+        document.documentElement.classList.toggle('light');
+      };
+    }
+
+    const modalElement = $('modal');
+    const closeModalButton = $('closeModal');
+
+    if (closeModalButton) {
+      closeModalButton.onclick = e => {
+        e.preventDefault();
+        e.stopPropagation();
+        closeModal();
+      };
+    }
+
+    if (modalElement) {
+      modalElement.hidden = true;
+      modalElement.style.display = 'none';
+
+      modalElement.onclick = e => {
+        if (e.target === modalElement) {
+          closeModal();
+        }
+      };
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+    if ($('newFlight')) {
+      $('newFlight').onclick = () =>
+        openOfferEditor({
+          type: 'flight',
+          category: 'رحلات طيران',
+          name: '',
+          country: '',
+          destination: '',
+          price: 0,
+          currency: 'USD',
+          image: '',
+          images: [],
+          fromIata: 'CAI',
+          toIata: 'JED',
+          airlineId: '',
+          cabin: 'اقتصادية',
+          baggage: '',
+          duration: '',
+          stopover: 'مباشر',
+          active: true,
+          discount: {
+            enabled: false,
+            type: 'percent',
+            value: 0,
+            label: ''
+          }
+        });
+    }
+
+    if ($('newCatalog')) {
+      $('newCatalog').onclick = () =>
+        openOfferEditor({
+          type: 'hotel',
+          category: 'فنادق',
+          name: '',
+          country: '',
+          destination: '',
+          price: 0,
+          currency: 'USD',
+          image: '',
+          images: [],
+          active: true,
+          discount: {
+            enabled: false,
+            type: 'percent',
+            value: 0,
+            label: ''
+          },
+          hotel: {
+            stars: 5,
+            rooms: [],
+            amenities: []
+          }
+        });
+    }
+
+    if ($('newPackage')) {
+      $('newPackage').onclick = () => openPackageEditor();
+    }
+
+    if ($('newAirline')) {
+      $('newAirline').onclick = () =>
+        openAirlineEditor({
+          id: `airline_${Date.now()}`,
+          name: '',
+          nameEn: '',
+          iata: '',
+          logo: ''
+        });
+    }
+
+    if ($('refreshBookings')) {
+      $('refreshBookings').onclick = renderBookings;
+    }
+
+    if ($('seedCatalog')) {
+      $('seedCatalog').onclick = async () => {
+        if (
+          !confirm(
+            'مزامنة 20 رحلة + عروض الفنادق والخدمات إلى Firestore؟'
+          )
+        ) {
+          return;
+        }
+
+        try {
+          for (const o of DEFAULT_OFFERS) {
+            await setDoc(
+              doc(db, 'offers', o.id),
+              {
+                ...o,
+                updatedAt: serverTimestamp(),
+                updatedBy: currentUser.uid
+              },
+              { merge: true }
+            );
+          }
+
+          for (const a of AIRLINES) {
+            await setDoc(
+              doc(db, 'airlines', a.id),
+              a,
+              { merge: true }
+            );
+          }
+
+          await loadAll();
+
+          alert('تمت المزامنة.');
+        } catch (e) {
+          alert(`تعذر مزامنة العروض: ${e.message}`);
+        }
+      };
+    }
+
+    await loadAll();
+
+  } catch (e) {
+    console.error('FLORIN ADMIN ERROR:', e);
+
+    const loading = $('authLoading');
+
+    if (loading) {
+      loading.hidden = false;
+      loading.style.display = 'grid';
+
+      loading.innerHTML = `
+        <div class="admin-auth-error">
+          <h2>تعذر تشغيل لوحة الإدارة</h2>
+          <p>${esc(e.message || 'حدث خطأ أثناء التحقق من صلاحيات الإدارة')}</p>
+          <a href="login.html?admin=1">العودة إلى تسجيل الدخول</a>
+        </div>
+      `;
+    }
+  }
+});
