@@ -801,3 +801,19 @@ a:focus-visible {
 .admin-panel {
     pointer-events: auto;
 }
+
+/* =====================================================
+   FIX - AUTH LOADING / HIDDEN ELEMENTS
+===================================================== */
+
+[hidden] {
+    display: none !important;
+}
+
+#authLoading[hidden] {
+    display: none !important;
+}
+
+#adminApp[hidden] {
+    display: none !important;
+}
