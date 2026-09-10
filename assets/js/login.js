@@ -41,7 +41,7 @@ async function isEmployee(user){
 }
 
 async function continueAfterLogin(user,role){
-  if(role==="client"){ location.replace("index.html"); return; }
+  if(role==="client"){ location.replace("profile.html"); return; }
   if(role==="admin"){
     if(await isAdmin(user)){ location.replace("admin.html"); return; }
     await signOut(auth).catch(()=>{}); throw new Error("هذا الحساب غير مصرح له بدخول الإدارة.");
