@@ -1,4 +1,4 @@
-import { loadPublicOffers } from './offers-data.js';
+import { loadPublicOffers, subscribePublicOffers } from './offers-data.js';
 import { AIRLINES } from './catalog-data.js';
 import { db } from './firebase-config.js';
 import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
@@ -28,8 +28,10 @@ function render(){
 }
 async function init(){
  offers=await loadPublicOffers();
- const cats=[...new Set(offers.filter(o=>o.type!=='flight').map(o=>o.category).filter(Boolean))];
- document.querySelector('#offerCategory').innerHTML='<option value="">كل الخدمات</option>'+cats.map(c=>`<option>${esc(c)}</option>`).join('');
- document.querySelector('#offerSearch').addEventListener('input',render);document.querySelector('#offerCategory').addEventListener('change',render);render();
+ const search=document.querySelector('#offerSearch'), category=document.querySelector('#offerCategory');
+ search?.addEventListener('input',render); category?.addEventListener('change',render);
+ const paint=rows=>{offers=rows;const cats=[...new Set(offers.filter(o=>o.type!=='flight').map(o=>o.category).filter(Boolean))];if(category)category.innerHTML='<option value="">كل الخدمات</option>'+cats.map(c=>`<option>${esc(c)}</option>`).join('');render();};
+ paint(offers);
+ subscribePublicOffers(paint);
 }
 init();

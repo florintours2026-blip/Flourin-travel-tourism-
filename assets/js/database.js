@@ -13,22 +13,13 @@ SAVE USER
 ==========================================================*/
 
 export async function saveUser(user) {
-
-    await setDoc(doc(db, "users", user.uid), {
-
-        uid: user.uid,
-
-        name: user.displayName || "",
-
-        email: user.email,
-
-        photo: user.photoURL || "",
-
-        createdAt: serverTimestamp()
-
-    }, { merge: true });
-
+    const ref=doc(db,"users",user.uid);
+    const existing=await getDoc(ref);
+    const data={uid:user.uid,name:user.displayName||"",email:user.email||"",photo:user.photoURL||"",role:"client",accountType:"client",active:true,updatedAt:serverTimestamp()};
+    if(!existing.exists()) data.createdAt=serverTimestamp();
+    await setDoc(ref,data,{merge:true});
 }
+
 
 /*==========================================================
 GET USER
