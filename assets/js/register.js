@@ -3,6 +3,12 @@ import {
     loginWithGoogle
 } from "./auth.js";
 
+import { auth } from "./firebase-config.js";
+import { getRedirectResult, signInWithRedirect, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: "select_account" });
+
 import {
     saveUser
 } from "./database.js";
@@ -72,21 +78,25 @@ if (googleRegister) {
     googleRegister.addEventListener("click", async () => {
 
         try {
-
-            const user = await loginWithGoogle();
-
-            await saveUser(user);
-
-            window.location.href = "profile.html";
-
-        }
-
-        catch (error) {
-
+            await signInWithRedirect(auth, googleProvider);
+        } catch (error) {
             alert(error.message);
-
         }
 
     });
 
 }
+
+
+getRedirectResult(auth).then(async result => {
+    if (!result?.user) return;
+    try {
+        await saveUser(result.user);
+        window.location.href = "profile.html";
+    } catch (error) {
+        alert("تم تسجيل الدخول إلى Google لكن تعذر إنشاء ملف الحساب: " + error.message);
+    }
+}).catch(error => {
+    console.error("Google redirect error", error);
+    if (error?.code) alert(error.message);
+});

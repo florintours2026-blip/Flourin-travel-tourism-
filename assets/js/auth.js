@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
   sendPasswordResetEmail,
   signOut,
   updateProfile,
@@ -26,6 +27,10 @@ export async function loginUser(email, password) {
 export async function loginWithGoogle() {
   const result = await signInWithPopup(auth, googleProvider);
   return result.user;
+}
+
+export async function loginWithGoogleRedirect() {
+  return signInWithRedirect(auth, googleProvider);
 }
 
 export async function resetPassword(email) {

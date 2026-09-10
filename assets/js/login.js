@@ -1,10 +1,11 @@
 import { auth, db } from "./firebase-config.js";
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { signInWithEmailAndPassword, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const BOOTSTRAP_ADMIN_UID = "7nE6QoTEPFOk0IhwcZUnymkyzoY2";
 const statusBox = document.getElementById("loginStatus");
 const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: "select_account" });
 
 function setStatus(message, ok=false){ if(!statusBox)return; statusBox.hidden=false; statusBox.classList.toggle("ok",ok); statusBox.textContent=message; }
 function clearStatus(){ if(statusBox){statusBox.hidden=true;statusBox.classList.remove("ok");statusBox.textContent="";} }
@@ -70,10 +71,31 @@ async function submitRole(form){
 document.querySelectorAll(".role-form").forEach(form=>form.addEventListener("submit",event=>{event.preventDefault();submitRole(form);}));
 
 // Keep Google available only as a customer shortcut if needed later; no role ambiguity is allowed for staff/admin.
-window.florinGoogleLogin=async()=>{
-  try{const result=await signInWithPopup(auth,googleProvider); await continueAfterLogin(result.user,"client");}
-  catch(error){setStatus(errorMessage(error));}
-};
+async function googleLogin(){
+  clearStatus();
+  try {
+    await signInWithRedirect(auth, googleProvider);
+  } catch(error) {
+    console.error("FLORIN Google login error", error);
+    setStatus(errorMessage(error));
+  }
+}
+
+document.getElementById("googleLogin")?.addEventListener("click", googleLogin);
+window.florinGoogleLogin = googleLogin;
+
+getRedirectResult(auth).then(async result=>{
+  if(!result?.user) return;
+  try {
+    await continueAfterLogin(result.user, "client");
+  } catch(error) {
+    console.error("FLORIN Google redirect error", error);
+    setStatus(errorMessage(error));
+  }
+}).catch(error=>{
+  console.error("FLORIN Google redirect result error", error);
+  setStatus(errorMessage(error));
+});
 
 const theme=document.getElementById("themeToggle");
 const saved=localStorage.getItem("florin-theme")||"dark";
