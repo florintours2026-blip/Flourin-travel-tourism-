@@ -8,7 +8,6 @@ html {
 
 body {
     margin: 0;
-    transition: background .2s ease, color .2s ease;
     min-height: 100vh;
     font-family: "Cairo", sans-serif;
     background: var(--bg);
@@ -31,7 +30,7 @@ body {
     --shadow: 0 12px 35px rgba(16, 24, 40, .08);
 }
 
-body.dark {
+body:not(.light) {
     --bg: #0b1020;
     --surface: #121a2b;
     --surface-2: #182235;
@@ -146,11 +145,11 @@ a {
     display: none;
 }
 
-body.dark .admin-brand .logo-dark {
+body:not(.light) .admin-brand .logo-dark {
     display: none;
 }
 
-body.dark .admin-brand .logo-light {
+body:not(.light) .admin-brand .logo-light {
     display: block;
 }
 
