@@ -1,0 +1,268 @@
+/*==========================================================
+FLORIN GLOBAL RESPONSIVE LAYOUT
+Loaded last so mobile/tablet rules are predictable.
+==========================================================*/
+
+html, body{
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+}
+
+.container{
+    width:min(1320px, calc(100% - 40px));
+    margin-inline:auto;
+}
+
+@media (max-width: 1200px){
+    .container{
+        width:min(1100px, calc(100% - 36px));
+    }
+    .nav-links{ gap:14px; }
+    .nav-links a{ font-size:14px; }
+    section{ padding:82px 0; }
+}
+
+@media (max-width: 991px){
+    .top-header{ display:none; }
+
+    .navbar .container{
+        min-height:70px;
+        gap:10px;
+    }
+
+    .nav-links{
+        position:fixed;
+        top:70px;
+        right:-100%;
+        width:min(320px, 86vw);
+        height:calc(100dvh - 70px);
+        padding:28px 20px;
+        background:#091827;
+        border-left:1px solid rgba(255,255,255,.08);
+        display:flex;
+        flex-direction:column;
+        align-items:stretch;
+        justify-content:flex-start;
+        gap:6px;
+        overflow-y:auto;
+        box-shadow:-20px 0 50px rgba(0,0,0,.25);
+        transition:right .3s ease;
+        z-index:9998;
+    }
+
+    .nav-links.active{ right:0; }
+
+    .nav-links a{
+        padding:13px 12px;
+        border-radius:12px;
+        font-size:15px;
+    }
+
+    .nav-links a:hover{
+        background:rgba(66,165,245,.10);
+    }
+
+    .header-actions{
+        gap:7px;
+    }
+
+    .auth-link span{ display:none; }
+
+    .mobile-menu{
+        display:flex !important;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .offers-grid,
+    .hotels-grid,
+    .flights-grid,
+    .destination-grid,
+    .services-grid,
+    .why-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media (max-width: 767px){
+    .container{
+        width:calc(100% - 28px);
+    }
+
+    section{
+        padding:58px 0;
+    }
+
+    .section-header{
+        max-width:100%;
+        margin-bottom:32px;
+        padding-inline:4px;
+    }
+
+    .section-header h2{
+        font-size:clamp(28px,8vw,38px);
+    }
+
+    .section-header p{
+        font-size:15px;
+    }
+
+    .offers-grid,
+    .hotels-grid,
+    .flights-grid,
+    .destination-grid,
+    .services-grid,
+    .why-grid{
+        grid-template-columns:1fr;
+        gap:16px;
+    }
+
+    .offer-card,
+    .hotel-card,
+    .tour-card{
+        width:100%;
+        min-width:0;
+    }
+
+    .offer-card{
+        flex-direction:row;
+        align-items:stretch;
+        min-height:170px;
+    }
+
+    .offer-card img{
+        width:38%;
+        min-width:130px;
+        height:auto !important;
+        min-height:170px;
+        object-fit:cover;
+    }
+
+    .offer-content{
+        min-width:0;
+        flex:1;
+        padding:16px;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+    }
+
+    .offer-content h3{
+        font-size:19px;
+        margin-bottom:6px;
+    }
+
+    .offer-content p{
+        font-size:13px;
+        margin-bottom:12px;
+    }
+
+    .offer-content a{
+        width:100%;
+        padding:10px 12px;
+        font-size:13px;
+    }
+
+    .hotel-card img,
+    .tour-card img{
+        height:190px;
+    }
+
+    .service-card,
+    .why-card{
+        padding:28px 20px;
+    }
+
+    .destination-card{
+        height:320px;
+    }
+
+    .booking-search{
+        margin-top:-35px;
+    }
+
+    .search-card{
+        padding:20px;
+        border-radius:22px;
+    }
+
+    .search-tabs{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:8px;
+    }
+
+    .search-tabs button{
+        width:100%;
+    }
+
+    .booking-form{
+        grid-template-columns:1fr !important;
+        gap:13px;
+    }
+
+    .hero{
+        min-height:430px;
+    }
+
+    .hero-content h1{
+        font-size:clamp(32px,9vw,44px);
+    }
+
+    .hero-content p{
+        font-size:15px;
+    }
+
+    .hero-buttons a{
+        width:100%;
+        max-width:280px;
+    }
+
+    .header-actions #langToggle{
+        padding-inline:12px;
+        font-size:12px;
+    }
+
+    .header-actions button{
+        width:40px;
+        height:40px;
+    }
+
+    .logo img{
+        height:40px !important;
+        max-width:125px;
+    }
+}
+
+@media (max-width:420px){
+    .container{
+        width:calc(100% - 20px);
+    }
+
+    .offer-card{
+        min-height:150px;
+    }
+
+    .offer-card img{
+        min-width:112px;
+        min-height:150px;
+        width:36%;
+    }
+
+    .offer-content{
+        padding:12px;
+    }
+
+    .offer-content h3{
+        font-size:17px;
+    }
+
+    .offer-content a{
+        padding:9px 8px;
+    }
+
+    .auth-link{
+        font-size:12px;
+    }
+}
