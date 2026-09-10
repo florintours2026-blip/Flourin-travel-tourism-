@@ -1,65 +1,111 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // FLORIN bootstrap administrator UID supplied for this project.
-    // This is not a secret; Firebase Auth still requires a valid signed-in user token.
-    function bootstrapAdmin() {
-      return request.auth != null && request.auth.uid == "7nE6QoTEPFOk0IhwcZUnymkyzoY2";
-    }
-    function signedIn() { return request.auth != null; }
-    function isAdmin() {
-      return bootstrapAdmin()
-        || (signedIn()
-          && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
-          && (get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true
-              || get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == "true"));
+
+    // FLORIN bootstrap administrator UID.
+    // Firebase Authentication must still authenticate the user.
+    function signedIn() {
+      return request.auth != null;
     }
 
+    function bootstrapAdmin() {
+      return signedIn()
+        && request.auth.uid == "7nE6QoTEPFOk0IhwcZUnymkyzoY2";
+    }
+
+    function isAdmin() {
+      return bootstrapAdmin()
+        || (
+          signedIn()
+          && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+          && (
+            get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true
+            || get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == "true"
+          )
+        );
+    }
+
+    // =========================
+    // ADMIN ACCOUNTS
+    // =========================
     match /admins/{userId} {
-      allow read: if signedIn() && request.auth.uid == userId;
+      allow read: if signedIn() && request.auth.uid == userId || isAdmin();
       allow create, update, delete: if isAdmin();
     }
 
-
+    // =========================
+    // EMPLOYEES
+    // =========================
     match /employees/{userId} {
       allow read: if (signedIn() && request.auth.uid == userId) || isAdmin();
       allow create, update, delete: if isAdmin();
     }
 
+    // =========================
+    // CUSTOMER PROFILES
+    // =========================
     match /users/{userId} {
-      allow create, update: if signedIn() && request.auth.uid == userId;
+      allow create: if signedIn() && request.auth.uid == userId;
       allow read: if (signedIn() && request.auth.uid == userId) || isAdmin();
+      allow update: if (signedIn() && request.auth.uid == userId) || isAdmin();
       allow delete: if isAdmin();
     }
 
+    // =========================
+    // FLIGHT OFFERS
+    // =========================
     match /offers/{offerId} {
       allow read: if true;
       allow create, update, delete: if isAdmin();
     }
 
+    // =========================
+    // TOUR PACKAGES
+    // =========================
     match /tourPackages/{packageId} {
       allow read: if true;
       allow create, update, delete: if isAdmin();
     }
 
+    // =========================
+    // AIRLINES
+    // =========================
     match /airlines/{airlineId} {
       allow read: if true;
       allow create, update, delete: if isAdmin();
     }
 
+    // =========================
+    // BOOKINGS
+    // =========================
     match /bookings/{bookingId} {
+      // Customers may submit a booking without being an admin.
       allow create: if true;
       allow read, update, delete: if isAdmin();
     }
 
+    // =========================
+    // ACTIVITY LOGS
+    // =========================
     match /activityLogs/{logId} {
-      allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid;
       allow read, update, delete: if isAdmin();
     }
 
+    // =========================
+    // PUBLIC SITE CONTENT
+    // =========================
     match /siteContent/{contentId} {
       allow read: if true;
       allow create, update, delete: if isAdmin();
+    }
+
+    // =========================
+    // DENY EVERYTHING ELSE
+    // =========================
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

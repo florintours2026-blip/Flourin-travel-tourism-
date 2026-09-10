@@ -1,37 +1,73 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    function signedIn() { return request.auth != null; }
-    function isAdmin() {
-      return signedIn()
-        && (request.auth.uid == "7nE6QoTEPFOk0IhwcZUnymkyzoY2"
-          || (firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid))
-              && (firestore.get(/databases/(default)/documents/admins/$(request.auth.uid)).data.active == true
-                  || firestore.get(/databases/(default)/documents/admins/$(request.auth.uid)).data.active == "true")));
+
+    function signedIn() {
+      return request.auth != null;
     }
 
+    function bootstrapAdmin() {
+      return signedIn()
+        && request.auth.uid == "7nE6QoTEPFOk0IhwcZUnymkyzoY2";
+    }
+
+    function isAdmin() {
+      return bootstrapAdmin()
+        || (
+          signedIn()
+          && firestore.exists(
+            /databases/(default)/documents/admins/$(request.auth.uid)
+          )
+          && (
+            firestore.get(
+              /databases/(default)/documents/admins/$(request.auth.uid)
+            ).data.active == true
+            || firestore.get(
+              /databases/(default)/documents/admins/$(request.auth.uid)
+            ).data.active == "true"
+          )
+        );
+    }
+
+    function validImage() {
+      return request.resource != null
+        && request.resource.size < 8 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // =========================
+    // FLIGHT OFFER IMAGES
+    // =========================
     match /offers/{offerId}/{fileName} {
       allow read: if true;
-      allow write: if isAdmin()
-        && request.resource.size < 8 * 1024 * 1024
-        && request.resource.contentType.matches('image/.*');
+      allow write: if isAdmin() && validImage();
       allow delete: if isAdmin();
     }
 
+    // =========================
+    // TOUR PACKAGE IMAGES
+    // =========================
     match /packages/{packageId}/{fileName} {
       allow read: if true;
-      allow write: if isAdmin()
-        && request.resource.size < 8 * 1024 * 1024
-        && request.resource.contentType.matches('image/.*');
+      allow write: if isAdmin() && validImage();
       allow delete: if isAdmin();
     }
 
+    // =========================
+    // AIRLINE LOGOS
+    // =========================
     match /airlines/{airlineId}/{fileName} {
       allow read: if true;
       allow write: if isAdmin()
+        && request.resource != null
         && request.resource.size < 4 * 1024 * 1024
         && request.resource.contentType.matches('image/.*');
       allow delete: if isAdmin();
+    }
+
+    // Deny every other Storage path.
+    match /{allPaths=**} {
+      allow read, write: if false;
     }
   }
 }
