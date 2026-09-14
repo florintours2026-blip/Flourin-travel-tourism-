@@ -1,7 +1,338 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="FLORIN Travel & Tourism — طلبات وحجوزات السفر والفنادق والتأشيرات والبرامج السياحية"><title>FLORIN | السفر والسياحة</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/florin-v2.css"></head><body>
-<header class="site-header"><div class="container nav-wrap"><a class="logo" href="index.html"><img class=" logo-dark" src="assets/images/logo/logo-dark.png"alt="FLORIN Travel & Tourism"><img class=" logo-light" src="assets/images/logo/logo-light.png"alt="FLORIN Travel & Tourism"></a><nav class="main-nav"><a class="active" href="index.html">الرئيسية</a><a href="flights.html">رحلات الطيران</a><a href="offers.html">الفنادق والعروض</a><a href="booking.html">طلب حجز</a><a href="visas.html">التأشيرات</a><a href="contact.html">تواصل معنا</a></nav><div class="nav-actions"><button id="themeToggle" aria-label="المظهر">◐</button><button id="langToggle" aria-label="اللغة">AR / EN</button><button class="mobile-menu">☰</button></div></div></header>
-<main><section class="home-hero"><div class="container hero-grid"><div><span class="eyebrow">FLORIN TRAVEL & TOURISM</span><h1>من طلب العميل إلى تأكيد الحجز — <em>كل شيء في مكان واحد</em></h1><p>طيران، فنادق، بكجات سياحية، عمرة، تأشيرات وخدمات سفر. اختر الخدمة وأرسل طلبك، وفريق فلورين يتابع معك حتى التأكيد.</p><div class="hero-actions"><a class="btn-primary" href="flights.html">ابحث عن رحلة</a><a class="btn-secondary" href="booking.html">أرسل طلبًا مخصصًا</a></div></div><div class="hero-visual"><img src="assets/images/hero/hero-4.png" alt="FLORIN travel" loading="eager"><div class="floating-card"><b>24/7</b><span>استقبال الطلبات</span></div></div></div></section>
-<section class="container quick-services"><div class="section-title"><span class="eyebrow">SERVICES</span><h2>خدمات فلورين</h2></div><div class="service-grid"><a href="flights.html" class="service-card"><i class="fa-solid fa-plane-departure"></i><b>حجز الطيران</b><span>بحث باسم المطار أو IATA</span></a><a href="offers.html" class="service-card"><i class="fa-solid fa-hotel"></i><b>الفنادق</b><span>أكثر من عرض داخل كل وجهة</span></a><a href="offers.html" class="service-card"><i class="fa-solid fa-map-location-dot"></i><b>البكجات السياحية</b><span>برامج قابلة للتخصيص</span></a><a href="visas.html" class="service-card"><i class="fa-solid fa-passport"></i><b>التأشيرات</b><span>طلبات إلكترونية ومتابعة</span></a><a href="security-clearance.html" class="service-card"><i class="fa-solid fa-shield-halved"></i><b>الموافقات الأمنية</b><span>تقديم ومتابعة الطلب</span></a><a href="booking.html" class="service-card"><i class="fa-solid fa-headset"></i><b>طلب مخصص</b><span>إذا لم تجد العرض المطلوب</span></a></div></section>
-<section class="container featured"><div class="section-title"><span class="eyebrow">WHY FLORIN</span><h2>مصمم لاستقبال طلبات العملاء</h2></div><div class="feature-grid"><div><strong>بحث ذكي للمطارات</strong><p>اكتب CAI أو اسم القاهرة، وستظهر بيانات المطار وكود IATA.</p></div><div><strong>عروض بخصومات</strong><p>الإدارة تحدد خصمًا كنسبة أو مبلغ ويظهر السعر القديم والجديد تلقائيًا.</p></div><div><strong>صور وعروض من الإدارة</strong><p>رفع صور متعددة مباشرة إلى Firebase Storage وربطها بالعرض.</p></div><div><strong>ترحيب باسم العميل</strong><p id="homeGreeting">سجّل الدخول ليظهر اسمك في الموقع.</p></div></div></section>
-<section class="cta-band"><div class="container"><div><span class="eyebrow">FLORIN</span><h2>لديك طلب مختلف؟</h2><p>أرسل التفاصيل وسيتواصل معك الفريق لتجهيز العرض المناسب.</p></div><a class="btn-primary" href="booking.html">ابدأ الطلب</a></div></section></main><footer class="site-footer"><div class="container"><b>FLORIN Travel & Tourism Agency</b><span>+201041936473</span><span>بنكك · بنك أبوظبي الإسلامي · VISA · Vodafone Cash</span></div></footer>
-<script type="module" src="assets/js/main.js"></script><script type="module" src="assets/js/navbar-auth.js"></script><script type="module" src="assets/js/home-v2.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فلورين للسفر والسياحة | Florin Travel & Tourism</title>
+  <meta name="description" content="فلورين للسفر والسياحة - عالم أقرب إليك. حجوزات طيران، فنادق، تأشيرات، وبرامج سياحية.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dark.css">
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="header" id="header">
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div class="top-info">
+        <a href="mailto:florintoursim@gmail.com">
+          <i class="fa-solid fa-envelope"></i>
+          <span>florintoursim@gmail.com</span>
+        </a>
+        <a href="https://wa.me/201041936473" target="_blank">
+          <i class="fa-brands fa-whatsapp"></i>
+          <span>+20 104 193 6473</span>
+        </a>
+      </div>
+      <div class="top-actions">
+        <button class="lang-switch" id="langSwitch" title="Change Language">
+          <i class="fa-solid fa-globe"></i>
+          <span class="lang-label">EN</span>
+        </button>
+        <button class="theme-switch" id="themeSwitch" title="Dark / Light Mode">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navbar -->
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo">
+        <img src="images/logo.png" alt="Florin Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <span class="logo-fallback">FLORIN</span>
+      </a>
+
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html" class="active" data-i18n="nav.home">الرئيسية</a></li>
+        <li><a href="flights.html" data-i18n="nav.flights">حجوزات الطيران</a></li>
+        <li><a href="hotels.html" data-i18n="nav.hotels">حجز الفنادق</a></li>
+        <li><a href="visas.html" data-i18n="nav.visas">خدمات التأشيرات</a></li>
+        <li><a href="ads.html" data-i18n="nav.ads">الإعلانات</a></li>
+        <li><a href="#contact" data-i18n="nav.contact">تواصل معنا</a></li>
+      </ul>
+
+      <a href="admin.html" class="btn-admin">
+        <i class="fa-solid fa-user-shield"></i>
+        <span data-i18n="nav.admin">لوحة الإدارة</span>
+      </a>
+
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- ============ HERO SECTION ============ -->
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1920&q=80');"></div>
+
+  <div class="container hero-content">
+    <div class="hero-text">
+      <span class="hero-badge">
+        <i class="fa-solid fa-star"></i>
+        <span data-i18n="hero.badge">وكالة معتمدة لخدمات السفر</span>
+      </span>
+      <h1 class="hero-title" data-i18n="hero.title">
+        فلورين للسفر والسياحة
+      </h1>
+      <p class="hero-subtitle" data-i18n="hero.subtitle">
+        عالم أقرب إليك — نرتب لك رحلتك من البداية حتى الوصول
+      </p>
+
+      <!-- Search Box -->
+      <div class="search-box">
+        <div class="search-tabs">
+          <button class="tab active" data-tab="flights">
+            <i class="fa-solid fa-plane"></i>
+            <span data-i18n="search.flights">طيران</span>
+          </button>
+          <button class="tab" data-tab="hotels">
+            <i class="fa-solid fa-hotel"></i>
+            <span data-i18n="search.hotels">فنادق</span>
+          </button>
+          <button class="tab" data-tab="visas">
+            <i class="fa-solid fa-passport"></i>
+            <span data-i18n="search.visas">تأشيرات</span>
+          </button>
+        </div>
+
+        <form class="search-form" id="searchForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label data-i18n="search.from">من</label>
+              <input type="text" placeholder="القاهرة" data-i18n-placeholder="search.fromPh">
+            </div>
+            <div class="form-group">
+              <label data-i18n="search.to">إلى</label>
+              <input type="text" placeholder="دبي" data-i18n-placeholder="search.toPh">
+            </div>
+            <div class="form-group">
+              <label data-i18n="search.date">تاريخ السفر</label>
+              <input type="date">
+            </div>
+            <div class="form-group">
+              <label data-i18n="search.passengers">المسافرون</label>
+              <select>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4+</option>
+              </select>
+            </div>
+            <button type="submit" class="btn-search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <span data-i18n="search.btn">ابحث الآن</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="services section" id="services">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title" data-i18n="services.title">خدماتنا</h2>
+      <p class="section-sub" data-i18n="services.sub">نقدم لك مجموعة متكاملة من خدمات السفر والسياحة</p>
+    </div>
+
+    <div class="services-grid">
+      <a href="flights.html" class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-plane-departure"></i></div>
+        <h3 data-i18n="services.flights">حجوزات الطيران</h3>
+        <p data-i18n="services.flightsDesc">أفضل الأسعار على جميع الخطوط الجوية</p>
+      </a>
+
+      <a href="hotels.html" class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-hotel"></i></div>
+        <h3 data-i18n="services.hotels">حجز الفنادق</h3>
+        <p data-i18n="services.hotelsDesc">فنادق ومنتجعات في كل أنحاء العالم</p>
+      </a>
+
+      <a href="visas.html" class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-passport"></i></div>
+        <h3 data-i18n="services.visas">خدمات التأشيرات</h3>
+        <p data-i18n="services.visasDesc">إجراءات سريعة وموثوقة لجميع التأشيرات</p>
+      </a>
+
+      <a href="#" class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-umbrella-beach"></i></div>
+        <h3 data-i18n="services.packages">البرامج السياحية</h3>
+        <p data-i18n="services.packagesDesc">عروض وباقات سياحية متكاملة</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURED DESTINATIONS ============ -->
+<section class="destinations section">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title" data-i18n="dest.title">أشهر الوجهات</h2>
+      <p class="section-sub" data-i18n="dest.sub">اكتشف أجمل الأماكن حول العالم</p>
+    </div>
+
+    <div class="dest-grid">
+      <div class="dest-card" style="background-image: url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80');">
+        <div class="dest-overlay">
+          <h3 data-i18n="dest.dubai">دبي</h3>
+          <p data-i18n="dest.dubaiDesc">مدينة الأضواء والفخامة</p>
+        </div>
+      </div>
+
+      <div class="dest-card" style="background-image: url('https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=800&q=80');">
+        <div class="dest-overlay">
+          <h3 data-i18n="dest.paris">باريس</h3>
+          <p data-i18n="dest.parisDesc">مدينة الحب والأناقة</p>
+        </div>
+      </div>
+
+      <div class="dest-card" style="background-image: url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80');">
+        <div class="dest-overlay">
+          <h3 data-i18n="dest.london">لندن</h3>
+          <p data-i18n="dest.londonDesc">التاريخ والحداثة معاً</p>
+        </div>
+      </div>
+
+      <div class="dest-card" style="background-image: url('https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=800&q=80');">
+        <div class="dest-overlay">
+          <h3 data-i18n="dest.istanbul">إسطنبول</h3>
+          <p data-i18n="dest.istanbulDesc">حيث يلتقي الشرق والغرب</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY US ============ -->
+<section class="why-us section">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title" data-i18n="why.title">لماذا فلورين؟</h2>
+      <p class="section-sub" data-i18n="why.sub">ثقة عملائنا هي رأس مالنا</p>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3 data-i18n="why.trust">موثوقية وأمان</h3>
+        <p data-i18n="why.trustDesc">تعاملات آمنة وشفافة 100%</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><i class="fa-solid fa-tags"></i></div>
+        <h3 data-i18n="why.price">أفضل الأسعار</h3>
+        <p data-i18n="why.priceDesc">نضمن لك أرخص سعر متاح</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><i class="fa-solid fa-headset"></i></div>
+        <h3 data-i18n="why.support">دعم 24/7</h3>
+        <p data-i18n="why.supportDesc">فريقنا جاهز لخدمتك في أي وقت</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><i class="fa-solid fa-bolt"></i></div>
+        <h3 data-i18n="why.fast">حجز سريع</h3>
+        <p data-i18n="why.fastDesc">أنجز حجزك في دقائق</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA CONTACT ============ -->
+<section class="cta-contact section" id="contact">
+  <div class="container">
+    <div class="cta-box">
+      <div class="cta-text">
+        <h2 data-i18n="cta.title">جاهز لرحلتك القادمة؟</h2>
+        <p data-i18n="cta.sub">تواصل معنا الآن واحصل على عرض سعر فوري</p>
+      </div>
+      <div class="cta-buttons">
+        <a href="https://wa.me/201041936473" target="_blank" class="btn btn-whatsapp">
+          <i class="fa-brands fa-whatsapp"></i>
+          <span data-i18n="cta.whatsapp">واتساب</span>
+        </a>
+        <a href="tel:+201041936473" class="btn btn-call">
+          <i class="fa-solid fa-phone"></i>
+          <span data-i18n="cta.call">اتصل بنا</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <img src="images/logo.png" alt="Florin" class="footer-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <span class="logo-fallback footer-logo">FLORIN</span>
+        <p data-i18n="footer.about">وكالة فلورين للسفر والسياحة — عالم أقرب إليك. نرتب لك كل تفاصيل رحلتك باحترافية.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4 data-i18n="footer.links">روابط سريعة</h4>
+        <ul>
+          <li><a href="index.html" data-i18n="nav.home">الرئيسية</a></li>
+          <li><a href="flights.html" data-i18n="nav.flights">حجوزات الطيران</a></li>
+          <li><a href="hotels.html" data-i18n="nav.hotels">حجز الفنادق</a></li>
+          <li><a href="visas.html" data-i18n="nav.visas">خدمات التأشيرات</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 data-i18n="footer.contact">تواصل معنا</h4>
+        <ul class="contact-list">
+          <li><i class="fa-solid fa-envelope"></i> florintoursim@gmail.com</li>
+          <li><i class="fa-brands fa-whatsapp"></i> +20 104 193 6473</li>
+          <li><i class="fa-solid fa-location-dot"></i> <span data-i18n="footer.address">مصر</span></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 data-i18n="footer.follow">تابعنا</h4>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="https://wa.me/201041936473" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© <span id="year"></span> Florin Travel & Tourism. <span data-i18n="footer.rights">جميع الحقوق محفوظة</span></p>
+    </div>
+  </div>
+</footer>
+
+<!-- Floating WhatsApp -->
+<a href="https://wa.me/201041936473" target="_blank" class="float-whatsapp" aria-label="WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<!-- Scripts -->
+<script src="js/translations.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>
