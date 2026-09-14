@@ -4,3 +4,262 @@
 @media(max-width:600px){.nav-wrap{min-height:68px}.logo img{width:105px}.welcome-user{display:none}.page-hero,.home-hero{padding:45px 0 25px}.home-hero h1,.page-hero h1{font-size:32px}.service-grid,.feature-grid,.flight-grid,.catalog-grid,.form-grid,.catalog-filter{grid-template-columns:1fr}.flight-search-grid{grid-template-columns:1fr}.results-head,.group-head,.cta-band .container{align-items:flex-start;flex-direction:column}.hero-visual{order:-1}.hero-visual img{aspect-ratio:16/11}.site-footer .container{display:grid}.booking-container{padding:18px}}
 
 .logo-light{display:none!important}.logo-dark{display:block!important}body.light .logo-dark{display:none!important}body.light .logo-light{display:block!important}
+
+/* ==================================================
+   FLORIN — Responsive Fixes (Mobile & Tablet)
+   ================================================== */
+
+/* ====== Fix 1: Search Box on Mobile ====== */
+@media (max-width: 768px) {
+  
+  /* اجعل نموذج البحث عموديًا */
+  .search-box {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .search-tabs {
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .search-tabs .tab {
+    font-size: 0.8rem;
+    padding: 8px 6px;
+  }
+
+  .search-tabs .tab span {
+    display: none; /* أخفِ النص، أبقِ الأيقونة */
+  }
+
+  .search-tabs .tab i {
+    font-size: 1.1rem;
+  }
+
+  .search-form .form-row {
+    grid-template-columns: 1fr 1fr; /* عمودان */
+    gap: 10px;
+  }
+
+  .search-form .form-group {
+    width: 100%;
+  }
+
+  .search-form .btn-search {
+    grid-column: span 2; /* زر بعرض كامل */
+    width: 100%;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  /* ====== Fix 2: Navbar on Mobile ====== */
+  .top-strip-inner {
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 0;
+    text-align: center;
+  }
+
+  .top-info {
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.75rem;
+  }
+
+  .top-info a {
+    justify-content: center;
+  }
+
+  .top-actions {
+    justify-content: center;
+  }
+
+  .nav-wrap {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 16px;
+  }
+
+  .logo img {
+    height: 42px;
+  }
+
+  .main-nav {
+    display: none; /* أخفِ القائمة الأفقية */
+    width: 100%;
+    flex-direction: column;
+    gap: 4px;
+    order: 3;
+    padding: 12px 0;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .main-nav.open {
+    display: flex;
+  }
+
+  .main-nav a {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    text-align: start;
+  }
+
+  .nav-actions {
+    margin-inline-start: auto;
+  }
+
+  .nav-actions .btn-admin span {
+    display: none;
+  }
+
+  .nav-actions .btn-admin {
+    padding: 8px 12px;
+  }
+
+  /* ====== Fix 3: Hero on Mobile ====== */
+  .home-hero {
+    padding: 60px 0 40px;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-content h1 {
+    font-size: 1.8rem;
+    line-height: 1.3;
+  }
+
+  .hero-lead {
+    font-size: 1rem;
+    margin-bottom: 24px;
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    padding: 6px 14px;
+  }
+
+  /* ====== Fix 4: Destinations on Mobile ====== */
+  .dest-grid {
+    grid-template-columns: 1fr; /* بطاقة واحدة بعرض كامل */
+    gap: 16px;
+  }
+
+  .dest-card {
+    height: 240px;
+  }
+
+  .dest-overlay h3 {
+    font-size: 1.3rem;
+  }
+
+  /* ====== Fix 5: Services on Mobile ====== */
+  .service-grid {
+    grid-template-columns: 1fr 1fr; /* بطاقتان في الصف */
+    gap: 12px;
+  }
+
+  .service-card {
+    padding: 22px 14px;
+  }
+
+  .service-card i {
+    font-size: 1.6rem;
+  }
+
+  .service-card b {
+    font-size: 0.92rem;
+  }
+
+  .service-card span {
+    font-size: 0.78rem;
+  }
+
+  /* ====== Fix 6: Why Us on Mobile ====== */
+  .feature-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* ====== Fix 7: CTA Band ====== */
+  .cta-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    padding: 32px 20px;
+  }
+
+  .cta-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cta-actions a {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ====== Fix 8: Footer ====== */
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    text-align: center;
+  }
+
+  .footer-col ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .contact-list {
+    align-items: center;
+  }
+
+  .contact-list li {
+    justify-content: center;
+  }
+
+  .social-links {
+    justify-content: center;
+  }
+
+  .footer-bottom {
+    text-align: center;
+    font-size: 0.8rem;
+  }
+}
+
+/* ====== شاشات صغيرة جدًا ====== */
+@media (max-width: 480px) {
+  .service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .section-title h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* ====== Tablet ====== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .service-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .dest-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
