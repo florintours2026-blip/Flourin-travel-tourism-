@@ -1,4 +1,238 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>الفنادق | FLORIN</title><style>
-body{margin:0;background:#061525;color:#fff;font-family:Arial,Tahoma,sans-serif;direction:rtl}.wrap{width:min(900px,92%);margin:80px auto}.card{background:#102b45;border:1px solid #ffffff12;border-radius:24px;padding:30px}.badge{color:#48aaf2}.btn{display:inline-flex;margin-top:20px;padding:13px 20px;background:#2495e8;border-radius:12px;font-weight:800}
-p{color:#aab9c8;line-height:1.9}
-</style></head><body><main class="wrap"><div class="card"><span class="badge">FLORIN Travel & Tourism</span><h1>حجوزات الفنادق</h1><p>نساعدك في اختيار وحجز الفنادق والمنتجعات المناسبة حسب الوجهة والتاريخ والميزانية.</p><a class="btn" href="booking.html?type=hotel">العودة إلى الموقع</a></div></main></body></html>
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="حجز الفنادق والمنتجعات حول العالم مع فلورين للسفر والسياحة">
+<title>حجز الفنادق | FLORIN Travel & Tourism</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/florin-v2.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="top-strip">
+    <div class="container top-strip-inner">
+      <div class="top-info">
+        <a href="mailto:florintoursim@gmail.com"><i class="fa-solid fa-envelope"></i> florintoursim@gmail.com</a>
+        <a href="https://wa.me/201041936473" target="_blank"><i class="fa-brands fa-whatsapp"></i> +20 104 193 6473</a>
+      </div>
+      <div class="top-actions">
+        <button id="langToggle" class="lang-btn" aria-label="اللغة">
+          <i class="fa-solid fa-globe"></i> <span>EN</span>
+        </button>
+        <button id="themeToggle" class="theme-btn" aria-label="المظهر">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container nav-wrap">
+    <a class="logo" href="index.html">
+      <img class="logo-dark" src="assets/images/logo/logo-dark.png" alt="FLORIN">
+      <img class="logo-light" src="assets/images/logo/logo-light.png" alt="FLORIN">
+    </a>
+    <nav class="main-nav">
+      <a href="index.html">الرئيسية</a>
+      <a href="flights.html">حجوزات الطيران</a>
+      <a class="active" href="hotels.html">حجز الفنادق</a>
+      <a href="visas.html">خدمات التأشيرات</a>
+      <a href="tours.html">البرامج السياحية</a>
+      <a href="contact.html">تواصل معنا</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn-admin" href="admin.html">
+        <i class="fa-solid fa-user-shield"></i>
+        <span>لوحة الإدارة</span>
+      </a>
+      <button class="mobile-menu" aria-label="القائمة">☰</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">FLORIN HOTELS</span>
+    <h1>حجز الفنادق والمنتجعات</h1>
+    <p>اختر وجهتك، حدّد التاريخ، وسيتواصل معك فريق فلورين لاختيار أفضل فندق يناسب ميزانيتك وذوقك.</p>
+    <div class="hero-actions" style="justify-content:center;margin-top:25px;">
+      <a class="btn-primary" href="offers.html">
+        <i class="fa-solid fa-hotel"></i> استعرض عروض الفنادق
+      </a>
+      <a class="btn-secondary" href="booking.html?type=hotel">
+        <i class="fa-solid fa-paper-plane"></i> طلب حجز مخصص
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="container quick-services section">
+  <div class="section-title">
+    <span class="eyebrow">WHY BOOK HOTELS WITH US</span>
+    <h2>لماذا تحجز الفنادق مع فلورين؟</h2>
+  </div>
+  <div class="service-grid">
+    <article class="service-card">
+      <i class="fa-solid fa-globe"></i>
+      <b>فنادق حول العالم</b>
+      <span>شراكات مع أكثر من 500 ألف فندق ومنتجع</span>
+    </article>
+    <article class="service-card">
+      <i class="fa-solid fa-tags"></i>
+      <b>أفضل الأسعار</b>
+      <span>أسعار تنافسية وعروض حصرية للعملاء</span>
+    </article>
+    <article class="service-card">
+      <i class="fa-solid fa-star"></i>
+      <b>تصنيفات موثوقة</b>
+      <span>من 3 إلى 5 نجوم، مع معلومات كاملة عن المرافق</span>
+    </article>
+    <article class="service-card">
+      <i class="fa-solid fa-headset"></i>
+      <b>دعم كامل</b>
+      <span>متابعة قبل وأثناء وبعد الحجز</span>
+    </article>
+  </div>
+</section>
+
+<section class="destinations section">
+  <div class="container">
+    <div class="section-title">
+      <span class="eyebrow">POPULAR HOTELS</span>
+      <h2>أشهر الوجهات الفندقية</h2>
+      <p class="section-sub">اختر وجهتك المفضلة واستعرض الفنادق المتاحة</p>
+    </div>
+    <div class="dest-grid">
+      <a href="offers.html" class="dest-card" style="background-image:url('assets/images/hotels/dubai-hotel.webp')">
+        <div class="dest-overlay">
+          <h3>فنادق دبي</h3>
+          <p>فخامة ورفاهية لا مثيل لها</p>
+        </div>
+      </a>
+      <a href="offers.html" class="dest-card" style="background-image:url('assets/images/hotels/maldives-resort.webp')">
+        <div class="dest-overlay">
+          <h3>منتجعات المالديف</h3>
+          <p>فيلات فوق الماء وجزر خاصة</p>
+        </div>
+      </a>
+      <a href="offers.html" class="dest-card" style="background-image:url('assets/images/hotels/sharm-hotel.webp')">
+        <div class="dest-overlay">
+          <h3>فنادق شرم الشيخ</h3>
+          <p>إقامة على البحر الأحمر</p>
+        </div>
+      </a>
+      <a href="offers.html" class="dest-card" style="background-image:url('assets/images/offers/cleaned/istanbul-offer-clean.png')">
+        <div class="dest-overlay">
+          <h3>فنادق إسطنبول</h3>
+          <p>الشرق والغرب في مكان واحد</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="container quick-services section">
+  <div class="section-title">
+    <span class="eyebrow">HOW IT WORKS</span>
+    <h2>كيف تحجز فندقك؟</h2>
+  </div>
+  <div class="service-grid">
+    <article class="service-card">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <b>1. اختر الوجهة</b>
+      <span>حدد المدينة والتاريخ وعدد الليالي</span>
+    </article>
+    <article class="service-card">
+      <i class="fa-solid fa-list-check"></i>
+      <b>2. اختر الفندق</b>
+      <span>قارن بين الفنادق حسب السعر والتصنيف</span>
+    </article>
+    <article class="service-card">
+      <i class="fa-solid fa-paper-plane"></i>
+      <b>3. أرسل الطلب</b>
+      <span>املأ بياناتك وسنتواصل معك للتأكيد</span>
+    </article>
+    <article class="service-card">
+      <i class="fa-solid fa-circle-check"></i>
+      <b>4. تأكيد الحجز</b>
+      <span>نؤكد السعر والتوفر وننجز حجزك</span>
+    </article>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container cta-inner">
+    <div class="cta-text">
+      <span class="eyebrow">CONTACT US</span>
+      <h2>لم تجد الفندق الذي تبحث عنه؟</h2>
+      <p>أرسل طلبًا مخصصًا وسنبحث لك عن أفضل العروض</p>
+    </div>
+    <div class="cta-actions">
+      <a class="btn-whatsapp" href="https://wa.me/201041936473" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i> واتساب
+      </a>
+      <a class="btn-call" href="booking.html?type=hotel">
+        <i class="fa-solid fa-paper-plane"></i> طلب حجز
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <img src="assets/images/logo/logo-dark.png" alt="FLORIN" class="footer-logo">
+      <p>وكالة فلورين للسفر والسياحة — عالم أقرب إليك. نرتب لك كل تفاصيل رحلتك باحترافية.</p>
+    </div>
+    <div class="footer-col">
+      <h4>روابط سريعة</h4>
+      <ul>
+        <li><a href="index.html">الرئيسية</a></li>
+        <li><a href="flights.html">حجوزات الطيران</a></li>
+        <li><a href="hotels.html">حجز الفنادق</a></li>
+        <li><a href="visas.html">خدمات التأشيرات</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>تواصل معنا</h4>
+      <ul class="contact-list">
+        <li><i class="fa-solid fa-envelope"></i> florintoursim@gmail.com</li>
+        <li><i class="fa-brands fa-whatsapp"></i> +20 104 193 6473</li>
+        <li><i class="fa-solid fa-location-dot"></i> مصر</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>تابعنا</h4>
+      <div class="social-links">
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="https://wa.me/201041936473" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© <span id="year"></span> FLORIN Travel & Tourism — جميع الحقوق محفوظة</p>
+  </div>
+</footer>
+
+<a href="https://wa.me/201041936473" target="_blank" class="float-whatsapp" aria-label="WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<script type="module" src="assets/js/main.js"></script>
+<script type="module" src="assets/js/navbar-auth.js"></script>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
