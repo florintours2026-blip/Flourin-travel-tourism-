@@ -5,6 +5,7 @@ service cloud.firestore {
     function bootstrapAdmin(){return signedIn() && request.auth.uid=="7nE6QoTEPFOk0IhwcZUnymkyzoY2";}
     function isAdmin(){return bootstrapAdmin() || (signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)) && (get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active==true || get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active=="true"));}
     function owner(uid){return signedIn() && request.auth.uid==uid;}
+    
     match /admins/{uid}{allow read: if owner(uid)||bootstrapAdmin(); allow create,update,delete: if isAdmin();}
     match /users/{uid}{allow create,update: if owner(uid); allow read: if owner(uid)||isAdmin(); allow delete: if isAdmin();}
     match /employees/{uid}{allow read: if owner(uid)||isAdmin(); allow create,update,delete: if isAdmin();}
@@ -12,7 +13,7 @@ service cloud.firestore {
     match /tourPackages/{id}{allow read: if true; allow create,update,delete: if isAdmin();}
     match /airlines/{id}{allow read: if true; allow create,update,delete: if isAdmin();}
     match /media/{id}{allow read: if true; allow create,update,delete: if isAdmin();}
-    match /bookings/{id}{allow create: if true; allow read,update,delete: if isAdmin();}
+    match /bookings/{id}{allow create: if signedIn(); allow read,update,delete: if isAdmin();}
     match /activityLogs/{id}{allow create: if signedIn(); allow read,update,delete: if isAdmin();}
     match /siteContent/{id}{allow read: if true; allow create,update,delete: if isAdmin();}
     match /{document=**}{allow read,write: if false;}
