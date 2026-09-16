@@ -1,5 +1,8 @@
 // FLORIN Travel Catalog — seed data for the static Firebase site.
 // Airport IATA codes and airline IATA codes are identifiers used for search/display.
+// Airline logos: Google Favicon API (reliable, works without uploading assets).
+
+const airlineLogo = (domain) => `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
 
 export const AIRPORTS = [
   {iata:'CAI', city:'القاهرة', cityEn:'Cairo', country:'مصر', countryEn:'Egypt', name:'مطار القاهرة الدولي', nameEn:'Cairo International Airport'},
@@ -13,9 +16,6 @@ export const AIRPORTS = [
   {iata:'EBB', city:'عنتيبي', cityEn:'Entebbe', country:'أوغندا', countryEn:'Uganda', name:'مطار عنتيبي الدولي', nameEn:'Entebbe International Airport'},
   {iata:'IST', city:'إسطنبول', cityEn:'Istanbul', country:'تركيا', countryEn:'Türkiye', name:'مطار إسطنبول الدولي', nameEn:'Istanbul Airport'}
 ];
-
-// Airline logos: Google Favicon API (works 100% of the time)
-const airlineLogo = (domain) => `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
 
 export const AIRLINES = [
   {id:'egyptair', name:'مصر للطيران', nameEn:'EgyptAir', iata:'MS', logo:airlineLogo('egyptair.com')},
