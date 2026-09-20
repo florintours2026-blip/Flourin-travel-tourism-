@@ -325,6 +325,9 @@ function openOfferEditor(existing) {
   html += '<div class="field full"><label>الصورة الرئيسية (URL)</label><input id="e_image" value="' + esc(x.image || '') + '" dir="ltr" placeholder="https://..."></div>';
   html += '<div class="field full"><label>صور إضافية (سطر لكل رابط)</label><textarea id="e_images" rows="4" dir="ltr">' + esc(arr(x.images).filter(v => !String(v).startsWith('data:')).join('\n')) + '</textarea></div>';
   html += '<div class="field full"><label>الوصف القصير</label><textarea id="e_description" rows="3">' + esc(x.description || '') + '</textarea></div>';
+  html += '<div class="field full"><label>رابط المصدر الأصلي (Booking / Agoda / Trip.com / شركة الطيران)</label><input id="e_sourceUrl" value="' + esc(x.sourceUrl || '') + '" dir="ltr" placeholder="https://..."></div>';
+  html += '<div class="field"><label>المصدر</label><select id="e_sourceProvider"><option value="">غير محدد</option><option value="Booking.com"' + (x.sourceProvider === 'Booking.com' ? ' selected' : '') + '>Booking.com</option><option value="Agoda"' + (x.sourceProvider === 'Agoda' ? ' selected' : '') + '>Agoda</option><option value="Trip.com"' + (x.sourceProvider === 'Trip.com' ? ' selected' : '') + '>Trip.com</option><option value="Airline Direct"' + (x.sourceProvider === 'Airline Direct' ? ' selected' : '') + '>شركة الطيران</option><option value="Other"' + (x.sourceProvider === 'Other' ? ' selected' : '') + '>مصدر آخر</option></select></div>';
+  html += '<div class="field"><label>سعر المصدر وقت الإضافة</label><input id="e_sourcePrice" type="number" min="0" value="' + esc(x.sourcePrice ?? x.price ?? '') + '"></div>';
   html += '<div class="field full"><label>ملاحظات</label><textarea id="e_notes" rows="2">' + esc(x.notes || '') + '</textarea></div>';
   html += '</div>';
 
@@ -474,6 +477,10 @@ async function saveOffer(existing) {
       images: images,
       description: $('e_description') ? $('e_description').value.trim() : '',
       notes: $('e_notes') ? $('e_notes').value.trim() : '',
+      sourceUrl: $('e_sourceUrl') ? $('e_sourceUrl').value.trim() : (existing?.sourceUrl || ''),
+      sourceProvider: $('e_sourceProvider') ? $('e_sourceProvider').value : (existing?.sourceProvider || ''),
+      sourcePrice: Number($('e_sourcePrice') ? $('e_sourcePrice').value : 0),
+      fulfillment: { mode: 'manual', bookingByFlorin: true },
       fromIata: $('e_from') ? $('e_from').value.trim().toUpperCase() : '',
       toIata: $('e_to') ? $('e_to').value.trim().toUpperCase() : '',
       airlineId: $('e_airline') ? $('e_airline').value : '',
@@ -671,38 +678,50 @@ function openAirlineEditor(a) {
 async function renderBookings() {
   try {
     const snap = await getDocs(collection(db, 'bookings'));
-    const rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const rows = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => {
+      const ad = a.createdAt?.seconds || 0, bd = b.createdAt?.seconds || 0;
+      return bd - ad;
+    });
     const root = $('bookingTable');
     if (!root) return;
-    let html = '<table class="data-table"><thead><tr><th>الاسم</th><th>الهاتف</th><th>الخدمة</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody>';
+    let html = '<div class="notice" style="margin-bottom:14px">النظام يعمل كـ <b>وسيط حجز يدوي</b>: العميل يختار العرض، ويرسل طلبه، ثم يقوم فريق FLORIN بالحجز الفعلي من رابط المصدر.</div>';
+    html += '<table class="data-table"><thead><tr><th>العميل</th><th>العرض</th><th>الهاتف</th><th>تاريخ السفر</th><th>المسافرون</th><th>السعر المعروض</th><th>الحالة</th><th>المصدر</th><th>إجراء</th></tr></thead><tbody>';
     if (rows.length) {
       rows.forEach(x => {
+        const snapOffer = x.offerSnapshot || {};
+        const sourceUrl = x.sourceUrl || snapOffer.sourceUrl || '';
+        const price = snapOffer.price != null ? money(snapOffer.price, snapOffer.currency) : '—';
         html += '<tr>';
-        html += '<td>' + esc(x.fullName || '') + '</td>';
+        html += '<td><b>' + esc(x.fullName || '') + '</b><br><small>' + esc(x.email || '') + '</small></td>';
+        html += '<td>' + esc(x.offerName || snapOffer.name || x.service || '') + '<br><small>' + esc(x.destination || snapOffer.destination || '') + '</small></td>';
         html += '<td>' + esc(x.phone || '') + '</td>';
-        html += '<td>' + esc(x.service || '') + '</td>';
         html += '<td>' + esc(x.travelDate || '') + '</td>';
-        html += '<td><span class="pill">' + esc(x.status || 'Pending') + '</span></td>';
-        html += '<td><button data-bstatus="' + esc(x.id) + '"><i class="fa-solid fa-rotate"></i></button></td>';
+        html += '<td>' + esc(x.travelers || 1) + '</td>';
+        html += '<td>' + esc(price) + '</td>';
+        html += '<td><select data-bstatus="' + esc(x.id) + '">' +
+          ['جديد','قيد الحجز','تم الحجز','بانتظار تأكيد العميل','مكتمل','ملغى'].map(st => '<option value="'+st+'"'+((x.status || 'جديد')===st?' selected':'')+'>'+st+'</option>').join('') +
+          '</select></td>';
+        html += '<td>' + (sourceUrl ? '<a href="'+esc(sourceUrl)+'" target="_blank" rel="noopener" class="btn-link">فتح المصدر</a>' : '—') + '</td>';
+        html += '<td><button class="small primary" data-bsave="' + esc(x.id) + '"><i class="fa-solid fa-floppy-disk"></i> حفظ</button></td>';
         html += '</tr>';
       });
     } else {
-      html += '<tr><td colspan="6" class="empty">لا توجد طلبات.</td></tr>';
+      html += '<tr><td colspan="9" class="empty">لا توجد طلبات حتى الآن.</td></tr>';
     }
     html += '</tbody></table>';
     root.innerHTML = html;
 
-    document.querySelectorAll('[data-bstatus]').forEach(b => {
+    document.querySelectorAll('[data-bsave]').forEach(b => {
       b.onclick = async () => {
-        const status = prompt('الحالة: Pending / Confirmed / Cancelled / Completed', 'Confirmed');
-        if (status) {
-          await updateDoc(doc(db, 'bookings', b.dataset.bstatus), {
-            status: status,
-            updatedAt: serverTimestamp(),
-            updatedBy: currentUser.uid
-          });
-          renderBookings();
-        }
+        const id = b.dataset.bsave;
+        const select = document.querySelector('[data-bstatus="' + CSS.escape(id) + '"]');
+        if (!select) return;
+        b.disabled = true;
+        try {
+          await updateDoc(doc(db, 'bookings', id), { status: select.value, updatedAt: serverTimestamp(), updatedBy: currentUser.uid });
+          b.innerHTML = '<i class="fa-solid fa-check"></i> تم';
+        } catch (e) { alert(e.message); }
+        finally { setTimeout(() => { b.disabled = false; b.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> حفظ'; }, 900); }
       };
     });
   } catch (e) {
@@ -710,7 +729,6 @@ async function renderBookings() {
     if (root) root.innerHTML = '<div class="notice">تعذر تحميل الطلبات.</div>';
   }
 }
-
 /* ============ USERS ============ */
 
 async function renderUsers() {

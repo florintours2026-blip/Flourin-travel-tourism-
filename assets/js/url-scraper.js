@@ -14,6 +14,7 @@ const PROXIES = [
 const HOSTS = {
   booking: ['booking.com', 'www.booking.com'],
   trip:    ['trip.com', 'www.trip.com', 'uk.trip.com', 'ar.trip.com'],
+  agoda:   ['agoda.com', 'www.agoda.com'],
   travelgo:['travelgo.com', 'travelocity.com', 'www.travelgo.com']
 };
 
@@ -24,6 +25,7 @@ function detectSource(url) {
     const host = new URL(url).hostname.toLowerCase();
     if (host.includes('booking')) return 'booking';
     if (host.includes('trip.com')) return 'trip';
+    if (host.includes('agoda.com')) return 'agoda';
     if (host.includes('travelgo') || host.includes('travelocity')) return 'travelgo';
     return 'unknown';
   } catch {
@@ -198,7 +200,7 @@ export async function scrapeHotelUrl(url) {
   }
 
   if (source === 'unknown') {
-    return { success: false, error: 'الموقع غير مدعوم حاليًا. يدعم النظام: Booking.com، Trip.com، TravelGo/Travelocity' };
+    return { success: false, error: 'الموقع غير مدعوم حاليًا. يدعم النظام: Booking.com، Trip.com، Agoda، TravelGo/Travelocity' };
   }
 
   const { html, error } = await tryFetchViaProxies(url);
@@ -238,6 +240,7 @@ export function getSourceLabel(source) {
   const labels = {
     booking: 'Booking.com',
     trip: 'Trip.com',
+    agoda: 'Agoda',
     travelgo: 'TravelGo',
     unknown: 'موقع غير معروف'
   };
