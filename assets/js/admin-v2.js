@@ -690,7 +690,7 @@ async function renderBookings() {
     const root = $('bookingTable');
     if (!root) return;
     let html = '<div class="notice" style="margin-bottom:14px">النظام يعمل كـ <b>وسيط حجز يدوي</b>: العميل يختار العرض، ويرسل طلبه، ثم يقوم فريق FLORIN بالحجز الفعلي من رابط المصدر.</div>';
-    html += '<table class="data-table"><thead><tr><th>العميل</th><th>العرض</th><th>الهاتف</th><th>تاريخ السفر</th><th>المسافرون</th><th>السعر المعروض</th><th>الحالة</th><th>المصدر</th><th>إجراء</th></tr></thead><tbody>';
+    html += '<table class="data-table"><thead><tr><th>العميل</th><th>العرض</th><th>الهاتف</th><th>تاريخ السفر</th><th>المسافرون</th><th>السعر المعروض</th><th>الحالة</th><th>المصدر</th><th>الدفع والإيصال</th><th>الجواز</th><th>إجراء</th></tr></thead><tbody>';
     if (rows.length) {
       rows.forEach(x => {
         const snapOffer = x.offerSnapshot || {};
@@ -707,11 +707,17 @@ async function renderBookings() {
           ['جديد','قيد الحجز','تم الحجز','بانتظار تأكيد العميل','مكتمل','ملغى'].map(st => '<option value="'+st+'"'+((x.status || 'جديد')===st?' selected':'')+'>'+st+'</option>').join('') +
           '</select></td>';
         html += '<td>' + (sourceUrl ? '<a href="'+esc(sourceUrl)+'" target="_blank" rel="noopener" class="btn-link">فتح المصدر</a>' : '—') + '</td>';
+        const payment = x.paymentMethod ? '<b>' + esc(x.paymentMethod) + '</b>' : '—';
+        const receipt = x.paymentReceiptUrl ? '<a href="'+esc(x.paymentReceiptUrl)+'" target="_blank" rel="noopener" class="btn-link">إيصال الدفع</a>' : 'لا يوجد';
+        const passport = x.passportImageUrl ? '<a href="'+esc(x.passportImageUrl)+'" target="_blank" rel="noopener" class="btn-link">صورة الجواز</a>' : 'لا يوجد';
+        const passportData = x.passport ? '<small>جواز: '+esc(x.passport.number||'')+'<br>الاسم: '+esc(x.passport.name||'')+'<br>الجنسية: '+esc(x.passport.nationality||'')+'<br>الميلاد: '+esc(x.passport.dob||'')+'<br>الانتهاء: '+esc(x.passport.expiry||'')+'</small>' : '';
+        html += '<td>' + payment + '<br>' + receipt + '</td>';
+        html += '<td>' + passport + '<br>' + passportData + '</td>';
         html += '<td><button class="small primary" data-bsave="' + esc(x.id) + '"><i class="fa-solid fa-floppy-disk"></i> حفظ</button></td>';
         html += '</tr>';
       });
     } else {
-      html += '<tr><td colspan="9" class="empty">لا توجد طلبات حتى الآن.</td></tr>';
+      html += '<tr><td colspan="11" class="empty">لا توجد طلبات حتى الآن.</td></tr>';
     }
     html += '</tbody></table>';
     root.innerHTML = html;
