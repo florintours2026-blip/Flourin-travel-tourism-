@@ -14,7 +14,7 @@ function finalPrice(o){
 }
 function card(o){
  const a=airline(o.airlineId); const final=finalPrice(o);
- return `<article class="catalog-card"><div class="catalog-image"><img src="${esc(o.image||'assets/images/offers/cleaned/florin-offer-clean.png')}" alt="${esc(o.name)}" loading="lazy">${o.discount?.enabled?`<span class="discount-badge">${esc(o.discount.label||`خصم ${o.discount.value}${o.discount.type==='percent'?'%':''}`)}</span>`:''}</div><div class="catalog-body"><div class="mini-type">${esc(o.category||'عرض')}</div><h3>${esc(o.name)}</h3>${a?`<div class="catalog-airline">${a.logo?`<img src="${esc(a.logo)}" alt="${esc(a.name)}">`:''}<span>${esc(a.name)} ${a.iata?`(${a.iata})`:''}</span></div>`:''}<p>${esc(o.description||'عرض قابل للتخصيص حسب طلب العميل.')}</p><div class="catalog-bottom"><div>${o.discount?.enabled?`<del>${money(o.price,o.currency)}</del>`:''}<strong>${money(final,o.currency)}</strong></div><a class="btn-primary" href="booking.html?offer=${encodeURIComponent(o.id)}&offerName=${encodeURIComponent(o.name)}">التفاصيل وطلب الحجز</a></div></div></article>`;
+ return `<article class="catalog-card"><div class="catalog-image"><img src="${esc(o.image||'assets/images/offers/cleaned/florin-offer-clean.png')}" alt="${esc(o.name)}" loading="lazy">${o.discount?.enabled?`<span class="discount-badge">${esc(o.discount.label||`خصم ${o.discount.value}${o.discount.type==='percent'?'%':''}`)}</span>`:''}</div><div class="catalog-body"><div class="mini-type">${esc(o.category||'عرض')}</div><h3>${esc(o.name)}</h3>${a?`<div class="catalog-airline">${a.logo?`<img src="${esc(a.logo)}" alt="${esc(a.name)}">`:''}<span>${esc(a.name)} ${a.iata?`(${a.iata})`:''}</span></div>`:''}<p>${esc(o.description||'عرض قابل للتخصيص حسب طلب العميل.')}</p><div class="catalog-bottom"><div>${o.discount?.enabled?`<del>${money(o.price,o.currency)}</del>`:''}<strong>${money(final,o.currency)}</strong></div><a class="btn-primary" href="offer-details.html?id=${encodeURIComponent(o.id)}">التفاصيل وطلب الحجز</a></div></div></article>`;
 }
 function render(){
  const root=document.querySelector('#offersRoot');
@@ -24,7 +24,7 @@ function render(){
  if(q) rows=rows.filter(o=>[o.name,o.destination,o.country,o.category].some(v=>String(v||'').toLowerCase().includes(q)));
  if(category) rows=rows.filter(o=>o.category===category);
  const groups={}; rows.forEach(o=>(groups[o.destination||'عروض متنوعة']??=[]).push(o));
- root.innerHTML=Object.keys(groups).length?Object.entries(groups).map(([dest,list])=>`<section class="destination-group"><div class="group-head"><div><span class="eyebrow">DESTINATION</span><h2>${esc(dest)}</h2></div><span>${list.length} عرض</span></div><div class="catalog-grid">${list.map(card).join('')}</div></section>`).join(''):`<div class="empty-state">لا توجد عروض مطابقة.</div>`;
+ root.innerHTML=Object.keys(groups).length?Object.entries(groups).map(([dest,list])=>`<section class="destination-group"><div class="group-head"><div><span class="eyebrow">DESTINATION</span><h2>${esc(dest)}</h2></div><span>${list.length} عرض</span></div><div class="catalog-grid">${list.map(card).join('')}</div></section>`).join(''):`<div class="empty-state">لا توجد عروض مطابقة.</div>`; if(window.FLORIN_APPLY_LANGUAGE) window.FLORIN_APPLY_LANGUAGE(localStorage.getItem('florin-language')||'ar');
 }
 async function init(){
  offers=await loadPublicOffers();

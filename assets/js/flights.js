@@ -19,6 +19,12 @@ function fillAirportLists(){
   });
 }
 
+function resolveAirportCode(value){
+  const q=String(value||'').trim().toLowerCase();
+  const exact=AIRPORTS.find(a=>String(a.iata).toLowerCase()===q || [a.city,a.cityEn,a.name,a.nameEn,a.country,a.countryEn].some(v=>String(v||'').toLowerCase()===q));
+  return exact?.iata || AIRPORTS.find(a=>[a.iata,a.city,a.cityEn,a.name,a.nameEn,a.country,a.countryEn].some(v=>String(v||'').toLowerCase().includes(q)))?.iata || String(value||'').trim().toUpperCase();
+}
+
 function setupAirportSearch(){
   const inputs = document.querySelectorAll('[data-airport-search]');
   inputs.forEach(input=>{
@@ -27,7 +33,7 @@ function setupAirportSearch(){
       const q = input.value.trim().toLowerCase();
       if(!q){ list.innerHTML=''; list.classList.remove('show'); return; }
       const rows = AIRPORTS.filter(a => [a.iata,a.city,a.cityEn,a.country,a.countryEn,a.name,a.nameEn].some(v=>String(v).toLowerCase().includes(q))).slice(0,8);
-      list.innerHTML = rows.map(a=>`<button type="button" data-code="${a.iata}"><strong>${a.iata}</strong><span>${esc(a.city)} — ${esc(a.name)}</span></button>`).join('');
+      list.innerHTML = rows.map(a=>`<button type="button" data-code="${a.iata}"><strong>${esc(a.iata)}</strong><span>${esc(a.city)} — ${esc(a.name)}<em>${esc(a.country)} / ${esc(a.countryEn)}</em></span></button>`).join('');
       list.classList.toggle('show',rows.length>0);
       list.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{input.value=btn.dataset.code; input.dispatchEvent(new Event('change')); list.classList.remove('show');});
     };
@@ -59,8 +65,8 @@ function render(rows){
 }
 
 function filterFlights(){
-  const from=$('#fromSearch').value.trim().toUpperCase();
-  const to=$('#toSearch').value.trim().toUpperCase();
+  const from=resolveAirportCode($('#fromSearch').value);
+  const to=resolveAirportCode($('#toSearch').value);
   const q=$('#airlineSearch').value.trim().toLowerCase();
   let rows=allFlights.filter(f=> (!from||f.fromIata===from) && (!to||f.toIata===to));
   if(q) rows=rows.filter(f=>{const a=airline(f.airlineId); return [a.name,a.nameEn,a.iata].some(v=>String(v).toLowerCase().includes(q));});

@@ -291,9 +291,9 @@ function openOfferEditor(existing) {
 
   if (isNew) {
     html += '<div class="scraper-section">';
-    html += '<label class="scraper-label"><i class="fa-solid fa-link"></i> رابط الفندق (Booking / Trip / TravelGo)</label>';
+    html += '<label class="scraper-label"><i class="fa-solid fa-link"></i> رابط الفندق (Booking / Agoda / Trip.com)</label>';
     html += '<div class="scraper-input">';
-    html += '<input type="url" id="e_sourceUrl" placeholder="https://www.booking.com/hotel/..." dir="ltr">';
+    html += '<input type="url" id="e_importSourceUrl" placeholder="https://www.booking.com/hotel/..." dir="ltr">';
     html += '<button type="button" class="btn primary" id="btnScrape"><i class="fa-solid fa-cloud-arrow-down"></i> استيراد</button>';
     html += '</div>';
     html += '<div id="scrapeStatus" class="scrape-status"></div>';
@@ -388,7 +388,7 @@ function openOfferEditor(existing) {
 /* ============ SCRAPER ============ */
 
 async function handleScrape() {
-  const urlInput = $('e_sourceUrl');
+  const urlInput = $('e_importSourceUrl');
   const url = urlInput ? urlInput.value.trim() : '';
   const status = $('scrapeStatus');
   const btn = $('btnScrape');
@@ -421,6 +421,9 @@ async function handleScrape() {
     if (result.shortDescription && descField) descField.value = result.shortDescription;
     if (result.stars && starsField) starsField.value = result.stars;
     if (result.location && destField) destField.value = result.location;
+    if ($('e_sourceUrl')) $('e_sourceUrl').value = url;
+    if ($('e_sourceProvider')) $('e_sourceProvider').value = result.source === 'booking' ? 'Booking.com' : result.source === 'agoda' ? 'Agoda' : result.source === 'trip' ? 'Trip.com' : '';
+    if (result.price && $('e_price')) $('e_price').value = result.price;
 
     if (result.images && result.images.length) {
       if (mainImg) mainImg.value = result.images[0];
@@ -556,7 +559,8 @@ async function renderPackageTable() {
       b.onclick = async () => {
         if (!confirm('حذف هذا البكج؟')) return;
         await deleteDoc(doc(db, 'tourPackages', b.dataset.pdelete));
-        renderPackageTable();
+        await deleteDoc(doc(db, 'offers', b.dataset.pdelete)).catch(()=>{});
+        await loadAll();
       };
     });
   } catch (e) {
@@ -566,7 +570,7 @@ async function renderPackageTable() {
 }
 
 function openPackageEditor(x) {
-  const p = x || EMPTY_TOUR_PACKAGE;
+  const p = x || { ...EMPTY_TOUR_PACKAGE, active: true };
   let html = '<div class="editor-wrap">';
   html += '<h2>' + (x ? 'تعديل البكج' : 'إضافة بكج') + '</h2>';
   html += '<div class="editor-grid">';
@@ -578,7 +582,7 @@ function openPackageEditor(x) {
   html += '<div class="field"><label>السعر</label><input id="p_price" value="' + esc(p.price || '') + '"></div>';
   html += '<div class="field full"><label>الوصف</label><textarea id="p_desc" rows="3">' + esc(p.description || '') + '</textarea></div>';
   html += '<div class="field full"><label>روابط الصور (سطر لكل رابط)</label><textarea id="p_images" rows="4" dir="ltr">' + esc(arr(p.images).join('\n')) + '</textarea></div>';
-  html += '<div class="field"><label><input type="checkbox" id="p_active"' + (p.active ? ' checked' : '') + '> نشر</label></div>';
+  html += '<div class="field"><label><input type="checkbox" id="p_active"' + (p.active !== false ? ' checked' : '') + '> نشر</label></div>';
   html += '</div>';
   html += '<div class="editor-actions"><button class="btn primary" id="savePackage">حفظ</button><button class="btn secondary" id="cancelPackage">إلغاء</button></div>';
   html += '</div>';
@@ -608,8 +612,9 @@ function openPackageEditor(x) {
           updatedBy: currentUser.uid
         };
         await setDoc(doc(db, 'tourPackages', id), data, { merge: true });
+        await setDoc(doc(db, 'offers', id), { ...data, id, type: 'tour', category: 'بكجات سياحية', fulfillment: { mode: 'manual', bookingByFlorin: true } }, { merge: true });
         closeModal();
-        renderPackageTable();
+        await loadAll();
       } catch (e) { alert(e.message); }
     };
   }

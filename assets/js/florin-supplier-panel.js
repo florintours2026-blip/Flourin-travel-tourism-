@@ -6,13 +6,10 @@
 import { auth } from './firebase-config.js';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js';
 import { AIRPORTS, AIRLINES } from './catalog-data.js';
-import {
-  importHotelUrl,
-  searchHotels,
-  searchFlights,
-  saveOffer,
-  apiHealth
-} from './florin-supplier-api.js';
+import { db } from './firebase-config.js';
+import { scrapeHotelUrl, getSourceLabel } from './url-scraper.js';
+import { doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
+import { searchHotels, searchFlights, apiHealth } from './florin-supplier-api.js';
 
 const esc = v => String(v ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 
@@ -194,19 +191,15 @@ function bind() {
 
     try {
       setStatus('جاري استيراد بيانات الفندق...');
-      const data = await importHotelUrl(url, role);
-      showResult(data);
-
-      if (data.offer) {
-        const save = confirm('تم استخراج البيانات. هل تريد حفظ الفندق في عروض FLORIN؟');
-        if (save) {
-          const saved = await saveOffer(data.offer);
-          showResult(saved);
-          setStatus('تم حفظ الفندق في Firestore / offers.');
-        } else {
-          setStatus('تم استخراج البيانات ولم يتم الحفظ.');
-        }
-      }
+      const result = await scrapeHotelUrl(url);
+      showResult(result);
+      if (!result.success) throw new Error(result.error);
+      const price = Number(prompt('أدخل السعر الذي تريد عرضه للعميل (اختياري):','0') || 0);
+      const id = 'hotel_' + Date.now();
+      const offer = {id,type:'hotel',category:'فنادق',name:result.title||'Hotel',country:'',destination:result.location||'',price,currency:'USD',image:result.images?.[0]||'',images:result.images||[],description:result.shortDescription||'',sourceUrl:url,sourceProvider:getSourceLabel(result.source),sourcePrice:price,hotel:{name:result.title||'',stars:Number(result.stars||5),rooms:[],amenities:[]},fulfillment:{mode:'manual',bookingByFlorin:true},active:true,createdAt:serverTimestamp(),updatedAt:serverTimestamp(),updatedBy:auth.currentUser?.uid||''};
+      await setDoc(doc(db,'offers',id),offer,{merge:true});
+      showResult({success:true,offer});
+      setStatus('تم استيراد الفندق وحفظه في عروض FLORIN.');
     } catch (e) {
       setStatus(e.message, true);
     }
