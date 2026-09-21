@@ -11,6 +11,8 @@ import { scrapeHotelUrl, getSourceLabel } from './url-scraper.js';
 import { doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
 import { searchHotels, searchFlights, apiHealth } from './florin-supplier-api.js';
 
+let pendingImportedOffer = null;
+
 const esc = v => String(v ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 
 function injectStyles() {
@@ -28,6 +30,10 @@ function injectStyles() {
     .supplier-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
     .supplier-result{margin-top:14px;padding:12px;border-radius:12px;background:rgba(255,255,255,.04);white-space:pre-wrap;overflow:auto;max-height:360px}
     .supplier-status{font-size:13px;margin-top:8px}
+    .publish-offer-wrap{margin-top:14px;padding:14px;border:1px solid rgba(34,211,238,.25);border-radius:14px;background:rgba(34,211,238,.05)}
+    .publish-offer-wrap[hidden]{display:none!important}
+    .publish-offer-title{font-weight:800;margin-bottom:6px}
+    .publish-offer-help{font-size:12px;opacity:.75;margin-bottom:10px}
     @media(max-width:700px){.supplier-grid{grid-template-columns:1fr}}
   `;
   document.head.appendChild(style);
@@ -140,6 +146,11 @@ function panelHtml() {
     </div>
 
     <div id="supplierStatus" class="supplier-status"></div>
+    <div id="publishOfferWrap" class="publish-offer-wrap" hidden>
+      <div class="publish-offer-title">جاهز للرفع إلى موقع FLORIN</div>
+      <div class="publish-offer-help">تم استيراد بيانات الفندق. راجع البيانات ثم اضغط الزر ليظهر العرض في صفحة العملاء.</div>
+      <button class="btn primary" id="publishImportedOffer"><i class="fa-solid fa-cloud-arrow-up"></i> رفع العرض للموقع</button>
+    </div>
     <div id="supplierResult" class="supplier-result" hidden></div>
   </section>`;
 }
@@ -196,12 +207,35 @@ function bind() {
       if (!result.success) throw new Error(result.error);
       const price = Number(prompt('أدخل السعر الذي تريد عرضه للعميل (اختياري):','0') || 0);
       const id = 'hotel_' + Date.now();
-      const offer = {id,type:'hotel',category:'فنادق',name:result.title||'Hotel',country:'',destination:result.location||'',price,currency:'USD',image:result.images?.[0]||'',images:result.images||[],description:result.shortDescription||'',sourceUrl:url,sourceProvider:getSourceLabel(result.source),sourcePrice:price,hotel:{name:result.title||'',stars:Number(result.stars||5),rooms:[],amenities:[]},fulfillment:{mode:'manual',bookingByFlorin:true},active:true,createdAt:serverTimestamp(),updatedAt:serverTimestamp(),updatedBy:auth.currentUser?.uid||''};
-      await setDoc(doc(db,'offers',id),offer,{merge:true});
-      showResult({success:true,offer});
-      setStatus('تم استيراد الفندق وحفظه في عروض FLORIN.');
+      pendingImportedOffer = {id,type:'hotel',category:'فنادق',name:result.title||'Hotel',country:'',destination:result.location||'',price,currency:'USD',image:result.images?.[0]||'',images:result.images||[],description:result.shortDescription||'',sourceUrl:url,sourceProvider:getSourceLabel(result.source),sourcePrice:price,hotel:{name:result.title||'',stars:Number(result.stars||5),rooms:[],amenities:[]},fulfillment:{mode:'manual',bookingByFlorin:true},active:true};
+      showResult({success:true,stage:'ready_to_publish',offer:pendingImportedOffer});
+      const publishWrap = document.getElementById('publishOfferWrap');
+      if (publishWrap) publishWrap.hidden = false;
+      setStatus('تم استيراد بيانات الفندق. راجعها ثم اضغط «رفع العرض للموقع».');
     } catch (e) {
       setStatus(e.message, true);
+    }
+  };
+
+  const publishBtn = document.getElementById('publishImportedOffer');
+  if (publishBtn) publishBtn.onclick = async () => {
+    if (!pendingImportedOffer) return setStatus('لا توجد بيانات مستوردة جاهزة للرفع.', true);
+    try {
+      publishBtn.disabled = true;
+      publishBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري رفع العرض...';
+      const offer = { ...pendingImportedOffer, active:true, published:true, publishedAt:serverTimestamp(), updatedAt:serverTimestamp(), updatedBy:auth.currentUser?.uid||'' };
+      if (!offer.createdAt) offer.createdAt = serverTimestamp();
+      await setDoc(doc(db,'offers',offer.id),offer,{merge:true});
+      pendingImportedOffer = null;
+      const publishWrap = document.getElementById('publishOfferWrap');
+      if (publishWrap) publishWrap.hidden = true;
+      showResult({success:true,stage:'published',offer});
+      setStatus('✅ تم رفع العرض إلى موقع FLORIN وسيظهر للعملاء.');
+    } catch (e) {
+      setStatus('تعذر رفع العرض: ' + e.message, true);
+    } finally {
+      publishBtn.disabled = false;
+      publishBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> رفع العرض للموقع';
     }
   };
 
