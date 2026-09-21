@@ -1042,3 +1042,12 @@ html[dir="ltr"] .hero-title {
   opacity: 0;
   animation: fadeInUp 0.8s ease forwards;
 }
+
+/* FLORIN mobile main navigation fix */
+@media(max-width:991px){
+  .mobile-menu{display:flex!important;align-items:center;justify-content:center;min-width:44px;min-height:44px;cursor:pointer;position:relative;z-index:10001;}
+  .site-header .main-nav{position:fixed;top:70px;right:-100%;width:min(320px,86vw);height:calc(100dvh - 70px);padding:24px 18px;background:#091827;display:flex;flex-direction:column;align-items:stretch;gap:8px;overflow-y:auto;box-shadow:-20px 0 50px rgba(0,0,0,.3);transition:right .3s ease;z-index:10000;}
+  .site-header .main-nav.mobile-open{right:0;}
+  .site-header .main-nav a{padding:13px 14px;border-radius:12px;color:#fff;}
+  .site-header .main-nav a:hover{background:rgba(66,165,245,.12);}
+}
