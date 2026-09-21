@@ -17,6 +17,11 @@ const box=document.getElementById("offerDetailsPage");
 const id=new URLSearchParams(location.search).get("id")||"dubai";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 const arr=v=>Array.isArray(v)?v:[];
+const publicText=v=>{
+ const text=String(v??"");
+ const internal=/(PHOTO-SOURCES\.md|assets\/images\/packages|assets\\images\\packages|مصادر الصور|حقوق الاستخدام التجاري|قبل النشر النهائي|النشر التجاري)/i.test(text);
+ return internal?"":text;
+};
 const o=await getOffer(id);
 if(!o){box.innerHTML="<div class='hotel-empty'>العرض غير موجود أو تم إخفاؤه.</div>";}
 else{
@@ -44,10 +49,10 @@ else{
    <div class="rooms-grid">${arr(h.rooms).map((r,i)=>`<article class="room-card"><img src="${esc(images[(i+1)%Math.max(images.length,1)]||o.image)}" alt="${esc(r)}" onerror="this.onerror=null;this.src='${esc(o.image)}'"><div><h3>${esc(r)}</h3><p>نوع إقامة ضمن الفندق، والتوفر الفعلي والسعر يعتمدان على تاريخ السفر.</p><strong><i class="fa-solid fa-circle-check"></i> متاح حسب الطلب</strong></div></article>`).join("")}</div>
  </section>`:""}
  <section class="hotel-info-grid">
-   <div class="hotel-info-main"><div class="section-title"><i class="fa-solid fa-suitcase-rolling"></i> عن الباقة</div><p>${esc(o.description)}</p>
+   <div class="hotel-info-main"><div class="section-title"><i class="fa-solid fa-suitcase-rolling"></i> عن الباقة</div><p>${esc(publicText(o.description))}</p>
    <div class="info-cols"><div><h3>يشمل</h3><ul>${arr(o.included).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
    <div><h3>لا يشمل</h3><ul>${arr(o.excluded).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div>
-   <div class="hotel-note">${esc(o.notes)}</div></div>
+   ${publicText(o.notes)?`<div class="hotel-note">${esc(publicText(o.notes))}</div>`:""}</div>
    <aside class="booking-card"><small>احجز هذه الباقة</small><h2>${esc(o.price)}</h2><p>التوفر والسعر النهائي يتم تأكيدهما قبل الحجز.</p>
    <a class="details-btn" href="booking.html?offer=${encodeURIComponent(o.id)}&offerName=${encodeURIComponent(o.name)}"><i class="fa-solid fa-calendar-check"></i> احجز الآن</a></aside>
  </section>`;
