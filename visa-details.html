@@ -13,10 +13,11 @@ body{background:#061525;color:#fff;font-family:Cairo,Arial,Tahoma,sans-serif}.vi
 <div id="app"><p>جاري التحميل...</p></div>
 </div></main>
 <script type="module">
+import {db} from "./assets/js/firebase-config.js";
+import {collection,getDocs} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 const id=new URLSearchParams(location.search).get("id");
-const data=await fetch("assets/data/visas.json").then(r=>r.json());
-const v=data.items.find(x=>x.id===id);
+let items=[]; try{const snap=await getDocs(collection(db,"visas"));items=snap.docs.map(d=>({id:d.id,...d.data()})).filter(v=>v.active!==false);}catch(e){} if(!items.length)items=(await fetch("assets/data/visas.json").then(r=>r.json())).items; const v=items.find(x=>x.id===id);
 const app=document.getElementById("app");
 if(!v){app.innerHTML="<div class='box'>التأشيرة غير موجودة.</div>";}
 else{
@@ -34,4 +35,4 @@ app.innerHTML=`<article class="visa-card">
 <div class="source"><i class="fa-solid fa-circle-info"></i> السعر مدخل من قائمة الأسعار المقدمة للموقع، والتأكيد النهائي يتم بعد مراجعة بيانات المسافر.</div>
 </div></article>`;
 }
-</script></body></html>
+</script><script type="module" src="assets/js/main.js"></script></body></html>

@@ -30,9 +30,12 @@ a{text-decoration:none;color:inherit}.container{width:min(1180px,92%);margin:aut
 </div></header>
 <main class="container" id="visaCatalog"><p class="note">جاري تحميل التأشيرات...</p></main>
 <script type="module">
+import {db} from "./assets/js/firebase-config.js";
+import {collection,getDocs} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 const catalog=document.getElementById("visaCatalog");
-const data=await fetch("assets/data/visas.json").then(r=>r.json());
+let data;
+try{const snap=await getDocs(collection(db,"visas")); const items=snap.docs.map(d=>({id:d.id,...d.data()})).filter(v=>v.active!==false); data={items:items.length?items:(await fetch("assets/data/visas.json").then(r=>r.json())).items};}catch(e){data=await fetch("assets/data/visas.json").then(r=>r.json());}
 const groups={};
 data.items.forEach(v=>(groups[v.region]??=[]).push(v));
 catalog.innerHTML=Object.entries(groups).map(([region,items])=>`
@@ -49,5 +52,5 @@ catalog.innerHTML=Object.entries(groups).map(([region,items])=>`
 <a class="btn" href="visa-details.html?id=${encodeURIComponent(v.id)}"><i class="fa-solid fa-circle-info"></i> التفاصيل</a>
 </div></article>`).join("")}</div>
 </section>`).join("")+`<p class="note">الأسعار المعروضة هي الأسعار التي زودتنا بها. قد تتغير المتطلبات أو الرسوم الخارجية وفق الجنسية والجهات المختصة.</p>`;
-</script>
+</script><script type="module" src="assets/js/main.js"></script>
 </body></html>
