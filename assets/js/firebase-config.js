@@ -3,6 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebas
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
 const firebaseConfig = {
 
@@ -28,4 +29,6 @@ const auth = getAuth(app);
 
 const db = getFirestore(app);
 
-export { app, auth, db };
+const storage = getStorage(app);
+
+export { app, auth, db, storage };

@@ -1,0 +1,20 @@
+import { auth, db, storage } from './firebase-config.js';
+import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
+import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js';
+
+const $=id=>document.getElementById(id);
+const params=new URLSearchParams(location.search);
+$('bookingId').value=params.get('bookingId')||'';
+
+const methods={
+ paypal:{title:'PayPal',rows:[['الحساب','florintoursim@gmail.com',true],['طريقة الدفع','أرسل المبلغ إلى حساب PayPal ثم ارفع صورة الإيصال.']],},
+ bankak:{title:'بنكك Bankak',rows:[['الحساب الأول','2525924 — فراس مصطفى عبدالوهاب سعيد'],['الحساب الثاني','3235969 — مصطفى عبدالوهاب سعيد'],['تنبيه','اكتب رقم الحساب المستخدم في وصف التحويل إن أمكن ثم احتفظ بالإيصال.']]},
+ adib:{title:'مصرف أبوظبي الإسلامي (ADIB)',rows:[['اسم البنك','مصرف أبوظبي الإسلامي (ADIB)'],['نوع الحساب','حساب توفير (Saving Account)'],['IBAN','EG060030501200000200000762463',true],['اسم الحساب','مصطفى عبدالوهاب سعيد']]}};
+
+function renderMethod(key){const m=methods[key];$('methodDetails').innerHTML=`<div class="detail-title" style="font-weight:800;margin-bottom:8px">${m.title}</div>`+m.rows.map(([label,value,copy])=>`<div class="detail-row"><div class="detail-label">${label}</div><div class="detail-value">${value}${copy?`<button class="copy-btn" type="button" data-copy="${value}"><i class="fa-regular fa-copy"></i></button>`:''}</div></div>`).join('');document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText(b.dataset.copy);b.innerHTML='<i class="fa-solid fa-check"></i>';}catch{}})}
+renderMethod('paypal');
+document.querySelectorAll('.method').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.method').forEach(x=>x.classList.remove('active'));btn.classList.add('active');renderMethod(btn.dataset.method);}));
+
+$('receipt').addEventListener('change',()=>{$('receiptName').textContent=$('receipt').files?.[0]?.name||'لم يتم اختيار ملف';});
+
+$('paymentForm').addEventListener('submit',async e=>{e.preventDefault();const status=$('paymentStatus');status.className='payment-status';status.textContent='';const file=$('receipt').files?.[0];if(!file){status.classList.add('error');status.textContent='يجب رفع صورة الإيصال أو ملف PDF.';return;}if(file.size>10*1024*1024){status.classList.add('error');status.textContent='حجم الإيصال يجب ألا يتجاوز 10MB.';return;}if(!auth.currentUser){status.classList.add('error');status.textContent='يرجى تسجيل الدخول أولاً لإرسال إثبات الدفع بأمان.';return;}const method=document.querySelector('.method.active')?.dataset.method||'paypal';const btn=e.submitter;btn.disabled=true;btn.textContent='جاري رفع الإيصال...';try{const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');const path=`payment-receipts/${auth.currentUser.uid}/${Date.now()}-${safeName}`;const storageRef=ref(storage,path);await uploadBytes(storageRef,file,{contentType:file.type||'application/octet-stream'});const receiptUrl=await getDownloadURL(storageRef);const payment={bookingId:$('bookingId').value.trim(),method,amount:Number($('amount').value),currency:$('currency').value,receiptUrl,receiptPath:path,fileName:file.name,uid:auth.currentUser.uid,status:'Pending Review',createdAt:serverTimestamp()};const paymentRef=await addDoc(collection(db,'payments'),payment);if(payment.bookingId){try{await updateDoc(doc(db,'bookings',payment.bookingId),{paymentId:paymentRef.id,paymentMethod:method,paymentAmount:payment.amount,paymentCurrency:payment.currency,paymentReceiptUrl:receiptUrl,paymentStatus:'Pending Review',updatedAt:serverTimestamp()});}catch(err){console.warn('Booking update skipped:',err);}}status.textContent='تم إرسال إثبات الدفع بنجاح، وسيتم مراجعته من فريق FLORIN.';e.target.reset();$('receiptName').textContent='لم يتم اختيار ملف';}catch(err){console.error(err);status.classList.add('error');status.textContent='تعذر إرسال الإيصال. تحقق من تسجيل الدخول واتصال الإنترنت ثم حاول مرة أخرى.';}finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-lock"></i> إرسال إثبات الدفع';}});
