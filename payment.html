@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>طرق الدفع | FLORIN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/florin-v2.css"><link rel="stylesheet" href="assets/css/payment.css">
+</head>
+<body>
+<header class="site-header"><div class="container nav-wrap">
+<a class="logo" href="index.html"><img class="logo-dark" src="assets/images/logo/logo-dark.png" alt="FLORIN"><img class="logo-light" src="assets/images/logo/logo-light.png" alt="FLORIN"></a>
+<nav class="main-nav"><a href="index.html">الرئيسية</a><a href="flights.html">الطيران</a><a href="offers.html">الفنادق والعروض</a><a href="booking.html">طلب حجز</a><a class="active" href="payment.html">الدفع</a><a href="visas.html">التأشيرات</a></nav>
+<div class="nav-actions"><span id="welcomeUser" class="welcome-user"></span><button id="themeToggle">◐</button><button id="langToggle">العربية <span>EN</span></button><button class="mobile-menu">☰</button></div>
+</div></header>
+
+<main class="payment-page"><section class="payment-shell">
+<div class="payment-hero"><span class="payment-kicker"><i class="fa-solid fa-shield-halved"></i> FLORIN PAYMENTS</span><h1>اختر طريقة الدفع</h1><p>ادفع بالطريقة المناسبة لك، ثم ارفع صورة الإيصال ليتمكن فريق فلورين من مراجعة العملية وربطها بطلبك.</p></div>
+
+<div class="payment-layout">
+<section class="payment-card methods-card">
+<div class="section-title"><div class="title-icon"><i class="fa-solid fa-wallet"></i></div><div><h2>طرق الدفع المتاحة</h2><p>اختر وسيلة واحدة لعرض بيانات التحويل.</p></div></div>
+<div class="method-list" id="methodList">
+<button class="method active" type="button" data-method="paypal"><span class="method-icon paypal"><i class="fa-brands fa-paypal"></i></span><span><strong>PayPal</strong><small>الدفع عبر حساب PayPal</small></span><i class="fa-solid fa-chevron-left method-arrow"></i></button>
+<button class="method" type="button" data-method="bankak"><span class="method-icon bankak"><i class="fa-solid fa-building-columns"></i></span><span><strong>بنكك Bankak</strong><small>تحويل بنكي عبر بنكك</small></span><i class="fa-solid fa-chevron-left method-arrow"></i></button>
+<button class="method" type="button" data-method="adib"><span class="method-icon adib"><i class="fa-solid fa-landmark"></i></span><span><strong>مصرف أبوظبي الإسلامي ADIB</strong><small>تحويل إلى الحساب البنكي</small></span><i class="fa-solid fa-chevron-left method-arrow"></i></button>
+</div>
+<div class="method-details" id="methodDetails"></div>
+</section>
+
+<section class="payment-card receipt-card">
+<div class="section-title"><div class="title-icon"><i class="fa-solid fa-receipt"></i></div><div><h2>إرسال إثبات الدفع</h2><p>رفع صورة الإيصال إلزامي لإتمام طلب الدفع.</p></div></div>
+<form id="paymentForm" class="payment-form">
+<div class="form-group"><label for="bookingId">رقم طلب الحجز *</label><input id="bookingId" required placeholder="أدخل رقم الطلب" autocomplete="off"></div>
+<div class="form-group"><label for="amount">المبلغ المدفوع *</label><div class="amount-row"><input id="amount" type="number" min="0" step="0.01" required placeholder="0.00"><select id="currency"><option>EGP</option><option>USD</option><option>SDG</option></select></div></div>
+<div class="upload-box"><input id="receipt" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" required><label for="receipt"><span class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span><strong>اضغط لرفع إيصال التحويل</strong><small>JPG / PNG / WEBP / PDF — بحد أقصى 10MB</small><em id="receiptName">لم يتم اختيار ملف</em></label></div>
+<label class="confirm-check"><input id="confirm" type="checkbox" required><span>أؤكد أن بيانات التحويل صحيحة وأن الإيصال المرفق يخص عملية الدفع لهذا الطلب.</span></label>
+<button class="submit-payment" type="submit"><i class="fa-solid fa-lock"></i> إرسال إثبات الدفع</button>
+<div id="paymentStatus" class="payment-status" role="status"></div>
+</form>
+</section>
+</div>
+<div class="security-note"><i class="fa-solid fa-circle-check"></i><span><strong>مراجعة آمنة</strong> يتم مراجعة الإيصال من فريق FLORIN وربطه بطلب الحجز قبل اعتماد الدفع.</span></div>
+</section></main>
+<script type="module" src="assets/js/main.js"></script><script type="module" src="assets/js/navbar-auth.js"></script><script type="module" src="assets/js/payment.js"></script>
+</body></html>
