@@ -3,6 +3,20 @@ import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signIn
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 import { saveUser } from "./database.js";
 const BOOTSTRAP_ADMIN_UID="7nE6QoTEPFOk0IhwcZUnymkyzoY2";
+const loginMode=new URLSearchParams(location.search).get('role') || (new URLSearchParams(location.search).has('admin') ? 'admin' : 'client');
+document.querySelectorAll('.privileged-card').forEach(card=>{
+  const visible=card.dataset.loginRole===loginMode;
+  card.hidden=!visible;
+});
+const loginColumns=document.querySelector('.login-columns');
+if(loginColumns){
+  loginColumns.setAttribute('aria-label',loginMode==='admin'?'تسجيل دخول الإدارة':loginMode==='employee'?'تسجيل دخول الموظفين':'تسجيل دخول العملاء');
+}
+const loginIntro=document.getElementById('loginIntro');
+if(loginIntro){
+  loginIntro.textContent=loginMode==='admin'?'دخول مخصص للمديرين المصرح لهم فقط.':loginMode==='employee'?'دخول مخصص للموظفين المصرح لهم فقط.':'سجّل الدخول إلى حسابك للمتابعة إلى خدمات فلورين.';
+}
+
 const statusBox=document.getElementById('loginStatus'); const provider=new GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'});
 function setStatus(m,ok=false){if(!statusBox)return;statusBox.hidden=false;statusBox.classList.toggle('ok',ok);statusBox.textContent=m;}
 function errorMessage(e){const c=e?.code||'';if(['auth/invalid-credential','auth/wrong-password','auth/user-not-found'].includes(c))return 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';if(c==='auth/invalid-email')return 'أدخل بريدًا إلكترونيًا صحيحًا.';if(c==='auth/popup-closed-by-user')return 'تم إغلاق نافذة Google.';if(c==='auth/unauthorized-domain')return 'نطاق الموقع غير مضاف إلى Authorized domains في Firebase Authentication.';if(c==='auth/operation-not-allowed')return 'تسجيل الدخول بحساب Google غير مفعّل في Firebase Authentication.';return e?.message||'تعذر تسجيل الدخول.';}

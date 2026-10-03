@@ -32,8 +32,7 @@ async function checkAdmin(user) {
 function renderSignedOut() {
   box.innerHTML = `
     <a class="auth-nav-btn" href="login.html">تسجيل الدخول</a>
-    <a class="auth-nav-btn auth-register" href="register.html">إنشاء حساب</a>
-    <a class="auth-nav-admin" href="login.html?role=admin">دخول الإدارة</a>`;
+    <a class="auth-nav-btn auth-register" href="register.html">إنشاء حساب</a>`;
 }
 
 async function renderSignedIn(user) {

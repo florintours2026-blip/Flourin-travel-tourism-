@@ -9,7 +9,7 @@ const DICT = {
   'الاسم الكامل *':'Full Name *','الهاتف / واتساب *':'Phone / WhatsApp *','البريد الإلكتروني':'Email','دولة الإقامة':'Country of Residence','الخدمة *':'Service *','اختر الخدمة':'Choose a service','الوجهة':'Destination','عدد المسافرين':'Travelers','تفاصيل إضافية':'Additional Details',
   'حجز طيران':'Flight Booking','حجز فندق':'Hotel Booking','بكج سياحي':'Tour Package','عمرة':'Umrah','تأشيرة':'Visa','موافقة أمنية':'Security Approval','زيارة عائلية بمصر':'Family Visit to Egypt',
   'المظهر':'Appearance','اللغة':'Language','سجّل الدخول':'Sign in','مستخدم':'User','العربية':'Arabic','English':'English','العودة':'Back','العودة إلى التأشيرات':'Back to Visas',
-  'التفاصيل':'Details','ابدأ طلب التأشيرة':'Start Visa Request','التأشيرات الإلكترونية':'e-Visas','تأشيرات السفر بأسعار واضحة':'Travel visas with clear pricing',
+  'التفاصيل':'Details','ابدأ طلب التأشيرة':'Start Visa Request','التأشيرات الإلكترونية':'e-Visas','تأشيرات السفر بأسعار واضحة':'Travel visas with clear pricing','خدمات خاصة':'Special Services','الموافقة الأمنية':'Security Approval','تأشيرة العمرة':'Umrah Visa','خدمة الموافقة الأمنية':'Security Approval Service','خدمة تأشيرة العمرة':'Umrah Visa Service',
   'البكجات السياحية':'Tour Packages','إضافة بكج':'Add Package','إضافة عرض جديد':'Add New Offer','تعديل العرض':'Edit Offer','حفظ':'Save','إلغاء':'Cancel','استيراد':'Import','استيراد بيانات الفندق':'Import Hotel Data'
 };
 const REVERSE = Object.fromEntries(Object.entries(DICT).map(([a,e])=>[e,a]));
