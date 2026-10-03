@@ -208,20 +208,20 @@
 window.addEventListener('error', function(e) {
   var box = document.getElementById('authLoading');
   if (box && document.getElementById('adminApp')?.hidden) {
-    box.innerHTML = '<div class="admin-auth-error"><h2>تعذر تشغيل لوحة الإدارة</h2><p>' + String(e.message || 'حدث خطأ أثناء تحميل ملفات الإدارة') + '</p><a href="login.html">العودة إلى تسجيل الدخول</a></div>';
+    box.innerHTML = '<div class="admin-auth-error"><h2>تعذر تشغيل لوحة الإدارة</h2><p>' + String(e.message || 'حدث خطأ أثناء تحميل ملفات الإدارة') + '</p><a href="login.html?role=admin">العودة إلى تسجيل الدخول</a></div>';
   }
 });
 
 window.addEventListener('unhandledrejection', function(e) {
   var box = document.getElementById('authLoading');
   if (box && document.getElementById('adminApp')?.hidden) {
-    box.innerHTML = '<div class="admin-auth-error"><h2>تعذر تشغيل لوحة الإدارة</h2><p>' + String(e.reason?.message || e.reason || 'حدث خطأ غير متوقع') + '</p><a href="login.html">العودة إلى تسجيل الدخول</a></div>';
+    box.innerHTML = '<div class="admin-auth-error"><h2>تعذر تشغيل لوحة الإدارة</h2><p>' + String(e.reason?.message || e.reason || 'حدث خطأ غير متوقع') + '</p><a href="login.html?role=admin">العودة إلى تسجيل الدخول</a></div>';
   }
 });
 
 setTimeout(function() {
   if (!window.__florinAdminStarted && document.getElementById('adminApp')?.hidden) {
-    document.getElementById('authLoading').innerHTML = '<div class="admin-auth-error"><h2>تعذر تحميل ملفات الإدارة</h2><p>لم يتم تشغيل ملف لوحة الإدارة. تحقق من رفع assets/js/admin-v2.js.</p><a href="login.html">العودة إلى تسجيل الدخول</a></div>';
+    document.getElementById('authLoading').innerHTML = '<div class="admin-auth-error"><h2>تعذر تحميل ملفات الإدارة</h2><p>لم يتم تشغيل ملف لوحة الإدارة. تحقق من رفع assets/js/admin-v2.js.</p><a href="login.html?role=admin">العودة إلى تسجيل الدخول</a></div>';
   }
 }, 20000);
 </script>

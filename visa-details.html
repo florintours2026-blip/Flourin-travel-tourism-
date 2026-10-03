@@ -17,13 +17,23 @@ import {db} from "./assets/js/firebase-config.js";
 import {collection,getDocs} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 const id=new URLSearchParams(location.search).get("id");
-let items=[]; try{const snap=await getDocs(collection(db,"visas"));items=snap.docs.map(d=>({id:d.id,...d.data()})).filter(v=>v.active!==false);}catch(e){} if(!items.length)items=(await fetch("assets/data/visas.json").then(r=>r.json())).items; const v=items.find(x=>x.id===id);
+let items=[];
+try{
+  const local=(await fetch("assets/data/visas.json").then(r=>r.json())).items||[];
+  const snap=await getDocs(collection(db,"visas"));
+  const byId=new Map(local.map(v=>[v.id,v]));
+  snap.docs.map(d=>({id:d.id,...d.data()})).filter(v=>v.active!==false).forEach(v=>byId.set(v.id,{...byId.get(v.id),...v}));
+  items=[...byId.values()];
+}catch(e){
+  items=(await fetch("assets/data/visas.json").then(r=>r.json())).items||[];
+}
+const v=items.find(x=>x.id===id);
 const app=document.getElementById("app");
 if(!v){app.innerHTML="<div class='box'>التأشيرة غير موجودة.</div>";}
 else{
 document.title=v.country+" | التأشيرات | FLORIN";
 app.innerHTML=`<article class="visa-card">
-<div class="visa-image"><img src="${esc(v.flag)}" alt="علم ${esc(v.country)}" onerror="this.onerror=null;this.src='assets/images/logo/logo.png'"></div>
+<div class="visa-image">${v.flag?`<img src="${esc(v.flag)}" alt="${esc(v.country)}" onerror="this.onerror=null;this.style.display='none'">`:`<div style="height:100%;min-height:420px;display:grid;place-items:center;color:#55b5ff;font-size:86px"><i class="${esc(v.icon||'fa-solid fa-passport')}"></i></div>`}</div>
 <div class="visa-content">
 <span class="badge"><i class="fa-solid fa-passport"></i> ${esc(v.serviceType)}</span>
 <h1>${esc(v.country)}</h1>

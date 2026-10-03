@@ -20,12 +20,12 @@
       <div>
         <span class="eyebrow">FLORIN TRAVEL &amp; TOURISM</span>
         <h1>مرحبًا بك في فلورين</h1>
-        <p>اختر نوع الحساب ثم سجّل الدخول إلى النظام.</p>
+        <p id="loginIntro">سجّل الدخول إلى حسابك للمتابعة إلى خدمات فلورين.</p>
       </div>
       <button id="themeToggle" class="theme-toggle" type="button" aria-label="تغيير المظهر">◐</button>
     </header>
 
-    <section class="login-columns" aria-label="أنواع تسجيل الدخول">
+    <section class="login-columns" aria-label="تسجيل دخول العملاء">
       <article class="login-card client-card">
         <div class="card-icon">👤</div>
         <span class="card-kicker">CUSTOMER</span>
@@ -39,7 +39,7 @@
         <button id="googleLogin" class="login-btn btn-google" type="button">تسجيل الدخول بحساب Google</button><div class="card-links"><a href="register.html">إنشاء حساب عميل</a><a href="forgot-password.html">نسيت كلمة المرور؟</a></div>
       </article>
 
-      <article class="login-card employee-card">
+      <article class="login-card employee-card privileged-card" data-login-role="employee" hidden>
         <div class="card-icon">🧑‍💼</div>
         <span class="card-kicker">EMPLOYEE</span>
         <h2>دخول الموظفين</h2>
@@ -52,7 +52,7 @@
         <div class="card-note">حساب الموظف يجب أن يكون نشطًا ومصرحًا به داخل Firebase.</div>
       </article>
 
-      <article class="login-card admin-card">
+      <article class="login-card admin-card privileged-card" data-login-role="admin" hidden>
         <div class="card-icon">🛡️</div>
         <span class="card-kicker">ADMINISTRATION</span>
         <h2>دخول الإدارة</h2>

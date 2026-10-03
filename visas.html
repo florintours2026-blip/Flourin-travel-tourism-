@@ -24,9 +24,9 @@ a{text-decoration:none;color:inherit}.container{width:min(1180px,92%);margin:aut
 </head>
 <body>
 <header class="page-head"><div class="container">
-<span class="badge"><i class="fa-solid fa-passport"></i> التأشيرات الإلكترونية</span>
-<h1>تأشيرات السفر بأسعار واضحة</h1>
-<p>اختَر الدولة لعرض السعر ونوع الخدمة ثم أرسل طلبك للمراجعة قبل التأكيد النهائي.</p>
+<span class="badge"><i class="fa-solid fa-passport"></i> التأشيرات والخدمات</span>
+<h1>التأشيرات والخدمات المرتبطة بالسفر</h1>
+<p>اختَر الدولة أو الخدمة لعرض التفاصيل ثم أرسل طلبك للمراجعة قبل التأكيد النهائي.</p>
 </div></header>
 <main class="container" id="visaCatalog"><p class="note">جاري تحميل التأشيرات...</p></main>
 <script type="module">
@@ -35,7 +35,16 @@ import {collection,getDocs} from "https://www.gstatic.com/firebasejs/12.1.0/fire
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 const catalog=document.getElementById("visaCatalog");
 let data;
-try{const snap=await getDocs(collection(db,"visas")); const items=snap.docs.map(d=>({id:d.id,...d.data()})).filter(v=>v.active!==false); data={items:items.length?items:(await fetch("assets/data/visas.json").then(r=>r.json())).items};}catch(e){data=await fetch("assets/data/visas.json").then(r=>r.json());}
+try{
+  const local=await fetch("assets/data/visas.json").then(r=>r.json());
+  const snap=await getDocs(collection(db,"visas"));
+  const remote=snap.docs.map(d=>({id:d.id,...d.data()})).filter(v=>v.active!==false);
+  const byId=new Map(local.items.map(v=>[v.id,v]));
+  remote.forEach(v=>byId.set(v.id,{...byId.get(v.id),...v}));
+  data={...local,items:[...byId.values()]};
+}catch(e){
+  data=await fetch("assets/data/visas.json").then(r=>r.json());
+}
 const groups={};
 data.items.forEach(v=>(groups[v.region]??=[]).push(v));
 catalog.innerHTML=Object.entries(groups).map(([region,items])=>`
@@ -43,7 +52,7 @@ catalog.innerHTML=Object.entries(groups).map(([region,items])=>`
 <h2 class="region-title"><i class="fa-solid fa-earth-asia"></i>${esc(region)}</h2>
 <div class="grid">${items.map(v=>`
 <article class="card">
-<div class="card-image"><img src="${esc(v.flag)}" alt="علم ${esc(v.country)}" loading="lazy"><span class="icon-badge"><i class="${esc(v.icon)}"></i></span></div>
+<div class="card-image">${v.flag?`<img src="${esc(v.flag)}" alt="${esc(v.country)}" loading="lazy">`:''}<span class="icon-badge"><i class="${esc(v.icon)}"></i></span></div>
 <div class="card-body">
 <div class="country-row"><h2>${esc(v.country)}</h2></div>
 <div class="type">${esc(v.serviceType)}</div>
