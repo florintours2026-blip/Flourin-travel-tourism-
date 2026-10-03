@@ -235,6 +235,32 @@
       "description": "تأشيرة إلكترونية إلى نيبال — السعر المعلن للخدمة: 80$.",
       "notes": "السعر المعلن للخدمة ويخضع للمراجعة حسب الجنسية والبيانات ومتطلبات الدخول السارية وقت التقديم.",
       "bookingLink": "booking.html?type=visa&country=np"
+    },
+    {
+      "id": "security-approval",
+      "country": "الموافقة الأمنية",
+      "countryEn": "Security Approval",
+      "region": "خدمات خاصة",
+      "price": "حسب الطلب",
+      "serviceType": "خدمة موافقة أمنية",
+      "icon": "fa-solid fa-shield-halved",
+      "flag": "",
+      "description": "خدمة متابعة طلب الموافقة الأمنية للسفر وفق الوجهة والجنسية والمستندات المطلوبة.",
+      "notes": "المدة والرسوم والمتطلبات تختلف حسب الوجهة والجنسية ونوع الطلب، ويتم تأكيدها بعد مراجعة البيانات.",
+      "bookingLink": "booking.html?type=security"
+    },
+    {
+      "id": "umrah",
+      "country": "تأشيرة العمرة",
+      "countryEn": "Umrah Visa",
+      "region": "خدمات خاصة",
+      "price": "حسب الطلب",
+      "serviceType": "تأشيرة عمرة",
+      "icon": "fa-solid fa-kaaba",
+      "flag": "",
+      "description": "خدمة طلب تأشيرة العمرة وترتيب إجراءات السفر ضمن برامج العمرة المتاحة.",
+      "notes": "السعر والمتطلبات والتوفر تعتمد على الموسم والجنسية والبرنامج المختار، ويتم تأكيدها قبل الحجز.",
+      "bookingLink": "booking.html?type=umrah"
     }
   ]
 }
