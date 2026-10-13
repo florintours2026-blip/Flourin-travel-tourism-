@@ -3,18 +3,30 @@ import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signIn
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 import { saveUser } from "./database.js";
 const BOOTSTRAP_ADMIN_UID="7nE6QoTEPFOk0IhwcZUnymkyzoY2";
-const loginMode=new URLSearchParams(location.search).get('role') || (new URLSearchParams(location.search).has('admin') ? 'admin' : 'client');
-document.querySelectorAll('.privileged-card').forEach(card=>{
-  const visible=card.dataset.loginRole===loginMode;
-  card.hidden=!visible;
+const loginMode = new URLSearchParams(location.search).get("role") || (new URLSearchParams(location.search).has("admin") ? "admin" : "client");
+const validRoles = ["client", "employee", "admin"];
+const activeRole = validRoles.includes(loginMode) ? loginMode : "client";
+document.querySelectorAll(".login-card").forEach(card => {
+  const role = card.querySelector(".role-form")?.dataset.role;
+  card.hidden = role !== activeRole;
 });
-const loginColumns=document.querySelector('.login-columns');
-if(loginColumns){
-  loginColumns.setAttribute('aria-label',loginMode==='admin'?'تسجيل دخول الإدارة':loginMode==='employee'?'تسجيل دخول الموظفين':'تسجيل دخول العملاء');
-}
-const loginIntro=document.getElementById('loginIntro');
-if(loginIntro){
-  loginIntro.textContent=loginMode==='admin'?'دخول مخصص للمديرين المصرح لهم فقط.':loginMode==='employee'?'دخول مخصص للموظفين المصرح لهم فقط.':'سجّل الدخول إلى حسابك للمتابعة إلى خدمات فلورين.';
+document.querySelectorAll("[data-role-link]").forEach(link => {
+  const active = link.dataset.roleLink === activeRole;
+  link.classList.toggle("active", active);
+  if (active) link.setAttribute("aria-current", "page");
+  else link.removeAttribute("aria-current");
+});
+const loginColumns = document.querySelector(".login-columns");
+if (loginColumns) loginColumns.setAttribute("aria-label",
+  activeRole === "admin" ? "تسجيل دخول الإدارة" :
+  activeRole === "employee" ? "تسجيل دخول الموظفين" : "تسجيل دخول العملاء");
+const loginIntro = document.getElementById("loginIntro");
+if (loginIntro) {
+  loginIntro.textContent = activeRole === "admin"
+    ? "دخول الإدارة مخصص للحسابات الإدارية المصرح بها فقط."
+    : activeRole === "employee"
+      ? "دخول الموظفين مخصص للحسابات النشطة والمصرح بها فقط."
+      : "سجّل الدخول إلى حسابك للمتابعة إلى خدمات فلورين.";
 }
 
 const statusBox=document.getElementById('loginStatus'); const provider=new GoogleAuthProvider(); provider.setCustomParameters({prompt:'select_account'});
@@ -27,5 +39,5 @@ async function submitRole(form){const role=form.dataset.role,email=form.elements
 document.querySelectorAll('.role-form').forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();submitRole(f);}));
 async function googleLogin(){try{if(/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent)){await signInWithRedirect(auth,provider);return;}const c=await signInWithPopup(auth,provider);await continueAfterLogin(c.user,'client');}catch(e){setStatus(errorMessage(e));}}
 document.getElementById('googleLogin')?.addEventListener('click',googleLogin);
-(async()=>{try{const r=await getRedirectResult(auth);if(r?.user){await saveUser(r.user);location.replace('profile.html');}}catch(e){setStatus(errorMessage(e));}})();
+(async()=>{try{const r=await getRedirectResult(auth);if(r?.user){await continueAfterLogin(r.user, 'client');}}catch(e){setStatus(errorMessage(e));}})();
 const theme=document.getElementById('themeToggle'),saved=localStorage.getItem('florin-theme')||'dark';document.body.classList.toggle('light',saved==='light');if(theme)theme.textContent=saved==='light'?'☀':'◐';theme?.addEventListener('click',()=>{const light=!document.body.classList.contains('light');document.body.classList.toggle('light',light);localStorage.setItem('florin-theme',light?'light':'dark');theme.textContent=light?'☀':'◐';});
