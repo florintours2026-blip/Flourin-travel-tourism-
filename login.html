@@ -25,7 +25,12 @@
       <button id="themeToggle" class="theme-toggle" type="button" aria-label="تغيير المظهر">◐</button>
     </header>
 
-    <section class="login-columns" aria-label="تسجيل دخول العملاء">
+    <nav class="role-switcher" aria-label="اختيار نوع الحساب">
+      <a class="role-option" data-role-link="client" href="login.html?role=client">دخول العملاء</a>
+      <a class="role-option" data-role-link="employee" href="login.html?role=employee">دخول الموظفين</a>
+      <a class="role-option" data-role-link="admin" href="login.html?role=admin">دخول الإدارة</a>
+    </nav>
+    <section class="login-columns" aria-label="خيارات تسجيل الدخول">
       <article class="login-card client-card">
         <div class="card-icon">👤</div>
         <span class="card-kicker">CUSTOMER</span>
